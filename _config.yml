@@ -3,3 +3,5 @@ title: TriggerTime
 description: Documentación y Privacidad
 logo: triggertime.png
 show_downloads: false
+github:
+  is_project_page: false
