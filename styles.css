@@ -76,7 +76,7 @@ nav {
   transition: var(--transition);
 }
 
-nav.scrolled {
+nav.sticky {
   height: 70px;
   box-shadow: var(--shadow-sm);
 }
