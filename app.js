@@ -36,6 +36,27 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             target.scrollIntoView({
                 behavior: 'smooth'
             });
+
+            // Close mobile menu if open
+            const toggle = document.getElementById('menu-toggle');
+            if (toggle) toggle.checked = false;
         }
     });
 });
+
+// Lang selector toggle on mobile
+const langBtn = document.querySelector('.lang-btn');
+const langSelector = document.querySelector('.lang-selector');
+if (langBtn && langSelector) {
+    langBtn.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            e.stopPropagation();
+            langSelector.classList.toggle('active');
+        }
+    });
+
+    document.addEventListener('click', () => {
+        langSelector.classList.remove('active');
+    });
+}
