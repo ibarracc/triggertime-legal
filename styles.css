@@ -97,6 +97,7 @@ nav .container {
 .site-logo {
   height: 64px;
   width: auto;
+  border-radius: 10px;
 }
 
 .logo-text {
