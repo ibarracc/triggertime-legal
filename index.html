@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriggerTime | Master Your Shooting Performance</title>
+    <meta name="description"
+        content="The ultimate tool to track your shooting sessions and training. 100% private, offline-first, and professional.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="triggertime.png">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="TriggerTime | Shooting Performance Tracker">
+    <meta property="og:description"
+        content="100% private, offline training logs for marksmen. Download now for iOS and Android.">
+    <meta property="og:image" content="mockup.png">
+    <meta property="og:type" content="website">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo-container">
+                <img src="triggertime.png" alt="TriggerTime Logo" class="site-logo">
+                <span class="logo-text">TriggerTime</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#features" data-i18n="nav_features">Features</a>
+                <a href="#premium" data-i18n="premium_title">Premium</a>
+                <a href="#contact" data-i18n="nav_contact">Contact</a>
+
+                <div class="lang-selector">
+                    <button class="lang-btn">
+                        <span class="current-lang">🇺🇸 English</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" onclick="setLanguage('en')">🇺🇸 English</div>
+                        <div class="lang-option" onclick="setLanguage('es')">🇪🇸 Español</div>
+                        <div class="lang-option" onclick="setLanguage('de')">🇩🇪 Deutsch</div>
+                        <div class="lang-option" onclick="setLanguage('fr')">🇫🇷 Français</div>
+                        <div class="lang-option" onclick="setLanguage('gl')">🇪🇸 Galego</div>
+                        <div class="lang-option" onclick="setLanguage('eu')">🇪🇸 Euskera</div>
+                        <div class="lang-option" onclick="setLanguage('ca')">🇪🇸 Català</div>
+                    </div>
+                </div>
+
+                <a href="#hero" class="btn btn-primary btn-sm" data-i18n="nav_download">Download</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content" data-aos>
+                <h1 data-i18n="hero_title">Master Your Shooting Performance</h1>
+                <p data-i18n="hero_subtitle">The ultimate tool to track your shooting sessions and training. Designed
+                    for privacy, simplicity, and performance.</p>
+
+                <div class="download-badges" style="margin-top: 25px;">
+                    <a href="#" class="badge-link">
+                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1314316800&h=7e5b682945a0de79a4da48608dced948"
+                            alt="Download on App Store" class="badge">
+                    </a>
+                    <a href="#" class="badge-link">
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                            alt="Get it on Google Play" class="badge">
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual" data-aos>
+                <img src="mockup.png" alt="TriggerTime App Mockup">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header" data-aos>
+                <h2 data-i18n="feature_title">Key Features</h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" data-aos>
+                    <div class="feature-icon">🎯</div>
+                    <h3 data-i18n="feat1_title">Precision Tracking</h3>
+                    <p data-i18n="feat1_desc">Record detailed scores, ammunition info, and technical notes for every
+                        session.</p>
+                </div>
+                <div class="feature-card" data-aos>
+                    <div class="feature-icon">🔒</div>
+                    <h3 data-i18n="feat2_title">100% Private</h3>
+                    <p data-i18n="feat2_desc">No accounts required. Your data never leaves your device. We respect your
+                        privacy.</p>
+                </div>
+                <div class="feature-card" data-aos>
+                    <div class="feature-icon">⏱️</div>
+                    <h3 data-i18n="feat3_title">Stopwatch</h3>
+                    <p data-i18n="feat3_desc">Integrated stopwatch for precise training timing and series control.</p>
+                </div>
+                <div class="feature-card" data-aos>
+                    <div class="feature-icon">🏆</div>
+                    <h3 data-i18n="feat4_title">ISSF Included</h3>
+                    <p data-i18n="feat4_desc">Main ISSF disciplines included and ready to use.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Features Section -->
+    <section id="premium" class="premium">
+        <div class="container">
+            <div class="section-header" data-aos>
+                <h2 data-i18n="premium_title">Premium Features</h2>
+            </div>
+
+            <div class="premium-grid">
+                <div class="premium-item" data-aos>
+                    <div class="prem-icon">⚡</div>
+                    <div>
+                        <h4 data-i18n="prem1_title">Shot Timer</h4>
+                        <p data-i18n="prem1_desc">With times per series/shot to train at the range.</p>
+                    </div>
+                </div>
+                <div class="premium-item" data-aos>
+                    <div class="prem-icon">📊</div>
+                    <div>
+                        <h4 data-i18n="prem2_title">Export to Excel</h4>
+                        <p data-i18n="prem2_desc">Analyze your performance deeper with simple data export.</p>
+                    </div>
+                </div>
+                <div class="premium-item" data-aos>
+                    <div class="prem-icon">💎</div>
+                    <div>
+                        <h4 data-i18n="prem3_title">Unlimited Sessions</h4>
+                        <p data-i18n="prem3_desc">Record all your history without limits.</p>
+                    </div>
+                </div>
+                <div class="premium-item" data-aos>
+                    <div class="prem-icon">🛠️</div>
+                    <div>
+                        <h4 data-i18n="prem4_title">Custom Disciplines</h4>
+                        <p data-i18n="prem4_desc">Create your own or disable default ones to fit your needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom TriggerTime Section -->
+    <section id="whitelabel" class="whitelabel">
+        <div class="container">
+            <div class="whitelabel-card" data-aos>
+                <div class="whitelabel-content">
+                    <h2 data-i18n="custom_title">Custom TriggerTime</h2>
+                    <p data-i18n="custom_desc">If you want your own whitelabel version of TriggerTime, contact us for a
+                        quote.</p>
+                </div>
+                <div class="whitelabel-cta">
+                    <a href="mailto:help@triggertime.es?subject=Custom Whitelabel Quote" class="btn btn-secondary"
+                        data-i18n="custom_btn">Request Quote</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header" data-aos>
+                <h2 data-i18n="contact_title">Need Help?</h2>
+                <p data-i18n="contact_subtitle">We're here to support you. If you found a bug or have suggestions, reach
+                    out to us.</p>
+                <br>
+                <a href="mailto:help@triggertime.es" class="btn btn-outline" data-i18n="contact_btn">Email Support</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h4>TriggerTime</h4>
+                    <p data-i18n="footer_tagline">The ultimate tool for marksmen.</p>
+                </div>
+                <div class="footer-links">
+                    <h5 data-i18n="footer_legal">Legal</h5>
+                    <ul>
+                        <li><a href="privacy-en.html" class="privacy-link" data-i18n="footer_privacy">Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TriggerTime. <span data-i18n="footer_rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
