@@ -278,11 +278,51 @@ const translations = {
     footer_rights: "Tots els drets reservats.",
     lang_name: "Català",
     lang_flag: "🇪🇸"
+  },
+  pt: {
+    nav_features: "Funcionalidades",
+    nav_privacy: "Privacidade",
+    nav_contact: "Contacto",
+    nav_download: "Descarregar Agora",
+    hero_title: "Domine o seu Desempenho de Tiro",
+    hero_subtitle: "A ferramenta definitiva para acompanhar as suas sessões de tiro e treino. Concebida para privacidade, simplicidade e desempenho.",
+    btn_download: "Descarregar Agora",
+    feature_title: "Principais Funcionalidades",
+    feat1_title: "Acompanhamento de Precisão",
+    feat1_desc: "Registe pontuações detalhadas, informações sobre munições e notas técnicas para cada sessão.",
+    feat2_title: "100% Privado",
+    feat2_desc: "Sem necessidade de conta. Os seus dados nunca saem do seu dispositivo. Respeitamos a sua privacidade.",
+    feat3_title: "Cronómetro",
+    feat3_desc: "Cronómetro integrado para um tempo de treino preciso e controlo de séries.",
+    feat4_title: "ISSF Incluído",
+    feat4_desc: "Principais disciplinas ISSF incluídas e prontas a usar.",
+    premium_title: "Funcionalidades Premium",
+    prem1_title: "Shot Timer",
+    prem1_desc: "Com tempos por série/tiro para treinar na carreira de tiro.",
+    prem2_title: "Exportar para Excel",
+    prem2_desc: "Analise o seu desempenho em profundidade com uma exportação de dados simples.",
+    prem3_title: "Sessões Ilimitadas",
+    prem3_desc: "Registe todo o seu histórico sem limites.",
+    prem4_title: "Disciplinas Personalizadas",
+    prem4_desc: "Crie as suas próprias ou desative as predefinidas para se ajustarem às suas necessidades.",
+    custom_title: "TriggerTime Personalizado",
+    custom_desc: "Se desejar a sua própria versão personalizada do TriggerTime, com o seu logótipo, disciplinas específicas e qualquer outra funcionalidade que pretenda adicionar, contacte-nos para um orçamento.",
+    custom_btn: "Solicitar Orçamento",
+    contact_title: "Precisa de Ajuda?",
+    contact_subtitle: "Estamos aqui para o apoiar. Se encontrou um erro ou tem sugestões, contacte-nos.",
+    contact_btn: "Suporte por Email",
+    footer_tagline: "A ferramenta definitiva para atiradores.",
+    footer_legal: "Legal",
+    footer_privacy: "Política de Privacidade",
+    footer_terms: "Termos de Serviço",
+    footer_rights: "Todos os direitos reservados.",
+    lang_name: "Português",
+    lang_flag: "🇵🇹"
   }
 };
 
 function setLanguage(lang) {
-  if (!translations[lang]) lang = 'en';
+  if (!translations[lang]) lang = 'es';
 
   localStorage.setItem('preferredLanguage', lang);
 
@@ -315,7 +355,7 @@ function setLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem('preferredLanguage');
   const browserLang = navigator.language.split('-')[0];
-  const defaultLang = savedLang || (translations[browserLang] ? browserLang : 'en');
+  const defaultLang = savedLang || (translations[browserLang] ? browserLang : 'es');
 
   setLanguage(defaultLang);
 });
