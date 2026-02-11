@@ -355,7 +355,7 @@ function setLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem('preferredLanguage');
   const browserLang = navigator.language.split('-')[0];
-  const defaultLang = savedLang || (translations[browserLang] ? browserLang : 'es');
+  const defaultLang = savedLang || 'es';
 
   setLanguage(defaultLang);
 });
