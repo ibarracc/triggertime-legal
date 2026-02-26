@@ -1,0 +1,1 @@
+import{s as i}from"./index-CHWeGoxB.js";const s={getDevices(){return i.get("/web/devices")},linkDevice(e){return i.post("/web/devices/link",{link_code:e})},unlinkDevice(e){return i.post(`/web/devices/${e}/unlink`)},updateDevice(e,t){return i.put(`/web/devices/${e}`,t)}};export{s as d};

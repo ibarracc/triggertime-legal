@@ -1,0 +1,1 @@
+import{_ as n,o as r,c as o,B as p,C as c,D as d}from"./index-CHWeGoxB.js";const l={__name:"AppBadge",props:{variant:{type:String,default:"neutral"}},setup(a){const e=a,s=d(()=>`badge-${e.variant}`);return(t,u)=>(r(),o("span",{class:c(["badge",s.value])},[p(t.$slots,"default",{},void 0,!0)],2))}},i=n(l,[["__scopeId","data-v-b92d1de2"]]);export{i as A};
