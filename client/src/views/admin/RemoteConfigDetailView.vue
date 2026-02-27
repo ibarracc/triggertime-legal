@@ -268,7 +268,11 @@ const detectValueType = (value) => {
 const parseValueByType = (rawInput, type) => {
     switch (type) {
         case 'boolean': return rawInput
-        case 'number': return Number(rawInput)
+        case 'number': {
+            const n = Number(rawInput)
+            if (Number.isNaN(n)) throw new Error('Invalid number')
+            return n
+        }
         case 'json': return JSON.parse(rawInput)
         default: return String(rawInput)
     }
@@ -339,6 +343,8 @@ const cancelComparison = () => {
 }
 
 const startEdit = (key) => {
+    cancelDelete()
+    cancelAdd()
     editingKey.value = key
     const value = currentConfigData.value[key]
     const type = detectValueType(value)
@@ -356,12 +362,72 @@ const cancelEdit = () => {
     editJsonError.value = ''
 }
 
+const saveEdit = async () => {
+    const key = editingKey.value
+    if (!key) return
+
+    const type = detectValueType(currentConfigData.value[key])
+    let parsedValue
+    try {
+        parsedValue = parseValueByType(editValue.value, type)
+    } catch (e) {
+        editJsonError.value = type === 'json' ? 'Invalid JSON' : 'Invalid number'
+        return
+    }
+
+    // Snapshot for rollback
+    const previousData = { ...currentConfigData.value }
+
+    // Optimistic update
+    currentConfigData.value = { ...currentConfigData.value, [key]: parsedValue }
+    savingKey.value = key
+
+    try {
+        await adminApi.updateRemoteConfig(configId, { config_data: currentConfigData.value })
+        cancelEdit()
+    } catch (err) {
+        currentConfigData.value = previousData
+        error.value = err.response?.data?.message || 'Failed to save changes'
+    } finally {
+        savingKey.value = null
+    }
+}
+
+const cancelAdd = () => {
+    addingKey.value = false
+    newKeyName.value = ''
+    newKeyType.value = 'string'
+    newKeyValue.value = ''
+    addKeyError.value = ''
+}
+
 const confirmDelete = (key) => {
     deletingKey.value = key
 }
 
 const cancelDelete = () => {
     deletingKey.value = null
+}
+
+const executeDelete = async () => {
+    const key = deletingKey.value
+    if (!key) return
+
+    const previousData = { ...currentConfigData.value }
+    const updated = { ...currentConfigData.value }
+    delete updated[key]
+    currentConfigData.value = updated
+    savingKey.value = key
+
+    try {
+        await adminApi.updateRemoteConfig(configId, { config_data: currentConfigData.value })
+        cancelDelete()
+    } catch (err) {
+        currentConfigData.value = previousData
+        error.value = err.response?.data?.message || 'Failed to delete key'
+    } finally {
+        savingKey.value = null
+    }
 }
 
 const saveChanges = async () => {
