@@ -99,13 +99,52 @@
                 <tbody>
                     <tr v-for="(value, key) in currentConfigData" :key="key">
                         <td class="key-cell">{{ key }}</td>
-                        <td class="value-cell">
+
+                        <!-- Edit mode -->
+                        <td v-if="editingKey === key" class="value-cell edit-mode-cell">
+                            <!-- Boolean toggle -->
+                            <label v-if="typeof currentConfigData[key] === 'boolean'" class="boolean-toggle">
+                                <input type="checkbox" v-model="editValue" />
+                                <span class="toggle-label" :class="editValue ? 'text-green-400' : 'text-red-400'">{{ editValue }}</span>
+                            </label>
+                            <!-- JSON textarea -->
+                            <div v-else-if="detectValueType(currentConfigData[key]) === 'json'" class="json-edit-wrapper">
+                                <textarea v-model="editValue" class="edit-textarea" rows="6" spellcheck="false"></textarea>
+                                <div v-if="editJsonError" class="edit-json-error">{{ editJsonError }}</div>
+                            </div>
+                            <!-- String/Number input -->
+                            <input v-else type="text" v-model="editValue" class="edit-input"
+                                @keydown.enter="saveEdit" @keydown.escape="cancelEdit" />
+                        </td>
+
+                        <!-- View mode -->
+                        <td v-else class="value-cell">
                             <pre v-if="typeof value === 'object'" class="value-pre">{{ JSON.stringify(value, null, 2) }}</pre>
                             <span v-else-if="typeof value === 'boolean'" :class="value ? 'text-green-400 font-bold' : 'text-red-400 font-bold'">{{ value }}</span>
                             <span v-else>{{ value }}</span>
                         </td>
+
+                        <!-- Actions -->
                         <td class="actions-cell">
-                            <div class="flex gap-1">
+                            <div v-if="editingKey === key" class="flex gap-1">
+                                <button class="action-btn action-btn-save" @click="saveEdit" :disabled="savingKey === key" title="Save">
+                                    <svg v-if="savingKey === key" class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                    <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </button>
+                                <button class="action-btn" @click="cancelEdit" title="Cancel">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                            <div v-else-if="deletingKey === key" class="delete-confirm">
+                                <span class="text-[10px] text-red-400">Delete?</span>
+                                <button class="action-btn action-btn-danger" @click="executeDelete" :disabled="savingKey === key" title="Confirm delete">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </button>
+                                <button class="action-btn" @click="cancelDelete" title="Cancel">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                            </div>
+                            <div v-else class="flex gap-1">
                                 <button class="action-btn" @click="startEdit(key)" title="Edit">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
@@ -614,5 +653,81 @@ onMounted(() => {
   text-align: center;
   color: var(--text-secondary);
   font-style: italic;
+}
+
+/* ── Edit Mode ── */
+.edit-mode-cell {
+  max-width: 0;
+  overflow: visible !important;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-family: monospace;
+  font-size: 11px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.edit-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 99,102,241), 0.15);
+}
+
+.edit-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: monospace;
+  font-size: 11px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-primary);
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+}
+
+.edit-textarea:focus {
+  border-color: var(--primary);
+}
+
+.edit-json-error {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #f87171;
+}
+
+.boolean-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.boolean-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.action-btn-save:hover {
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 </style>
