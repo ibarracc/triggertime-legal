@@ -104,12 +104,12 @@
                         <td v-if="editingKey === key" class="value-cell edit-mode-cell">
                             <!-- Boolean toggle -->
                             <label v-if="typeof currentConfigData[key] === 'boolean'" class="boolean-toggle">
-                                <input type="checkbox" v-model="editValue" />
+                                <input type="checkbox" v-model="editValue" @keydown.escape="cancelEdit" />
                                 <span class="toggle-label" :class="editValue ? 'text-green-400' : 'text-red-400'">{{ editValue }}</span>
                             </label>
                             <!-- JSON textarea -->
                             <div v-else-if="detectValueType(currentConfigData[key]) === 'json'" class="json-edit-wrapper">
-                                <textarea v-model="editValue" class="edit-textarea" rows="6" spellcheck="false"></textarea>
+                                <textarea v-model="editValue" class="edit-textarea" rows="6" spellcheck="false" @keydown.escape="cancelEdit"></textarea>
                                 <div v-if="editJsonError" class="edit-json-error">{{ editJsonError }}</div>
                             </div>
                             <!-- String/Number input -->
@@ -267,7 +267,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { adminApi } from '@/api/admin'
 import AppButton from '@/components/ui/AppButton.vue'
@@ -298,6 +298,11 @@ const newKeyName = ref('')
 const newKeyType = ref('string')
 const newKeyValue = ref('')
 const addKeyError = ref('')
+
+watch(newKeyType, () => {
+    newKeyValue.value = newKeyType.value === 'boolean' ? false : ''
+    addKeyError.value = ''
+})
 
 const detectValueType = (value) => {
     if (typeof value === 'boolean') return 'boolean'
@@ -406,6 +411,7 @@ const cancelEdit = () => {
 const saveEdit = async () => {
     const key = editingKey.value
     if (!key) return
+    error.value = ''
 
     const type = detectValueType(currentConfigData.value[key])
     let parsedValue
@@ -454,6 +460,7 @@ const startAdd = () => {
 
 const saveAdd = async () => {
     addKeyError.value = ''
+    error.value = ''
     const keyName = newKeyName.value.trim()
 
     if (!keyName) {
@@ -493,6 +500,8 @@ const saveAdd = async () => {
 }
 
 const confirmDelete = (key) => {
+    cancelEdit()
+    cancelAdd()
     deletingKey.value = key
 }
 
@@ -503,6 +512,7 @@ const cancelDelete = () => {
 const executeDelete = async () => {
     const key = deletingKey.value
     if (!key) return
+    error.value = ''
 
     const previousData = { ...currentConfigData.value }
     const updated = { ...currentConfigData.value }
