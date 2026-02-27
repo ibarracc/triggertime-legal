@@ -87,11 +87,13 @@
                 <colgroup>
                     <col class="key-col" />
                     <col class="value-col" />
+                    <col class="actions-col" />
                 </colgroup>
                 <thead>
                     <tr>
                         <th>Key</th>
                         <th>Value</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,9 +104,19 @@
                             <span v-else-if="typeof value === 'boolean'" :class="value ? 'text-green-400 font-bold' : 'text-red-400 font-bold'">{{ value }}</span>
                             <span v-else>{{ value }}</span>
                         </td>
+                        <td class="actions-cell">
+                            <div class="flex gap-1">
+                                <button class="action-btn" @click="startEdit(key)" title="Edit">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button class="action-btn action-btn-danger" @click="confirmDelete(key)" title="Delete">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     <tr v-if="Object.keys(currentConfigData).length === 0">
-                        <td colspan="2" class="empty-cell">No keys defined.</td>
+                        <td colspan="3" class="empty-cell">No keys defined.</td>
                     </tr>
                 </tbody>
             </table>
@@ -195,6 +207,34 @@ const uploadedConfigData = ref(null)
 
 const fileInputRef = ref(null)
 
+// Inline editing state
+const editingKey = ref(null)
+const editValue = ref('')
+const editJsonError = ref('')
+const deletingKey = ref(null)
+const savingKey = ref(null)
+const addingKey = ref(false)
+const newKeyName = ref('')
+const newKeyType = ref('string')
+const newKeyValue = ref('')
+const addKeyError = ref('')
+
+const detectValueType = (value) => {
+    if (typeof value === 'boolean') return 'boolean'
+    if (typeof value === 'number') return 'number'
+    if (typeof value === 'object' && value !== null) return 'json'
+    return 'string'
+}
+
+const parseValueByType = (rawInput, type) => {
+    switch (type) {
+        case 'boolean': return rawInput
+        case 'number': return Number(rawInput)
+        case 'json': return JSON.parse(rawInput)
+        default: return String(rawInput)
+    }
+}
+
 const loadConfig = async () => {
     loading.value = true
     error.value = ''
@@ -257,6 +297,32 @@ const handleFileUpload = (event) => {
 const cancelComparison = () => {
     isComparing.value = false
     uploadedConfigData.value = null
+}
+
+const startEdit = (key) => {
+    editingKey.value = key
+    const value = currentConfigData.value[key]
+    const type = detectValueType(value)
+    if (type === 'json') {
+        editValue.value = JSON.stringify(value, null, 2)
+    } else {
+        editValue.value = value
+    }
+    editJsonError.value = ''
+}
+
+const cancelEdit = () => {
+    editingKey.value = null
+    editValue.value = ''
+    editJsonError.value = ''
+}
+
+const confirmDelete = (key) => {
+    deletingKey.value = key
+}
+
+const cancelDelete = () => {
+    deletingKey.value = null
 }
 
 const saveChanges = async () => {
@@ -412,6 +478,42 @@ onMounted(() => {
 
 .config-table tr:hover td {
   background: rgba(255, 255, 255, 0.03);
+}
+
+.config-table .actions-col {
+  width: 80px;
+}
+
+.config-table td.actions-cell {
+  padding: 10px 8px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-subtle);
+  width: 80px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.action-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.action-btn-danger:hover {
+  color: #f87171;
+  border-color: #f87171;
 }
 
 /* ── Diff Table ── */
