@@ -159,6 +159,47 @@
                     </tr>
                 </tbody>
             </table>
+
+            <!-- Add Key -->
+            <div v-if="!addingKey" class="add-key-trigger">
+                <button class="add-key-btn" @click="startAdd">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Add Key
+                </button>
+            </div>
+            <div v-else class="add-key-form">
+                <div class="add-key-fields">
+                    <div class="add-key-field">
+                        <label class="add-key-label">Key Name</label>
+                        <input v-model="newKeyName" type="text" class="edit-input" placeholder="key_name"
+                            @keydown.escape="cancelAdd" />
+                    </div>
+                    <div class="add-key-field">
+                        <label class="add-key-label">Type</label>
+                        <select v-model="newKeyType" class="edit-input">
+                            <option value="string">String</option>
+                            <option value="number">Number</option>
+                            <option value="boolean">Boolean</option>
+                            <option value="json">JSON</option>
+                        </select>
+                    </div>
+                    <div class="add-key-field add-key-value-field">
+                        <label class="add-key-label">Value</label>
+                        <label v-if="newKeyType === 'boolean'" class="boolean-toggle">
+                            <input type="checkbox" v-model="newKeyValue" />
+                            <span class="toggle-label" :class="newKeyValue ? 'text-green-400' : 'text-red-400'">{{ newKeyValue }}</span>
+                        </label>
+                        <textarea v-else-if="newKeyType === 'json'" v-model="newKeyValue" class="edit-textarea" rows="4" placeholder="{}" spellcheck="false"></textarea>
+                        <input v-else type="text" v-model="newKeyValue" class="edit-input" placeholder="value"
+                            @keydown.enter="saveAdd" @keydown.escape="cancelAdd" />
+                    </div>
+                </div>
+                <div v-if="addKeyError" class="edit-json-error mb-2">{{ addKeyError }}</div>
+                <div class="flex gap-2 justify-end">
+                    <AppButton variant="secondary" size="sm" @click="cancelAdd">Cancel</AppButton>
+                    <AppButton size="sm" @click="saveAdd" :loading="savingKey === '__new__'">Add</AppButton>
+                </div>
+            </div>
         </div>
         
         <!-- Diff / Compare Mode -->
@@ -399,6 +440,56 @@ const cancelAdd = () => {
     newKeyType.value = 'string'
     newKeyValue.value = ''
     addKeyError.value = ''
+}
+
+const startAdd = () => {
+    cancelEdit()
+    cancelDelete()
+    addingKey.value = true
+    newKeyName.value = ''
+    newKeyType.value = 'string'
+    newKeyValue.value = ''
+    addKeyError.value = ''
+}
+
+const saveAdd = async () => {
+    addKeyError.value = ''
+    const keyName = newKeyName.value.trim()
+
+    if (!keyName) {
+        addKeyError.value = 'Key name is required'
+        return
+    }
+    if (keyName in currentConfigData.value) {
+        addKeyError.value = 'Key already exists'
+        return
+    }
+
+    let parsedValue
+    try {
+        if (newKeyType.value === 'boolean') {
+            parsedValue = !!newKeyValue.value
+        } else {
+            parsedValue = parseValueByType(newKeyValue.value || (newKeyType.value === 'json' ? '{}' : ''), newKeyType.value)
+        }
+    } catch (e) {
+        addKeyError.value = 'Invalid JSON value'
+        return
+    }
+
+    const previousData = { ...currentConfigData.value }
+    currentConfigData.value = { ...currentConfigData.value, [keyName]: parsedValue }
+    savingKey.value = '__new__'
+
+    try {
+        await adminApi.updateRemoteConfig(configId, { config_data: currentConfigData.value })
+        cancelAdd()
+    } catch (err) {
+        currentConfigData.value = previousData
+        error.value = err.response?.data?.message || 'Failed to add key'
+    } finally {
+        savingKey.value = null
+    }
 }
 
 const confirmDelete = (key) => {
@@ -795,5 +886,64 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* ── Add Key Form ── */
+.add-key-trigger {
+  padding: 12px;
+  border-top: 1px dashed var(--border-subtle);
+}
+
+.add-key-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px dashed var(--border-subtle);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.add-key-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(255,255,255,0.04);
+}
+
+.add-key-form {
+  padding: 16px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.02);
+}
+
+.add-key-fields {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+
+.add-key-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.add-key-value-field {
+  flex: 1;
+}
+
+.add-key-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 </style>
