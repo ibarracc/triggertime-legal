@@ -2,7 +2,26 @@
   <div class="input-group">
     <label v-if="label" :for="id" class="label">{{ label }}</label>
     <div class="input-wrapper">
+      <select
+        v-if="isSelect"
+        :id="id"
+        :value="modelValue"
+        @change="$emit('update:modelValue', $event.target.value)"
+        :required="required"
+        :disabled="disabled"
+        :name="name"
+        class="input select"
+        :class="{ 'has-error': error }"
+      >
+        <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
+        <option
+          v-for="opt in options"
+          :key="opt.value"
+          :value="opt.value"
+        >{{ opt.label }}</option>
+      </select>
       <input
+        v-else
         :id="id"
         :type="inputType"
         :value="modelValue"
@@ -47,12 +66,14 @@ const props = defineProps({
   disabled: Boolean,
   error: String,
   autocomplete: String,
-  name: String
+  name: String,
+  options: { type: Array, default: () => [] }
 })
 
 defineEmits(['update:modelValue'])
 
 const showPassword = ref(false)
+const isSelect = computed(() => props.type === 'select')
 const isPassword = computed(() => props.type === 'password')
 const inputType = computed(() => isPassword.value && showPassword.value ? 'text' : props.type)
 
@@ -92,6 +113,21 @@ const togglePasswordVisibility = () => {
   font-size: 1rem;
   transition: all 0.2s ease;
   outline: none;
+}
+
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+select.input option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
 }
 
 .input.has-icon {
