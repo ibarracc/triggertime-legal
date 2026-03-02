@@ -31,17 +31,12 @@
             />
           </div>
           
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-secondary mb-1.5">{{ $t('common.language') }}</label>
-            <select 
-              v-model="profileForm.language" 
-              class="w-full bg-elevated border border-subtle rounded-lg p-2.5 text-sm text-primary focus:border-primary outline-none transition-all"
-            >
-              <option v-for="l in availableLocales" :key="l.code" :value="l.code">
-                {{ l.flag }} {{ l.name }}
-              </option>
-            </select>
-          </div>
+          <AppInput
+            v-model="profileForm.language"
+            :label="$t('common.language')"
+            type="select"
+            :options="availableLocales.map(l => ({ value: l.code, label: `${l.flag} ${l.name}` }))"
+          />
 
           <AppInput
             v-model="profileForm.email"
