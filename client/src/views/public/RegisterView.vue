@@ -28,17 +28,12 @@
           required
         />
 
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-secondary mb-1.5">{{ $t('common.language') }}</label>
-          <select 
-            v-model="language" 
-            class="w-full bg-elevated border border-subtle rounded-lg p-2.5 text-sm text-primary focus:border-primary outline-none transition-all"
-          >
-            <option v-for="l in availableLocales" :key="l.code" :value="l.code">
-              {{ l.flag }} {{ l.name }}
-            </option>
-          </select>
-        </div>
+        <AppInput
+          v-model="language"
+          :label="$t('common.language')"
+          type="select"
+          :options="availableLocales.map(l => ({ value: l.code, label: `${l.flag} ${l.name}` }))"
+        />
         
         <AppInput
           v-model="password"
@@ -55,6 +50,26 @@
           :placeholder="$t('auth.password_placeholder')"
           required
         />
+
+        <div class="terms-checkbox mb-4">
+          <label class="flex items-start gap-2 cursor-pointer text-sm text-secondary">
+            <input
+              v-model="termsAccepted"
+              type="checkbox"
+              class="terms-input mt-0.5"
+            />
+            <span>
+              <i18n-t keypath="auth.accept_terms">
+                <template #terms>
+                  <router-link to="/terms" target="_blank" class="text-primary hover-underline">{{ $t('footer.terms') }}</router-link>
+                </template>
+                <template #privacy>
+                  <router-link to="/privacy" target="_blank" class="text-primary hover-underline">{{ $t('footer.privacy') }}</router-link>
+                </template>
+              </i18n-t>
+            </span>
+          </label>
+        </div>
 
         <div v-if="errorMsg" class="error-msg mb-4">
           {{ errorMsg }}
@@ -98,10 +113,16 @@ const email = ref('')
 const language = ref(locale.value)
 const password = ref('')
 const confirmPassword = ref('')
+const termsAccepted = ref(false)
 const isLoading = ref(false)
 const errorMsg = ref('')
 
 const handleRegister = async () => {
+  if (!termsAccepted.value) {
+    errorMsg.value = t('auth.accept_terms_required')
+    return
+  }
+
   if (password.value !== confirmPassword.value) {
     errorMsg.value = t('auth.password_mismatch')
     return
@@ -159,4 +180,17 @@ const handleRegister = async () => {
 
 .text-primary { color: var(--primary); }
 .hover-underline:hover { text-decoration: underline; }
+
+.terms-checkbox input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.flex { display: flex; }
+.items-start { align-items: flex-start; }
+.gap-2 { gap: 0.5rem; }
+.cursor-pointer { cursor: pointer; }
+.mt-0\.5 { margin-top: 0.125rem; }
 </style>
