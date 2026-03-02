@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import PublicLayout from '@/components/layout/PublicLayout.vue'
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
+import CookieConsent from '@/components/CookieConsent.vue'
 
 const route = useRoute()
 const auth = useAuthStore()
@@ -26,4 +27,5 @@ onMounted(() => {
   <component :is="layoutComponent">
     <router-view />
   </component>
+  <CookieConsent />
 </template>
