@@ -1,3 +1,8 @@
+<script setup>
+import { useCookieConsent } from '@/composables/useCookieConsent'
+const { openBanner } = useCookieConsent()
+</script>
+
 <template>
   <footer class="app-footer text-center">
     <div class="container">
@@ -9,8 +14,9 @@
         
         <div class="footer-links flex justify-center gap-6">
           <router-link to="/privacy" class="nav-link">{{ $t('footer.privacy') }}</router-link>
-          <router-link to="/privacy" class="nav-link">{{ $t('footer.terms') }}</router-link>
+          <router-link to="/terms" class="nav-link">{{ $t('footer.terms') }}</router-link>
           <a href="mailto:help@triggertime.es" class="nav-link">{{ $t('landing.email_support') }}</a>
+          <button class="nav-link cookie-link" @click="openBanner">{{ $t('footer.cookie_settings') }}</button>
         </div>
       </div>
       
@@ -57,5 +63,13 @@
 .footer-bottom {
   border-top: 1px solid var(--border-subtle);
   padding-top: 32px;
+}
+
+.cookie-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
 }
 </style>
