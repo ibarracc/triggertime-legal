@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import i18n from '@/i18n'
+
+const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'pt', 'eu', 'ca', 'gl']
 
 const isLandingDomain = [
     'triggertime.es',
@@ -23,6 +26,12 @@ const routes = [
         path: '/privacy',
         name: 'Privacy',
         component: () => import('../views/public/PrivacyPolicy.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/terms',
+        name: 'Terms',
+        component: () => import('../views/public/TermsOfService.vue'),
         meta: { requiresAuth: false }
     },
 
@@ -192,6 +201,20 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
     const authStore = useAuthStore()
+
+    // Handle ?lang= query param from external links
+    const langParam = to.query.lang
+    if (langParam && SUPPORTED_LOCALES.includes(langParam)) {
+        if (!authStore.isAuthenticated) {
+            // Apply locale for unauthenticated users
+            i18n.global.locale.value = langParam
+            localStorage.setItem('preferredLanguage', langParam)
+            document.documentElement.lang = langParam
+        }
+        // Always strip ?lang= from URL (clean up regardless of auth state)
+        const { lang, ...remainingQuery } = to.query
+        return { ...to, query: remainingQuery, replace: true }
+    }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         return { name: 'Login', query: { redirect: to.fullPath } }
