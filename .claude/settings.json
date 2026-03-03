@@ -22,7 +22,16 @@
       "Bash(composer search cakephp phpstan)",
       "Bash(composer search phpstan-cakephp)",
       "Bash(php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress --generate-baseline phpstan-baseline.neon)",
-      "Bash(echo \"Exit: $?\")"
+      "Bash(echo \"Exit: $?\")",
+      "Bash(vendor/bin/phpunit --verbose)",
+      "Bash(vendor/bin/phpunit --display-incomplete)",
+      "Bash(vendor/bin/phpunit --version)",
+      "Bash(vendor/bin/phpunit)",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(SECURITY_SALT=f76f1c8475585c46c6acd3ddcb8f5e0f15de524637bb4080a08c4afe7cfc9144 php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress)",
+      "Bash(echo \"PHPUnit exit: $?\")",
+      "Bash(echo \"PHPCS exit: $?\")",
+      "Bash(echo \"PHPStan exit: $?\")"
     ],
     "additionalDirectories": [
       "/Users/ajibarra/work/Sites/triggertime-site"
