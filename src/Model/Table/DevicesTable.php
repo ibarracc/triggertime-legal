@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -8,6 +7,9 @@ use Cake\ORM\Table;
 
 class DevicesTable extends Table
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -19,8 +21,6 @@ class DevicesTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
-
-
 
         $this->belongsTo('Instances', [
             'foreignKey' => 'instance_id',

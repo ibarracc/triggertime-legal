@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -9,6 +8,9 @@ use Cake\Validation\Validator;
 
 class ActivationLicensesTable extends Table
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -32,6 +34,9 @@ class ActivationLicensesTable extends Table
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator

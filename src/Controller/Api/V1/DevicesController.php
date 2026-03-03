@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1;
@@ -7,8 +6,7 @@ namespace App\Controller\Api\V1;
 use App\Controller\AppController;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
-use Cake\I18n\FrozenTime;
-use Cake\Utility\Text;
+use Cake\I18n\DateTime;
 
 /**
  * @property \App\Model\Table\ActivationLicensesTable $ActivationLicenses
@@ -18,6 +16,9 @@ use Cake\Utility\Text;
  */
 class DevicesController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -27,6 +28,9 @@ class DevicesController extends AppController
         $this->Instances = $this->fetchTable('Instances');
     }
 
+    /**
+     * Register a device and update its hardware details.
+     */
     public function register()
     {
         $this->request->allowMethod(['post']);
@@ -78,13 +82,16 @@ class DevicesController extends AppController
         $this->Devices->save($device);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'message' => 'Device registered successfully',
-                'device' => $device
+                'device' => $device,
             ]));
     }
 
+    /**
+     * Activate a device using a B2B license number.
+     */
     public function activate()
     {
         $this->request->allowMethod(['post']);
@@ -105,7 +112,7 @@ class DevicesController extends AppController
         $license = $this->ActivationLicenses->find()
             ->where([
                 'license_number' => $licenseNumber,
-                'instance_id' => $instanceObj ? $instanceObj->id : null
+                'instance_id' => $instanceObj ? $instanceObj->id : null,
             ])
             ->first();
 
@@ -122,22 +129,25 @@ class DevicesController extends AppController
         }
 
         $license->device_id = $device->id;
-        $license->used = clone new FrozenTime();
+        $license->used = clone new DateTime();
 
         $this->ActivationLicenses->save($license);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'message' => 'Device activated successfully',
                 'license' => [
                     'email' => $license->email,
                     'name' => $license->name,
-                    'valid' => true
-                ]
+                    'valid' => true,
+                ],
             ]));
     }
 
+    /**
+     * Return the Pro subscription status for a given device UUID.
+     */
     public function status(string $deviceUuid)
     {
         $this->request->allowMethod(['get']);
@@ -171,13 +181,16 @@ class DevicesController extends AppController
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'pro_active' => $isActive,
-                'details' => $statusData
+                'details' => $statusData,
             ]));
     }
 
+    /**
+     * Return the B2B license status for a given device UUID.
+     */
     public function licenseStatus(string $deviceUuid)
     {
         $this->request->allowMethod(['get']);
@@ -185,7 +198,7 @@ class DevicesController extends AppController
         $device = $this->Devices->find()->where(['device_uuid' => $deviceUuid])->first();
         if (!$device) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode(['success' => true, 'valid' => false]));
+                ->withStringBody((string)json_encode(['success' => true, 'valid' => false]));
         }
 
         $license = $this->ActivationLicenses->find()
@@ -194,21 +207,24 @@ class DevicesController extends AppController
 
         if ($license) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => true,
                     'valid' => true,
                     'license' => [
                         'email' => $license->email,
                         'name' => $license->name,
-                        'used' => $license->used
-                    ]
+                        'used' => $license->used,
+                    ],
                 ]));
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true, 'valid' => false]));
+            ->withStringBody((string)json_encode(['success' => true, 'valid' => false]));
     }
 
+    /**
+     * Transfer an existing license to a different device.
+     */
     public function transferLicense(string $deviceUuid)
     {
         $this->request->allowMethod(['post']);
@@ -234,13 +250,13 @@ class DevicesController extends AppController
         }
 
         $license->device_id = $device->id;
-        $license->used = clone new FrozenTime();
+        $license->used = clone new DateTime();
         $this->ActivationLicenses->save($license);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'message' => 'License transferred successfully'
+                'message' => 'License transferred successfully',
             ]));
     }
 }

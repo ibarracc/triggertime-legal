@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 /**
@@ -18,6 +17,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Middleware\ApiErrorMiddleware;
 use App\Middleware\HostHeaderMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
@@ -68,7 +68,7 @@ class Application extends BaseApplication
             // Catch any exceptions in the lower layers,
             // and make an error page/response
             ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
-            ->add(new \App\Middleware\ApiErrorMiddleware())
+            ->add(new ApiErrorMiddleware())
 
             // Validate Host header to prevent Host Header Injection attacks.
             // In production, ensures App.fullBaseUrl is configured and validates

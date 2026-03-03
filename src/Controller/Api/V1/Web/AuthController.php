@@ -1,28 +1,40 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Web;
 
 use App\Controller\AppController;
+use App\Model\Table\UsersTable;
 use App\Service\JwtService;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
-use Cake\Utility\Text;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
+use Cake\Log\Log;
 use Cake\Mailer\Mailer;
+use Cake\Routing\Router;
+use Cake\Utility\Text;
+use Exception;
 
 class AuthController extends AppController
 {
-    private $Authentication;
+    /**
+     * @var \App\Model\Table\UsersTable
+     */
+    private UsersTable $Authentication;
 
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
         $this->Authentication = $this->fetchTable('Users');
     }
 
+    /**
+     * Authenticate a user and return a JWT token.
+     */
     public function login()
     {
         $this->request->allowMethod(['post']);
@@ -47,17 +59,20 @@ class AuthController extends AppController
         $token = $jwt->generateToken([
             'sub' => $user->id,
             'email' => $user->email,
-            'role' => $user->role
+            'role' => $user->role,
         ]);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'token' => $token,
-                'user' => $user
+                'user' => $user,
             ]));
     }
 
+    /**
+     * Register a new user account and return a JWT token.
+     */
     public function register()
     {
         $this->request->allowMethod(['post']);
@@ -99,34 +114,37 @@ class AuthController extends AppController
         $sub->user_id = $user->id;
         $sub->plan = 'free';
         $sub->status = 'active';
-        $sub->max_devices_allowed = Configure::read("Subscriptions.{$sub->plan}.max_devices_allowed"); // Unlimited devices
-        $sub->current_period_start = FrozenTime::now();
+        $sub->max_devices_allowed = Configure::read("Subscriptions.{$sub->plan}.max_devices_allowed"); // Unlimited
+        $sub->current_period_start = DateTime::now();
         $subs->save($sub);
 
         // Also check if they have any B2B licenses matching their email, and auto-link user_id
         $licenses = $this->fetchTable('ActivationLicenses');
         $licenses->updateAll(
             ['user_id' => $user->id],
-            ['email' => $user->email, 'user_id IS' => null]
+            ['email' => $user->email, 'user_id IS' => null],
         );
 
         $jwt = new JwtService();
         $token = $jwt->generateToken([
             'sub' => $user->id,
             'email' => $user->email,
-            'role' => $user->role
+            'role' => $user->role,
         ]);
 
         $user->subscriptions = [$sub];
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'token' => $token,
-                'user' => $user
+                'user' => $user,
             ]));
     }
 
+    /**
+     * Return the authenticated user's profile data.
+     */
     public function me()
     {
         $this->request->allowMethod(['get']);
@@ -154,14 +172,17 @@ class AuthController extends AppController
             ->all();
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'user' => $user,
                 'b2b_licenses' => $licenses,
-                'instances' => $instances
+                'instances' => $instances,
             ]));
     }
 
+    /**
+     * Send a password reset email to the given address.
+     */
     public function forgotPassword()
     {
         $this->request->allowMethod(['post']);
@@ -181,11 +202,11 @@ class AuthController extends AppController
             $reset->id = Text::uuid();
             $reset->user_id = $user->id;
             $reset->token = $token;
-            $reset->expires_at = FrozenTime::now()->addHours(24);
+            $reset->expires_at = DateTime::now()->addHours(24);
             $Passwords->save($reset);
 
             // Construct frontend reset URL
-            $frontendUrl = env('FRONTEND_URL', \Cake\Routing\Router::fullBaseUrl());
+            $frontendUrl = env('FRONTEND_URL', Router::fullBaseUrl());
             $resetLink = $frontendUrl . '/reset-password/' . $token;
 
             // Send Email
@@ -193,20 +214,26 @@ class AuthController extends AppController
                 $mailer = new Mailer('default');
                 $mailer->setTo($user->email)
                     ->setSubject('TriggerTime - Password Reset')
-                    ->deliver("You requested a password reset. Please click on the link below to set a new password:\n\n" . $resetLink);
-            } catch (\Exception $e) {
+                    ->deliver(
+                        "You requested a password reset. Please click on the link below to set a new password:\n\n"
+                        . $resetLink,
+                    );
+            } catch (Exception $e) {
                 // Log and continue, or fail depending on strictness
-                \Cake\Log\Log::error('Mail sending failed: ' . $e->getMessage());
+                Log::error('Mail sending failed: ' . $e->getMessage());
             }
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'message' => 'If your email is registered, you will receive a password reset link shortly.'
+                'message' => 'If your email is registered, you will receive a password reset link shortly.',
             ]));
     }
 
+    /**
+     * Reset a user's password using a valid reset token.
+     */
     public function resetPassword()
     {
         $this->request->allowMethod(['post']);
@@ -221,7 +248,7 @@ class AuthController extends AppController
         $reset = $Passwords->find()->where([
             'token' => $token,
             'used' => false,
-            'expires_at >=' => FrozenTime::now()
+            'expires_at >=' => DateTime::now(),
         ])->first();
 
         if (!$reset) {
@@ -236,15 +263,18 @@ class AuthController extends AppController
             $Passwords->save($reset);
 
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => true,
-                    'message' => 'Password has been successfully reset'
+                    'message' => 'Password has been successfully reset',
                 ]));
         }
 
         throw new BadRequestException('Failed to reset password');
     }
 
+    /**
+     * Update the authenticated user's profile information.
+     */
     public function updateProfile()
     {
         $this->request->allowMethod(['post']);
@@ -257,15 +287,18 @@ class AuthController extends AppController
 
         if ($this->Authentication->save($user)) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => true,
-                    'user' => $user
+                    'user' => $user,
                 ]));
         }
 
         throw new BadRequestException('Failed to update profile');
     }
 
+    /**
+     * Change the authenticated user's password.
+     */
     public function updatePassword()
     {
         $this->request->allowMethod(['post']);
@@ -288,9 +321,9 @@ class AuthController extends AppController
 
         if ($this->Authentication->save($user)) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode([
+                ->withStringBody((string)json_encode([
                     'success' => true,
-                    'message' => 'Password updated successfully'
+                    'message' => 'Password updated successfully',
                 ]));
         }
 

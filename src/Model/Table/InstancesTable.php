@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -17,7 +15,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\AppRemoteConfigTable&\Cake\ORM\Association\HasMany $AppRemoteConfig
  * @property \App\Model\Table\DevicesTable&\Cake\ORM\Association\HasMany $Devices
  * @property \App\Model\Table\VersionsTable&\Cake\ORM\Association\HasMany $Versions
- *
  * @method \App\Model\Entity\Instance newEmptyEntity()
  * @method \App\Model\Entity\Instance newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\Instance> newEntities(array $data, array $options = [])
@@ -31,7 +28,6 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\Instance>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Instance> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Instance>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Instance>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\Instance>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\Instance> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class InstancesTable extends Table

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Admin;
@@ -8,6 +7,9 @@ use App\Controller\AppController;
 
 class RemoteConfigController extends AppController
 {
+    /**
+     * List all remote config entries.
+     */
     public function index()
     {
         $this->request->allowMethod(['get']);
@@ -16,20 +18,28 @@ class RemoteConfigController extends AppController
             ->all();
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true, 'configs' => $configs]));
+            ->withStringBody((string)json_encode(['success' => true, 'configs' => $configs]));
     }
 
-    public function view($id)
+    /**
+     * Display a single remote config entry.
+     *
+     * @param string $id Config record ID.
+     */
+    public function view(string $id)
     {
         $this->request->allowMethod(['get']);
         $config = $this->fetchTable('RemoteConfig')->get($id, [
-            'contain' => ['Instances', 'Versions']
+            'contain' => ['Instances', 'Versions'],
         ]);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true, 'config' => $config]));
+            ->withStringBody((string)json_encode(['success' => true, 'config' => $config]));
     }
 
+    /**
+     * Create a new remote config entry.
+     */
     public function add()
     {
         $this->request->allowMethod(['post']);
@@ -55,14 +65,19 @@ class RemoteConfigController extends AppController
 
         if ($table->save($config)) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode(['success' => true, 'config' => $config]));
+                ->withStringBody((string)json_encode(['success' => true, 'config' => $config]));
         }
 
         return $this->response->withType('application/json')->withStatus(422)
-            ->withStringBody(json_encode(['success' => false, 'errors' => $config->getErrors()]));
+            ->withStringBody((string)json_encode(['success' => false, 'errors' => $config->getErrors()]));
     }
 
-    public function edit($id)
+    /**
+     * Update an existing remote config entry.
+     *
+     * @param string $id Config record ID.
+     */
+    public function edit(string $id)
     {
         $this->request->allowMethod(['put']);
         $table = $this->fetchTable('RemoteConfig');
@@ -79,14 +94,19 @@ class RemoteConfigController extends AppController
 
         if ($table->save($config)) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode(['success' => true, 'config' => $config]));
+                ->withStringBody((string)json_encode(['success' => true, 'config' => $config]));
         }
 
         return $this->response->withType('application/json')->withStatus(422)
-            ->withStringBody(json_encode(['success' => false, 'errors' => $config->getErrors()]));
+            ->withStringBody((string)json_encode(['success' => false, 'errors' => $config->getErrors()]));
     }
 
-    public function delete($id)
+    /**
+     * Delete a remote config entry.
+     *
+     * @param string $id Config record ID.
+     */
+    public function delete(string $id)
     {
         $this->request->allowMethod(['delete']);
         $table = $this->fetchTable('RemoteConfig');
@@ -94,10 +114,10 @@ class RemoteConfigController extends AppController
 
         if ($table->delete($config)) {
             return $this->response->withType('application/json')
-                ->withStringBody(json_encode(['success' => true]));
+                ->withStringBody((string)json_encode(['success' => true]));
         }
 
         return $this->response->withType('application/json')->withStatus(422)
-            ->withStringBody(json_encode(['success' => false, 'message' => 'Could not delete config']));
+            ->withStringBody((string)json_encode(['success' => false, 'message' => 'Could not delete config']));
     }
 }

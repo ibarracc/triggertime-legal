@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 /**
@@ -19,12 +18,8 @@ declare(strict_types=1);
 namespace App\Test\TestCase;
 
 use App\Application;
-use App\Middleware\HostHeaderMiddleware;
 use Cake\Core\Configure;
-use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
-use Cake\Routing\Middleware\AssetMiddleware;
-use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 

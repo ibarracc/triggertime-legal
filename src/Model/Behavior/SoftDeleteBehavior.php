@@ -1,14 +1,13 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Behavior;
 
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
 use Cake\Event\EventInterface;
 use Cake\ORM\Behavior;
 use Cake\ORM\Query\SelectQuery;
-use Cake\Datasource\EntityInterface;
-use ArrayObject;
 
 class SoftDeleteBehavior extends Behavior
 {
@@ -18,9 +17,18 @@ class SoftDeleteBehavior extends Behavior
 
     /**
      * Intercept find queries to exclude soft-deleted records.
+     *
+     * @param \Cake\Event\EventInterface<\Cake\ORM\Table> $event The event object.
+     * @param \Cake\ORM\Query\SelectQuery<\Cake\ORM\Table> $query The query object.
+     * @param \ArrayObject<string, mixed> $options Query options.
+     * @param bool $primary Whether this is the primary query.
      */
-    public function beforeFind(EventInterface $event, SelectQuery $query, ArrayObject $options, $primary): void
-    {
+    public function beforeFind(
+        EventInterface $event,
+        SelectQuery $query,
+        ArrayObject $options,
+        bool $primary = false,
+    ): void {
         // Check if we specifically want to include deleted records
         if (isset($options['withDeleted']) && $options['withDeleted'] === true) {
             return;
@@ -36,6 +44,10 @@ class SoftDeleteBehavior extends Behavior
 
     /**
      * Intercept deletes to perform an update instead.
+     *
+     * @param \Cake\Event\EventInterface<\Cake\ORM\Table> $event The event object.
+     * @param \Cake\Datasource\EntityInterface $entity The entity being deleted.
+     * @param \ArrayObject<string, mixed> $options Delete options.
      */
     public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): bool
     {
@@ -67,6 +79,7 @@ class SoftDeleteBehavior extends Behavior
     {
         $field = $this->getConfig('field');
         $entity->set($field, null);
+
         return (bool)$this->_table->save($entity);
     }
 }

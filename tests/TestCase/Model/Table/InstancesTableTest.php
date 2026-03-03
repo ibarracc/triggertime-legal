@@ -25,7 +25,7 @@ class InstancesTableTest extends TestCase
      */
     protected array $fixtures = [
         'app.Instances',
-        'app.ClubAdmins',
+        'app.Users',
         'app.ActivationLicenses',
         'app.AppRemoteConfig',
         'app.Devices',

@@ -21,7 +21,7 @@ class RefactorAppInstances extends BaseMigration
         // 1. Add instance_id column
         foreach ($tables as $tableName) {
             $table = $this->table($tableName);
-            $table->addColumn('instance_id', 'uuid', ['null' => true, 'after' => 'app_instance'])
+            $table->addColumn('instance_id', 'uuid', ['null' => true])
                 ->update();
         }
 

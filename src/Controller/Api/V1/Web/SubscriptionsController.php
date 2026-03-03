@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Web;
@@ -7,6 +6,8 @@ namespace App\Controller\Api\V1\Web;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Log\Log;
+use Exception;
 use Stripe\StripeClient;
 
 /**
@@ -14,11 +15,17 @@ use Stripe\StripeClient;
  */
 class SubscriptionsController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
     }
 
+    /**
+     * Create a Stripe Checkout session for upgrading to a Pro subscription.
+     */
     public function createCheckout()
     {
         $this->request->allowMethod(['post']);
@@ -27,11 +34,11 @@ class SubscriptionsController extends AppController
         $userId = $payload['sub'];
 
         $user = $this->fetchTable('Users')->get($userId);
-        \Cake\Log\Log::debug('SubscriptionsController::createCheckout for user: ' . $userId);
+        Log::debug('SubscriptionsController::createCheckout for user: ' . $userId);
 
         $secretKey = Configure::read('Stripe.secret_key');
         if (!$secretKey) {
-            \Cake\Log\Log::error('Stripe Secret Key missing from configuration');
+            Log::error('Stripe Secret Key missing from configuration');
             throw new BadRequestException('Stripe is not configured correctly.');
         }
 
@@ -39,7 +46,7 @@ class SubscriptionsController extends AppController
 
         // Create or retrieve customer
         if (!$user->stripe_customer_id) {
-            \Cake\Log\Log::debug('Creating Stripe customer for user: ' . $user->email);
+            Log::debug('Creating Stripe customer for user: ' . $user->email);
             try {
                 $customer = $stripe->customers->create([
                     'email' => $user->email,
@@ -47,8 +54,8 @@ class SubscriptionsController extends AppController
                 ]);
                 $user->stripe_customer_id = $customer->id;
                 $this->fetchTable('Users')->save($user);
-            } catch (\Exception $e) {
-                \Cake\Log\Log::error('Stripe Customer Creation Failed: ' . $e->getMessage());
+            } catch (Exception $e) {
+                Log::error('Stripe Customer Creation Failed: ' . $e->getMessage());
                 throw new BadRequestException('Failed to create billing profile: ' . $e->getMessage());
             }
         }
@@ -71,11 +78,13 @@ class SubscriptionsController extends AppController
 
         // Real Stripe Checkout URL generation
         try {
-            \Cake\Log\Log::debug('Creating Stripe Checkout session');
+            Log::debug('Creating Stripe Checkout session');
             $sessionParams = [
                 'customer' => $user->stripe_customer_id,
-                'success_url' => env('APP_FULL_BASE_URL', 'https://triggertime.ddev.site') . '/checkout-success?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => env('APP_FULL_BASE_URL', 'https://triggertime.ddev.site') . '/dashboard/subscription',
+                'success_url' => env('APP_FULL_BASE_URL', 'https://triggertime.ddev.site')
+                    . '/checkout-success?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => env('APP_FULL_BASE_URL', 'https://triggertime.ddev.site')
+                    . '/dashboard/subscription',
                 'line_items' => [
                     [
                         'price_data' => [
@@ -99,19 +108,22 @@ class SubscriptionsController extends AppController
             }
 
             $session = $stripe->checkout->sessions->create($sessionParams);
-            \Cake\Log\Log::debug('Stripe Session Created: ' . $session->id);
-        } catch (\Exception $e) {
-            \Cake\Log\Log::error('Stripe Checkout Session Creation Failed: ' . $e->getMessage());
+            Log::debug('Stripe Session Created: ' . $session->id);
+        } catch (Exception $e) {
+            Log::error('Stripe Checkout Session Creation Failed: ' . $e->getMessage());
             throw new BadRequestException('Failed to initiate checkout: ' . $e->getMessage());
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'url' => $session->url
+                'url' => $session->url,
             ]));
     }
 
+    /**
+     * Create a Stripe Billing Portal session for managing subscriptions.
+     */
     public function portal()
     {
         $this->request->allowMethod(['post']);
@@ -139,9 +151,9 @@ class SubscriptionsController extends AppController
         ]);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'url' => $session->url
+                'url' => $session->url,
             ]));
     }
 }

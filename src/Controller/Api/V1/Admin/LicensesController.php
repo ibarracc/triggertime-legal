@@ -1,12 +1,12 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Admin;
 
 use App\Controller\AppController;
-use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\NotFoundException;
 
 /**
  * @property \App\Model\Table\ActivationLicensesTable $ActivationLicenses
@@ -14,6 +14,9 @@ use Cake\Http\Exception\BadRequestException;
  */
 class LicensesController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -36,7 +39,7 @@ class LicensesController extends AppController
             // A club admin can only see licenses attached to instances they manage
             $controlledInstances = $this->Instances->find('list', [
                 'idField' => 'id',
-                'valueField' => 'id'
+                'valueField' => 'id',
             ])->where(['club_admin_id' => $userId])->toArray();
 
             if (empty($controlledInstances)) {
@@ -52,13 +55,21 @@ class LicensesController extends AppController
         return $query;
     }
 
+    /**
+     * List all accessible activation licenses including soft-deleted ones.
+     */
     public function index()
     {
         $this->request->allowMethod(['get']);
         $licenses = $this->getAccessibleLicensesQuery(withDeleted: true)->all();
-        return $this->response->withType('application/json')->withStringBody(json_encode(['success' => true, 'licenses' => $licenses]));
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode(['success' => true, 'licenses' => $licenses]));
     }
 
+    /**
+     * Import activation licenses from a CSV file or string.
+     */
     public function importCsv()
     {
         $this->request->allowMethod(['post']);
@@ -68,7 +79,9 @@ class LicensesController extends AppController
 
         $targetInstanceId = $this->request->getData('instance_id');
         if (!$targetInstanceId) {
-            throw new BadRequestException('Target instance ID is required. Please select an instance to load licenses into.');
+            throw new BadRequestException(
+                'Target instance ID is required. Please select an instance to load licenses into.',
+            );
         }
 
         $instanceObj = $this->Instances->get($targetInstanceId);
@@ -94,22 +107,32 @@ class LicensesController extends AppController
         $emailIdx = array_search('email', $header);
         $nameIdx = array_search('name', $header);
 
-        if ($emailIdx === false) $emailIdx = 0;
-        if ($nameIdx === false) $nameIdx = 1;
+        if ($emailIdx === false) {
+            $emailIdx = 0;
+        }
+        if ($nameIdx === false) {
+            $nameIdx = 1;
+        }
 
         $created = [];
 
         foreach ($lines as $line) {
             $line = trim($line);
-            if (empty($line)) continue;
+            if (empty($line)) {
+                continue;
+            }
 
             $row = str_getcsv($line);
-            if (!isset($row[$emailIdx])) continue;
+            if (!isset($row[$emailIdx])) {
+                continue;
+            }
 
             $email = trim($row[$emailIdx]);
             $name = isset($row[$nameIdx]) ? trim($row[$nameIdx]) : '';
 
-            if (empty($email)) continue;
+            if (empty($email)) {
+                continue;
+            }
 
             $license = $this->ActivationLicenses->newEmptyEntity();
             $license->email = $email;
@@ -119,7 +142,8 @@ class LicensesController extends AppController
             // Generate XXXX-XXXX-XXXX-XXXX
             $pool = str_shuffle(str_repeat('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 5));
             $rawCode = substr($pool, 0, 16);
-            $licenseCode = substr($rawCode, 0, 4) . '-' . substr($rawCode, 4, 4) . '-' . substr($rawCode, 8, 4) . '-' . substr($rawCode, 12, 4);
+            $licenseCode = substr($rawCode, 0, 4) . '-' . substr($rawCode, 4, 4)
+                . '-' . substr($rawCode, 8, 4) . '-' . substr($rawCode, 12, 4);
 
             $license->license_number = $licenseCode;
 
@@ -129,35 +153,41 @@ class LicensesController extends AppController
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'message' => count($created) . ' licenses generated',
-                'licenses' => $created
+                'licenses' => $created,
             ]));
     }
 
+    /**
+     * Display a single activation license.
+     */
     public function view(string $id)
     {
         $this->request->allowMethod(['get']);
         $license = $this->getAccessibleLicensesQuery()->where(['ActivationLicenses.id' => $id])->first();
 
         if (!$license) {
-            throw new \Cake\Http\Exception\NotFoundException('License not found or inaccessible');
+            throw new NotFoundException('License not found or inaccessible');
         }
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'license' => $license
+            'license' => $license,
         ]));
     }
 
+    /**
+     * Update an activation license's details.
+     */
     public function edit(string $id)
     {
         $this->request->allowMethod(['put', 'patch', 'post']);
 
         $license = $this->getAccessibleLicensesQuery()->where(['ActivationLicenses.id' => $id])->first();
         if (!$license) {
-            throw new \Cake\Http\Exception\NotFoundException('License not found or inaccessible');
+            throw new NotFoundException('License not found or inaccessible');
         }
 
         $data = $this->request->getData();
@@ -169,25 +199,30 @@ class LicensesController extends AppController
 
         $license = $this->ActivationLicenses->patchEntity($license, $data);
         if ($this->ActivationLicenses->save($license)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'license' => $license
+                'license' => $license,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'errors' => $license->getErrors()
+            'errors' => $license->getErrors(),
         ]));
     }
 
+    /**
+     * Toggle a license between active and soft-deleted states.
+     */
     public function toggleActive(string $id)
     {
         $this->request->allowMethod(['post']);
 
-        $license = $this->getAccessibleLicensesQuery(withDeleted: true)->where(['ActivationLicenses.id' => $id])->first();
+        $license = $this->getAccessibleLicensesQuery(withDeleted: true)
+            ->where(['ActivationLicenses.id' => $id])
+            ->first();
         if (!$license) {
-            throw new \Cake\Http\Exception\NotFoundException('License not found or inaccessible');
+            throw new NotFoundException('License not found or inaccessible');
         }
 
         if ($license->deleted_at !== null) {
@@ -196,9 +231,9 @@ class LicensesController extends AppController
             $this->ActivationLicenses->delete($license); // Triggers soft delete
         }
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'message' => 'License access toggled'
+            'message' => 'License access toggled',
         ]));
     }
 }

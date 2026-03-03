@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Middleware;
@@ -14,6 +13,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ApiKeyMiddleware implements MiddlewareInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $apiKey = $request->getHeaderLine('X-Api-Key');

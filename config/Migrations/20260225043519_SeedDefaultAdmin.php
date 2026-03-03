@@ -27,7 +27,8 @@ class SeedDefaultAdmin extends BaseMigration
                 'email' => 'alejandro@triggertime.es',
                 'password_hash' => password_hash('password', PASSWORD_DEFAULT),
                 'role' => 'admin',
-                'created_at' => date('Y-m-d H:i:s')
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ])->saveData();
     }

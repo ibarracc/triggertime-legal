@@ -1,15 +1,17 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\ORM\RulesChecker;
 
 class SubscriptionDevicesTable extends Table
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -30,6 +32,9 @@ class SubscriptionDevicesTable extends Table
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
@@ -49,6 +54,9 @@ class SubscriptionDevicesTable extends Table
         return $validator;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn('subscription_id', 'Subscriptions'), ['errorField' => 'subscription_id']);

@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(SECURITY_SALT=test vendor/bin/phpstan analyse --no-progress)",
+      "Bash(awk 'length > 120 {print FILENAME \"\":\"\" NR \"\": \"\" length \"\" chars\"\"}' /Users/ajibarra/work/Sites/triggertime-site/src/Controller/Api/V1/Web/AuthController.php /Users/ajibarra/work/Sites/triggertime-site/src/Controller/Api/V1/Web/SubscriptionsController.php /Users/ajibarra/work/Sites/triggertime-site/src/Controller/Api/V1/Admin/LicensesController.php /Users/ajibarra/work/Sites/triggertime-site/src/Controller/Api/V1/Admin/VersionsController.php /Users/ajibarra/work/Sites/triggertime-site/src/Controller/Api/V1/WebhooksController.php /Users/ajibarra/work/Sites/triggertime-site/src/Model/Behavior/SoftDeleteBehavior.php /Users/ajibarra/work/Sites/triggertime-site/src/Service/JwtService.php)",
+      "Bash(composer require --dev phpstan/phpstan)",
+      "Read(//Users/ajibarra/.composer/vendor/bin/**)",
+      "Bash(composer require --dev \"phpstan/phpstan:^1.12\")",
+      "Bash(COMPOSER_AUTH='{}' composer require --dev \"phpstan/phpstan:^1.12\" --prefer-dist)",
+      "Bash(composer config --global github-oauth.github.com \"\")",
+      "Bash(COMPOSER_PROCESS_TIMEOUT=300 composer require --dev \"phpstan/phpstan:^1.12\" --no-plugins)",
+      "Bash(composer config --global --unset github-oauth.github.com)",
+      "Bash(COMPOSER_PROCESS_TIMEOUT=300 composer install)",
+      "Bash(php -r 'file_put_contents\\(getenv\\(\"\"HOME\"\"\\) . \"\"/.config/composer/auth.json\"\", json_encode\\([\"\"github-oauth\"\" => new stdClass\\(\\)]\\)\\);')",
+      "Bash(composer install)",
+      "Bash(SECURITY_SALT=f76f1c8475585c46c6acd3ddcb8f5e0f15de524637bb4080a08c4afe7cfc9144 vendor/bin/phpstan analyse --no-progress)",
+      "Bash(vendor/bin/phpstan analyse --no-progress)",
+      "Bash(php -r \"echo ini_get\\(''memory_limit''\\);\")",
+      "Bash(php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress)",
+      "Bash(php -r 'require \"\"vendor/autoload.php\"\"; var_dump\\(class_exists\\(\"\"Cake\\\\I18n\\\\FrozenTime\"\"\\)\\);')",
+      "Bash(composer show)",
+      "Bash(composer search cakephp phpstan)",
+      "Bash(composer search phpstan-cakephp)",
+      "Bash(php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress --generate-baseline phpstan-baseline.neon)",
+      "Bash(echo \"Exit: $?\")"
+    ],
+    "additionalDirectories": [
+      "/Users/ajibarra/work/Sites/triggertime-site"
+    ]
+  }
+}

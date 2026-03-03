@@ -1,11 +1,13 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1;
 
 use App\Controller\AppController;
 use Cake\Http\Exception\BadRequestException;
+use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\NotFoundException;
+use stdClass;
 
 /**
  * @property \App\Model\Table\RemoteConfigTable $RemoteConfig
@@ -14,6 +16,9 @@ use Cake\Http\Exception\BadRequestException;
  */
 class AppConfigController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -22,6 +27,9 @@ class AppConfigController extends AppController
         $this->Instances = $this->fetchTable('Instances');
     }
 
+    /**
+     * Return the remote configuration and version status for the requesting app instance.
+     */
     public function index()
     {
         $this->request->allowMethod(['get']);
@@ -36,10 +44,10 @@ class AppConfigController extends AppController
 
         $instanceObj = $this->Instances->find()->where(['name' => $appInstanceName])->first();
         if (!$instanceObj) {
-            throw new \Cake\Http\Exception\NotFoundException('Instance not found');
+            throw new NotFoundException('Instance not found');
         }
         if (!$instanceObj->is_active) {
-            throw new \Cake\Http\Exception\ForbiddenException('Instance is disabled');
+            throw new ForbiddenException('Instance is disabled');
         }
 
         $instanceId = $instanceObj->id;
@@ -68,7 +76,7 @@ class AppConfigController extends AppController
                 ->first();
         }
 
-        $configData = new \stdClass(); // base empty object
+        $configData = new stdClass(); // base empty object
 
         if ($configRecord) {
             // Convert to array and filter out metadata columns
@@ -116,10 +124,10 @@ class AppConfigController extends AppController
         }
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
                 'disabled' => $disabled,
-                'config' => $configData
+                'config' => $configData,
             ]));
     }
 }

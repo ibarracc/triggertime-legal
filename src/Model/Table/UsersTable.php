@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Table;
@@ -9,6 +8,9 @@ use Cake\Validation\Validator;
 
 class UsersTable extends Table
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(array $config): void
     {
         parent::initialize($config);
@@ -21,8 +23,8 @@ class UsersTable extends Table
             'events' => [
                 'Model.beforeSave' => [
                     'created_at' => 'new',
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->addBehavior('SoftDelete');
 
@@ -37,6 +39,9 @@ class UsersTable extends Table
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validationDefault(Validator $validator): Validator
     {
         $validator

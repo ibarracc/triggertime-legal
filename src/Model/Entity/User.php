@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Model\Entity;
@@ -26,11 +25,18 @@ class User extends Entity
         'password_hash',
     ];
 
+    /**
+     * Password hash setter.
+     *
+     * @param string $password The password to hash.
+     * @return string
+     */
     protected function _setPasswordHash(string $password): ?string
     {
         if (strlen($password) > 0) {
             return password_hash($password, PASSWORD_DEFAULT);
         }
+
         return $password;
     }
 }

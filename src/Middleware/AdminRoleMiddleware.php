@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Middleware;
 
@@ -11,6 +12,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AdminRoleMiddleware implements MiddlewareInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $payload = $request->getAttribute('jwt_payload');

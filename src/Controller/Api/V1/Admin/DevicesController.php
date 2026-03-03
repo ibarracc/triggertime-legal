@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Admin;
@@ -12,12 +11,18 @@ use Cake\Http\Exception\ForbiddenException;
  */
 class DevicesController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
         $this->Devices = $this->fetchTable('Devices');
     }
 
+    /**
+     * Throw a ForbiddenException if the current user is not a super admin.
+     */
     private function ensureAdmin()
     {
         $payload = $this->request->getAttribute('jwt_payload');
@@ -26,6 +31,9 @@ class DevicesController extends AppController
         }
     }
 
+    /**
+     * List all devices with associated users and instances.
+     */
     public function index()
     {
         $this->ensureAdmin();
@@ -35,12 +43,15 @@ class DevicesController extends AppController
             ->contain(['Users', 'Instances'])
             ->all();
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'devices' => $devices
+            'devices' => $devices,
         ]));
     }
 
+    /**
+     * Create a new device record.
+     */
     public function add()
     {
         $this->ensureAdmin();
@@ -49,18 +60,21 @@ class DevicesController extends AppController
 
         $device = $this->Devices->newEntity($data);
         if ($this->Devices->save($device)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'device' => $device
+                'device' => $device,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'errors' => $device->getErrors()
+            'errors' => $device->getErrors(),
         ]));
     }
 
+    /**
+     * Update an existing device record.
+     */
     public function edit(string $id)
     {
         $this->ensureAdmin();
@@ -70,33 +84,39 @@ class DevicesController extends AppController
         $device = $this->Devices->patchEntity($device, $this->request->getData());
 
         if ($this->Devices->save($device)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'device' => $device
+                'device' => $device,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'errors' => $device->getErrors()
+            'errors' => $device->getErrors(),
         ]));
     }
 
+    /**
+     * Display a single device's details.
+     */
     public function view(string $id)
     {
         $this->ensureAdmin();
         $this->request->allowMethod(['get']);
 
         $device = $this->Devices->get($id, [
-            'contain' => ['Users', 'Instances', 'Subscriptions']
+            'contain' => ['Users', 'Instances', 'Subscriptions'],
         ]);
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'device' => $device
+            'device' => $device,
         ]));
     }
 
+    /**
+     * Soft delete a device record.
+     */
     public function delete(string $id)
     {
         $this->ensureAdmin();
@@ -104,15 +124,15 @@ class DevicesController extends AppController
         $device = $this->Devices->get($id);
 
         if ($this->Devices->delete($device)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'message' => 'Device soft deleted'
+                'message' => 'Device soft deleted',
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'message' => 'Failed to delete device'
+            'message' => 'Failed to delete device',
         ]));
     }
 }

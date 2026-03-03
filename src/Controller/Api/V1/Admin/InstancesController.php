@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Admin;
@@ -12,12 +11,18 @@ use Cake\Http\Exception\ForbiddenException;
  */
 class InstancesController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
         $this->Instances = $this->fetchTable('Instances');
     }
 
+    /**
+     * Throw a ForbiddenException if the current user is not a super admin.
+     */
     private function ensureAdmin()
     {
         $payload = $this->request->getAttribute('jwt_payload');
@@ -26,6 +31,9 @@ class InstancesController extends AppController
         }
     }
 
+    /**
+     * List all instances, filtered by role (club_admin sees only their own).
+     */
     public function index()
     {
         $payload = $this->request->getAttribute('jwt_payload');
@@ -41,12 +49,15 @@ class InstancesController extends AppController
             $instances = $this->Instances->find()->contain(['ClubAdmins'])->all();
         }
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'instances' => $instances
+            'instances' => $instances,
         ]));
     }
 
+    /**
+     * Create a new instance.
+     */
     public function add()
     {
         $this->ensureAdmin();
@@ -55,18 +66,21 @@ class InstancesController extends AppController
 
         $instance = $this->Instances->newEntity($data);
         if ($this->Instances->save($instance)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'instance' => $instance
+                'instance' => $instance,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'errors' => $instance->getErrors()
+            'errors' => $instance->getErrors(),
         ]));
     }
 
+    /**
+     * Update an existing instance.
+     */
     public function edit(string $id)
     {
         $this->ensureAdmin();
@@ -75,30 +89,36 @@ class InstancesController extends AppController
 
         $instance = $this->Instances->patchEntity($instance, $this->request->getData());
         if ($this->Instances->save($instance)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
                 'success' => true,
-                'instance' => $instance
+                'instance' => $instance,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'errors' => $instance->getErrors()
+            'errors' => $instance->getErrors(),
         ]));
     }
 
+    /**
+     * Display a single instance's details.
+     */
     public function view(string $id)
     {
         $this->ensureAdmin();
         $this->request->allowMethod(['get']);
         $instance = $this->Instances->get($id);
 
-        return $this->response->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
             'success' => true,
-            'instance' => $instance
+            'instance' => $instance,
         ]));
     }
 
+    /**
+     * Delete an instance.
+     */
     public function delete(string $id)
     {
         $this->ensureAdmin();
@@ -106,14 +126,14 @@ class InstancesController extends AppController
         $instance = $this->Instances->get($id);
 
         if ($this->Instances->delete($instance)) {
-            return $this->response->withType('application/json')->withStringBody(json_encode([
-                'success' => true
+            return $this->response->withType('application/json')->withStringBody((string)json_encode([
+                'success' => true,
             ]));
         }
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody(json_encode([
+        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
             'success' => false,
-            'message' => 'Failed to delete instance'
+            'message' => 'Failed to delete instance',
         ]));
     }
 }

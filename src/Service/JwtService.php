@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -8,6 +9,8 @@ class JwtService
 {
     /**
      * Generate a JSON Web Token
+     *
+     * @param array<string, mixed> $payload The payload data to encode.
      */
     public function generateToken(array $payload, int $expirationSeconds = 86400 * 30): string
     {
@@ -16,17 +19,19 @@ class JwtService
         $payload['iat'] = time();
         $payload['exp'] = time() + $expirationSeconds;
 
-        $base64UrlHeader = $this->base64UrlEncode(json_encode($header));
-        $base64UrlPayload = $this->base64UrlEncode(json_encode($payload));
+        $base64UrlHeader = $this->base64UrlEncode((string)json_encode($header));
+        $base64UrlPayload = $this->base64UrlEncode((string)json_encode($payload));
 
-        $signature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $this->getSecretKey(), true);
+        $signature = hash_hmac('sha256', $base64UrlHeader . '.' . $base64UrlPayload, $this->getSecretKey(), true);
         $base64UrlSignature = $this->base64UrlEncode($signature);
 
-        return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+        return $base64UrlHeader . '.' . $base64UrlPayload . '.' . $base64UrlSignature;
     }
 
     /**
      * Decode and verify a JSON Web Token
+     *
+     * @return array<string, mixed>|null
      */
     public function verifyToken(string $token): ?array
     {
@@ -38,7 +43,12 @@ class JwtService
         [$base64UrlHeader, $base64UrlPayload, $base64UrlSignature] = $tokenParts;
 
         $signature = $this->base64UrlDecode($base64UrlSignature);
-        $expectedSignature = hash_hmac('sha256', $base64UrlHeader . "." . $base64UrlPayload, $this->getSecretKey(), true);
+        $expectedSignature = hash_hmac(
+            'sha256',
+            $base64UrlHeader . '.' . $base64UrlPayload,
+            $this->getSecretKey(),
+            true,
+        );
 
         if (!hash_equals($expectedSignature, $signature)) {
             return null;
@@ -54,16 +64,33 @@ class JwtService
         return $payload;
     }
 
+    /**
+     * Get the secret key for signing tokens.
+     *
+     * @return string
+     */
     private function getSecretKey(): string
     {
         return Configure::read('Security.salt', 'triggertime_super_secret_fallback_key_2026!');
     }
 
+    /**
+     * Encode data using base64url encoding.
+     *
+     * @param string $data The data to encode.
+     * @return string
+     */
     private function base64UrlEncode(string $data): string
     {
         return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($data));
     }
 
+    /**
+     * Decode data using base64url decoding.
+     *
+     * @param string $data The data to decode.
+     * @return string
+     */
     private function base64UrlDecode(string $data): string
     {
         $remainder = strlen($data) % 4;
@@ -71,6 +98,7 @@ class JwtService
             $padlen = 4 - $remainder;
             $data .= str_repeat('=', $padlen);
         }
-        return base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
+
+        return (string)base64_decode(str_replace(['-', '_'], ['+', '/'], $data));
     }
 }

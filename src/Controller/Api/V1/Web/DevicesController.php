@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller\Api\V1\Web;
@@ -8,6 +7,8 @@ use App\Controller\AppController;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
+use Cake\I18n\DateTime;
+use Cake\Utility\Text;
 
 /**
  * @property \App\Model\Table\DevicesTable $Devices
@@ -16,6 +17,9 @@ use Cake\Http\Exception\NotFoundException;
  */
 class DevicesController extends AppController
 {
+    /**
+     * @inheritDoc
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -24,6 +28,9 @@ class DevicesController extends AppController
         $this->UpgradeTokens = $this->fetchTable('UpgradeTokens');
     }
 
+    /**
+     * List all devices belonging to the authenticated user.
+     */
     public function index()
     {
         $this->request->allowMethod(['get']);
@@ -36,12 +43,15 @@ class DevicesController extends AppController
             ->all();
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'devices' => $devices
+                'devices' => $devices,
             ]));
     }
 
+    /**
+     * Link a device to the authenticated user's account using a link code.
+     */
     public function link()
     {
         $this->request->allowMethod(['post']);
@@ -69,7 +79,7 @@ class DevicesController extends AppController
             ->where(['token_string' => strtoupper($linkCode), 'type' => 'link'])
             ->first();
 
-        if (!$token || $token->is_used || $token->expires_at < new \Cake\I18n\FrozenTime()) {
+        if (!$token || $token->is_used || $token->expires_at < new DateTime()) {
             throw new BadRequestException('Invalid or expired link code');
         }
 
@@ -80,7 +90,7 @@ class DevicesController extends AppController
         if (!$device) {
             // Auto-create it if it hasn't registered yet for some reason
             $device = $this->Devices->newEmptyEntity();
-            $device->id = \Cake\Utility\Text::uuid();
+            $device->id = Text::uuid();
             $device->device_uuid = $deviceUuid;
             $device->user_id = $userId;
             $this->Devices->save($device);
@@ -94,16 +104,17 @@ class DevicesController extends AppController
             }
         }
 
-
-
         // Mark token as used
         $token->is_used = true;
         $this->UpgradeTokens->save($token);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true, 'device' => $device]));
+            ->withStringBody((string)json_encode(['success' => true, 'device' => $device]));
     }
 
+    /**
+     * Unlink a device from the authenticated user's account.
+     */
     public function unlink(string $deviceUuid)
     {
         $this->request->allowMethod(['post']);
@@ -123,9 +134,12 @@ class DevicesController extends AppController
         $this->Devices->delete($device);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true]));
+            ->withStringBody((string)json_encode(['success' => true]));
     }
 
+    /**
+     * Link a device to the user's account using an upgrade token.
+     */
     public function linkUpgradeToken()
     {
         $this->request->allowMethod(['post']);
@@ -153,7 +167,7 @@ class DevicesController extends AppController
             ->where(['token_string' => $upgradeTokenString, 'type' => 'upgrade'])
             ->first();
 
-        if (!$token || $token->is_used || $token->expires_at < new \Cake\I18n\FrozenTime()) {
+        if (!$token || $token->is_used || $token->expires_at < new DateTime()) {
             throw new BadRequestException('Invalid or expired upgrade token');
         }
 
@@ -163,22 +177,23 @@ class DevicesController extends AppController
         $device = $this->Devices->find()->where(['device_uuid' => $deviceUuid])->first();
         if (!$device) {
             $device = $this->Devices->newEmptyEntity();
-            $device->id = \Cake\Utility\Text::uuid();
+            $device->id = Text::uuid();
             $device->device_uuid = $deviceUuid;
         }
         $device->user_id = $userId;
         $this->Devices->save($device);
-
-
 
         // Mark token as used
         $token->is_used = true;
         $this->UpgradeTokens->save($token);
 
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode(['success' => true, 'device' => $device]));
+            ->withStringBody((string)json_encode(['success' => true, 'device' => $device]));
     }
 
+    /**
+     * Update a device's details for the authenticated user.
+     */
     public function update(string $deviceUuid)
     {
         $this->request->allowMethod(['put']);
@@ -203,9 +218,9 @@ class DevicesController extends AppController
 
         // Fetch user object to mirror payload from AppController indexing behavior
         return $this->response->withType('application/json')
-            ->withStringBody(json_encode([
+            ->withStringBody((string)json_encode([
                 'success' => true,
-                'device' => $device
+                'device' => $device,
             ]));
     }
 }

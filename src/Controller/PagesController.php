@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 /**
@@ -81,6 +80,7 @@ class PagesController extends AppController
         $path = WWW_ROOT . 'spa' . DIRECTORY_SEPARATOR . 'index.html';
         if (file_exists($path)) {
             $contents = file_get_contents($path);
+
             return $this->response->withType('html')->withStringBody($contents);
         }
 
