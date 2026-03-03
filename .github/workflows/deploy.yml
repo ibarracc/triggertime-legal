@@ -14,19 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: client/package-lock.json
-
-      - name: Build Vue SPA
-        run: |
-          cd client
-          npm ci
-          npm run build
-
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
