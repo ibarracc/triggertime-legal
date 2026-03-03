@@ -90,7 +90,7 @@
         "no_account": "Don't have an account?",
         "have_account": "Already have an account?",
         "reset_password": "Reset Password",
-        "email_placeholder": "your@email.com",
+        "email_placeholder": "your{'@'}email.com",
         "password_placeholder": "••••••••",
         "confirm_password": "Confirm Password",
         "preferred_language": "Preferred Language",

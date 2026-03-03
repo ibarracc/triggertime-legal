@@ -90,7 +90,7 @@
         "no_account": "No tens compte?",
         "have_account": "Ja tens compte?",
         "reset_password": "Restablir Contrasenya",
-        "email_placeholder": "el.teu@email.com",
+        "email_placeholder": "el.teu{'@'}email.com",
         "password_placeholder": "••••••••",
         "confirm_password": "Confirmar Contrasenya",
         "preferred_language": "Idioma Preferit",

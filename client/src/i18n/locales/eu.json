@@ -90,7 +90,7 @@
         "no_account": "Ez duzu konturik?",
         "have_account": "Baduzu kontua?",
         "reset_password": "Berrezarri Pasahitza",
-        "email_placeholder": "zure@email.com",
+        "email_placeholder": "zure{'@'}email.com",
         "password_placeholder": "••••••••",
         "confirm_password": "Berretsi Pasahitza",
         "preferred_language": "Hizkuntza hobetsia",

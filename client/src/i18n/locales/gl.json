@@ -90,7 +90,7 @@
         "no_account": "Non tes conta?",
         "have_account": "Xa tes conta?",
         "reset_password": "Restablecer Contrasinal",
-        "email_placeholder": "o.teu@email.com",
+        "email_placeholder": "o.teu{'@'}email.com",
         "password_placeholder": "••••••••",
         "confirm_password": "Confirmar Contrasinal",
         "preferred_language": "Idioma Preferido",
