@@ -64,7 +64,7 @@ class InstancesTableTest extends TestCase
      */
     public function testValidationDefault(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->markTestSkipped('Not implemented yet.');
     }
 
     /**
@@ -75,6 +75,6 @@ class InstancesTableTest extends TestCase
      */
     public function testBuildRules(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->markTestSkipped('Not implemented yet.');
     }
 }

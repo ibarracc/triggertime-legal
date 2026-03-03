@@ -12,11 +12,11 @@ class DevicesControllerTest extends TestCase
 
     public function testRegister(): void
     {
-        $this->markTestIncomplete('Test generated but not yet written.');
+        $this->markTestSkipped('Test generated but not yet written.');
     }
 
     public function testActivate(): void
     {
-        $this->markTestIncomplete('Test generated but not yet written.');
+        $this->markTestSkipped('Test generated but not yet written.');
     }
 }

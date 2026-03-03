@@ -12,11 +12,11 @@ class UpgradeTokensControllerTest extends TestCase
 
     public function testGenerate(): void
     {
-        $this->markTestIncomplete('Test generated but not yet written.');
+        $this->markTestSkipped('Test generated but not yet written.');
     }
 
     public function testGenerateLinkCode(): void
     {
-        $this->markTestIncomplete('Test generated but not yet written.');
+        $this->markTestSkipped('Test generated but not yet written.');
     }
 }
