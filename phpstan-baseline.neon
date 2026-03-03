@@ -1,0 +1,656 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#2 \\$factory of static method Cake\\\\Datasource\\\\FactoryLocator\\:\\:add\\(\\) expects Cake\\\\Datasource\\\\Locator\\\\LocatorInterface\\<Cake\\\\Datasource\\\\RepositoryInterface\\>, Cake\\\\ORM\\\\Locator\\\\TableLocator given\\.$#"
+			count: 1
+			path: src/Application.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:ensureAdmin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\DevicesController\\:\\:\\$Devices \\(App\\\\Model\\\\Table\\\\DevicesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:ensureAdmin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\InstancesController\\:\\:\\$Instances \\(App\\\\Model\\\\Table\\\\InstancesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/InstancesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$instance_id\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$license_number\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Model\\\\Table\\\\ActivationLicensesTable\\:\\:restore\\(\\)\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:getAccessibleLicensesQuery\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:importCsv\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:toggleActive\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:\\$ActivationLicenses \\(App\\\\Model\\\\Table\\\\ActivationLicensesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\LicensesController\\:\\:\\$Instances \\(App\\\\Model\\\\Table\\\\InstancesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:patchEntity\\(\\)$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/LicensesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\SubscriptionsController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/SubscriptionsController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\SubscriptionsController\\:\\:\\$Subscriptions \\(App\\\\Model\\\\Table\\\\SubscriptionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/SubscriptionsController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$club_admin_id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 4
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$role\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:ensureAdmin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:impersonate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\UsersController\\:\\:\\$Users \\(App\\\\Model\\\\Table\\\\UsersTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/UsersController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\VersionsController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/VersionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\VersionsController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/VersionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\VersionsController\\:\\:edit\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/VersionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\VersionsController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/VersionsController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\VersionsController\\:\\:\\$Versions \\(App\\\\Model\\\\Table\\\\VersionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/VersionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\AppConfigController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/AppConfigController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\AppConfigController\\:\\:\\$Instances \\(App\\\\Model\\\\Table\\\\InstancesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/AppConfigController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\AppConfigController\\:\\:\\$RemoteConfig \\(App\\\\Model\\\\Table\\\\RemoteConfigTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/AppConfigController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\AppConfigController\\:\\:\\$Versions \\(App\\\\Model\\\\Table\\\\VersionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/AppConfigController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$device_uuid\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:activate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:licenseStatus\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:register\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:status\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:transferLicense\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:\\$ActivationLicenses \\(App\\\\Model\\\\Table\\\\ActivationLicensesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:\\$Devices \\(App\\\\Model\\\\Table\\\\DevicesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:\\$Instances \\(App\\\\Model\\\\Table\\\\InstancesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\DevicesController\\:\\:\\$Subscriptions \\(App\\\\Model\\\\Table\\\\SubscriptionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
+			count: 3
+			path: src/Controller/Api/V1/DevicesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$device_uuid\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$expires_at\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$is_used\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$token_string\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$type\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\UpgradeTokensController\\:\\:generate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\UpgradeTokensController\\:\\:generateLinkCode\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\UpgradeTokensController\\:\\:\\$UpgradeTokens \\(App\\\\Model\\\\Table\\\\UpgradeTokensTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/UpgradeTokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$current_period_start\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$expires_at\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$first_name\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$language\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$last_name\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$max_devices_allowed\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$password_hash\\.$#"
+			count: 4
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$plan\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$role\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$status\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$subscriptions\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$token\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:forgotPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:login\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:me\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:register\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:resetPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:updatePassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:updateProfile\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:\\$Authentication \\(App\\\\Model\\\\Table\\\\UsersTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$device_uuid\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:link\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:linkUpgradeToken\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:unlink\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:update\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:\\$Devices \\(App\\\\Model\\\\Table\\\\DevicesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:\\$Subscriptions \\(App\\\\Model\\\\Table\\\\SubscriptionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\DevicesController\\:\\:\\$UpgradeTokens \\(App\\\\Model\\\\Table\\\\UpgradeTokensTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
+			count: 5
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/SubscriptionsController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$stripe_customer_id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/SubscriptionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\SubscriptionsController\\:\\:createCheckout\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/SubscriptionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\SubscriptionsController\\:\\:portal\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/SubscriptionsController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\TokensController\\:\\:\\$UpgradeTokens\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/TokensController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\TokensController\\:\\:verify\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/TokensController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$current_period_end\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$current_period_start\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$device_uuid\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$customer\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Access to an undefined property Stripe\\\\StripeObject\\:\\:\\$status\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\WebhooksController\\:\\:stripe\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
+			count: 6
+			path: src/Controller/Api/V1/WebhooksController.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of method Cake\\\\Http\\\\Response\\:\\:withStringBody\\(\\) expects string\\|null, string\\|false given\\.$#"
+			count: 1
+			path: src/Controller/PagesController.php
+
+		-
+			message: "#^Type Cake\\\\ORM\\\\Table in generic type Cake\\\\ORM\\\\Query\\\\SelectQuery\\<Cake\\\\ORM\\\\Table\\> in PHPDoc tag @param for parameter \\$query is not subtype of template type TSubject of array\\|Cake\\\\Datasource\\\\EntityInterface of class Cake\\\\ORM\\\\Query\\\\SelectQuery\\.$#"
+			count: 1
+			path: src/Model/Behavior/SoftDeleteBehavior.php

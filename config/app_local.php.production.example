@@ -1,0 +1,59 @@
+<?php
+
+use function Cake\Core\env;
+
+/*
+ * Production configuration for TriggerTime.
+ * Copy this to config/app_local.php on the server and fill in all values.
+ * NEVER commit the real app_local.php to git.
+ *
+ * Generate SECURITY_SALT with: openssl rand -hex 32
+ */
+
+return [
+    'debug' => false,
+
+    'Security' => [
+        'salt' => 'REPLACE_WITH_OUTPUT_OF_openssl_rand_-hex_32',
+    ],
+
+    'ApiKeys' => [
+        'verify_signature' => true,
+        'keys' => [
+            'tt_live_a8f3k2m9xQ7bR4cN' => [
+                'app_instance' => 'com.ibarracc.triggertime',
+                'secret' => 'REPLACE_WITH_REAL_HMAC_SECRET_FOR_TRIGGERTIME',
+            ],
+            'tt_live_pL5wE8jH2sK9dF1v' => [
+                'app_instance' => 'com.ibarracc.ctz',
+                'secret' => 'REPLACE_WITH_REAL_HMAC_SECRET_FOR_CTZ',
+            ],
+        ],
+    ],
+
+    'Datasources' => [
+        'default' => [
+            'url' => 'postgres://ttapp:REPLACE_DB_PASSWORD@localhost:5432/triggertime',
+        ],
+        'test' => [
+            'url' => env('DATABASE_TEST_URL', 'sqlite://127.0.0.1/tmp/tests.sqlite'),
+        ],
+    ],
+
+    'EmailTransport' => [
+        'default' => [
+            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        ],
+    ],
+
+    'Stripe' => [
+        'publishable_key' => 'REPLACE_WITH_pk_live_...',
+        'secret_key' => 'REPLACE_WITH_sk_live_...',
+        'webhook_secret' => 'REPLACE_WITH_whsec_...',
+    ],
+
+    'Subscriptions' => [
+        'free' => ['max_devices_allowed' => 999],
+        'pro' => ['max_devices_allowed' => 999],
+    ],
+];

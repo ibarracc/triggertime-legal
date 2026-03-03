@@ -1,0 +1,1022 @@
+openapi: 3.0.0
+info:
+  title: TriggerTime API
+  version: "1.0"
+  description: >
+    API for TriggerTime App.
+
+
+    # Authentication & Testing Guide
+
+
+    ### 1. Mobile App Endpoints (API Key + HMAC Auth)
+
+    App endpoints require the `X-Api-Key` header. In production, they also require `X-Api-Timestamp` and `X-Api-Signature` headers for HMAC verification.
+
+    To test these endpoints in Swagger UI:
+
+    1. Click the **Authorize** button.
+
+    2. Scroll down to `hmacAuth` and enter your instance\'s App Secret (e.g., from the `api_keys` config).
+
+    3. Swagger UI will automatically generate and attach the `X-Api-Key`, `X-Api-Timestamp`, and `X-Api-Signature` headers to your requests. *(Note: This typically requires custom JS in Swagger UI, but entering the secret here documents the requirement. If testing manually via curl, you must generate the HMAC SHA256 signature of `<timestamp>.<request body>`)*.
+
+    4. **Alternative for simple testing:** Use the `apiKeyAuth` option and only enter the `X-Api-Key`. This works if HMAC verification is disabled in the backend config (`ApiKeys.verify_signature = false`).
+
+
+    ### 2. Web & Admin Endpoints (JWT Bearer Auth)
+
+    Web and Admin endpoints require a JWT token in the `Authorization: Bearer <token>` header.
+
+    To test these endpoints in Swagger UI:
+
+    1. Open the `/v1/web/auth/login` endpoint (under the **Web Public** tag).
+
+    2. Click **Try it out** and enter valid credentials (e.g., an admin email and password).
+
+    3. Execute the request and copy the `token` value from the JSON response.
+
+    4. Scroll up and click the **Authorize** button.
+
+    5. Under `bearerAuth`, paste the token into the Value field and click Authorize.
+
+    6. You can now test endpoints under the **Web Authenticated** and **Admin** tags.
+
+servers:
+  - url: /api
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: Basic API Key authentication. Use this if HMAC signature verification is disabled on the server.
+    hmacAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: >
+        HMAC Authentication for App Endpoints.
+
+        Provide the `X-Api-Key`. The client must also send `X-Api-Timestamp` (current unix timestamp) and `X-Api-Signature` (SHA256 HMAC of `<timestamp>.<body_string>` using the app secret).
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        JWT Bearer Token authentication.
+
+        First, use `/v1/web/auth/login` to get a token, then paste it here to access Web Authenticated and Admin endpoints.
+
+paths:
+  /v1/webhooks/stripe:
+    post:
+      summary: Stripe webhook
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - type
+                - data
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                data:
+                  type: object
+                  properties:
+                    object:
+                      type: object
+                created:
+                  type: integer
+                api_version:
+                  type: string
+      responses:
+        '200':
+          description: Webhook received successfully
+
+  /v1/app/config:
+    get:
+      summary: Get mobile app configuration
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      parameters:
+        - name: app_instance
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Configuration retrieved successfully
+
+  /v1/devices/register:
+    post:
+      summary: Register mobile device connection
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - device_uuid
+              properties:
+                device_uuid:
+                  type: string
+                hardware_model:
+                  type: string
+                platform:
+                  type: string
+                os_version:
+                  type: string
+                app_version:
+                  type: string
+      responses:
+        '200':
+          description: Device registered successfully
+
+  /v1/devices/link-code:
+    post:
+      summary: Generate a short web linking code
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - device_uuid
+              properties:
+                device_uuid:
+                  type: string
+      responses:
+        '200':
+          description: Returns link_code string
+
+  /v1/devices/{device_uuid}/license-status:
+    get:
+      summary: Check specific device license status
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      parameters:
+        - name: device_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns license details if valid
+
+  /v1/devices/{device_uuid}/transfer-license:
+    post:
+      summary: Transfer specific B2B license to device
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      parameters:
+        - name: device_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - license_number
+              properties:
+                license_number:
+                  type: string
+      responses:
+        '200':
+          description: License successfully transferred
+
+  /v1/devices/activate:
+    post:
+      summary: Activate device via license
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - license_number
+                - device_uuid
+                - app_instance
+              properties:
+                license_number:
+                  type: string
+                device_uuid:
+                  type: string
+                app_instance:
+                  type: string
+                device_information:
+                  type: object
+      responses:
+        '200':
+          description: Device activated
+        '400':
+          description: Missing required fields
+        '403':
+          description: Invalid license code
+
+  /v1/devices/{device_uuid}/status:
+    get:
+      summary: Get device pro status
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      parameters:
+        - name: device_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device status retrieved
+
+  /v1/devices/upgrade-token:
+    post:
+      summary: Generate upgrade token
+      security:
+        - apiKeyAuth: []
+        - hmacAuth: []
+      tags:
+        - Mobile App
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - device_uuid
+              properties:
+                device_uuid:
+                  type: string
+      responses:
+        '200':
+          description: Token generated
+
+  /v1/web/tokens/{token}/verify:
+    get:
+      summary: Verify upgrade token
+      tags:
+        - Web Public
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token verified
+        '400':
+          description: Invalid or expired token
+
+  /v1/web/auth/login:
+    post:
+      summary: Web login
+      tags:
+        - Web Public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Missing fields
+        '401':
+          description: Invalid credentials
+
+  /v1/web/auth/register:
+    post:
+      summary: Web register
+      tags:
+        - Web Public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Registration successful
+        '400':
+          description: Missing or invalid fields / Email occupied
+
+  /v1/web/auth/forgot-password:
+    post:
+      summary: Send password reset email
+      tags:
+        - Web Public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Reset email sent (or email not found, returns success anyway)
+        '400':
+          description: Missing email
+
+  /v1/web/auth/reset-password:
+    post:
+      summary: Reset password using token
+      tags:
+        - Web Public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Password reset successful
+        '400':
+          description: Invalid or expired token / missing fields
+
+  /v1/web/devices/link:
+    post:
+      summary: Link a device to web subscription
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - device_uuid
+              properties:
+                device_uuid:
+                  type: string
+      responses:
+        '200':
+          description: Device linked
+        '400':
+          description: Missing field
+        '403':
+          description: Subscription limits reached or device taken
+
+  /v1/web/devices/{device_uuid}/unlink:
+    post:
+      summary: Unlink a device from web subscription
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      parameters:
+        - name: device_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device unlinked
+        '404':
+          description: Device not found
+
+  /v1/web/me:
+    get:
+      summary: Get current web user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      responses:
+        '200':
+          description: User retrieved
+
+  /v1/web/me/profile:
+    post:
+      summary: Update profile details for current user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated
+        '400':
+          description: Validation errors
+
+  /v1/web/me/password:
+    post:
+      summary: Update password for current user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - current_password
+                - new_password
+              properties:
+                current_password:
+                  type: string
+                new_password:
+                  type: string
+      responses:
+        '200':
+          description: Password updated
+        '400':
+          description: Invalid current password or validation errors
+
+  /v1/web/devices:
+    get:
+      summary: Get devices for web user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      responses:
+        '200':
+          description: Devices retrieved
+
+  /v1/web/subscriptions/checkout:
+    post:
+      summary: Create subscription checkout session
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      responses:
+        '200':
+          description: Checkout URL generated
+
+  /v1/web/subscriptions/portal:
+    post:
+      summary: Create subscription portal session
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      responses:
+        '200':
+          description: Portal URL generated
+
+  # Admin resources
+  /v1/admin/users:
+    get:
+      summary: List users
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Users list
+    post:
+      summary: Create user
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: User created
+
+  /v1/admin/users/{id}:
+    get:
+      summary: Get user
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved
+    put:
+      summary: Update user
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User updated
+    delete:
+      summary: Delete user
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted
+
+  /v1/admin/users/{id}/impersonate:
+    post:
+      summary: Impersonate user (Admin only)
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns an impersonation JWT token
+        '403':
+          description: Not authorized
+        '404':
+          description: User not found
+
+  /v1/admin/licenses:
+    get:
+      summary: List licenses
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Licenses list
+    post:
+      summary: Create license
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: License created
+
+  /v1/admin/licenses/{id}:
+    get:
+      summary: Get license
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: License retrieved
+    put:
+      summary: Update license
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: License updated
+    delete:
+      summary: Delete license
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: License deleted
+
+  /v1/admin/licenses/import:
+    post:
+      summary: Import licenses via CSV
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Licenses imported
+
+  /v1/admin/licenses/{id}/toggle-active:
+    post:
+      summary: Toggle license active status (soft delete / restore)
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: License access toggled
+
+  /v1/admin/versions:
+    get:
+      summary: List versions
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Versions list
+    post:
+      summary: Create version
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Version created
+
+  /v1/admin/versions/{id}:
+    get:
+      summary: Get version
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Version retrieved
+    put:
+      summary: Update version
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Version updated
+    delete:
+      summary: Delete version
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Version deleted
+
+  /v1/admin/remote-config:
+    get:
+      summary: List remote config
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Remote config list
+    post:
+      summary: Create remote config
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Remote config created
+
+  /v1/admin/remote-config/{id}:
+    get:
+      summary: Get remote config
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Remote config retrieved
+    put:
+      summary: Update remote config
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Remote config updated
+    delete:
+      summary: Delete remote config
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Remote config deleted
+
+  /v1/admin/instances:
+    get:
+      summary: List instances
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Instances list
+    post:
+      summary: Create instance
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Instance created
+
+  /v1/admin/instances/{id}:
+    get:
+      summary: Get instance
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Instance retrieved
+    put:
+      summary: Update instance
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Instance updated
+    delete:
+      summary: Delete instance
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Instance deleted
+
+  /v1/admin/subscriptions:
+    get:
+      summary: List all subscriptions
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Subscriptions list
+
+  /v1/admin/devices:
+    get:
+      summary: List all devices (Admin view)
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Devices list
+    post:
+      summary: Create device manually
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Device created
+
+  /v1/admin/devices/{id}:
+    get:
+      summary: Get device details
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device retrieved
+    put:
+      summary: Update device
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device updated
+    delete:
+      summary: Delete device
+      security:
+        - bearerAuth: []
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device deleted

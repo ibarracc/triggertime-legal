@@ -1,0 +1,63 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Build Vue SPA
+        run: |
+          cd client
+          npm ci
+          npm run build
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.DO_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy files via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='.git/' \
+            --exclude='vendor/' \
+            --exclude='node_modules/' \
+            --exclude='client/node_modules/' \
+            --exclude='client/' \
+            --exclude='logs/' \
+            --exclude='tmp/' \
+            --exclude='config/app_local.php' \
+            --exclude='config/.env' \
+            --exclude='.ddev/' \
+            --exclude='docs/' \
+            --exclude='tests/' \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            ./ ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }}:/var/www/triggertime/
+
+      - name: Post-deploy tasks
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} << 'ENDSSH'
+            set -e
+            cd /var/www/triggertime
+            composer install --no-dev --optimize-autoloader --no-interaction
+            bin/cake migrations migrate --no-lock
+            sudo systemctl reload php8.4-fpm
+            echo "Deployment complete."
+          ENDSSH
