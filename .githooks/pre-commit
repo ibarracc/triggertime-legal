@@ -1,0 +1,18 @@
+#!/bin/sh
+# Rebuild Vue SPA whenever client source files are staged for commit.
+
+STAGED_CLIENT=$(git diff --cached --name-only | grep -E '^client/(src/|index\.html|vite\.config|package\.json|package-lock\.json)')
+
+if [ -n "$STAGED_CLIENT" ]; then
+    echo "→ Client source changed — rebuilding Vue SPA..."
+
+    (cd client && npm run build)
+
+    if [ $? -ne 0 ]; then
+        echo "✗ Vue SPA build failed. Commit aborted."
+        exit 1
+    fi
+
+    git add webroot/spa/
+    echo "✓ Vue SPA rebuilt and staged."
+fi
