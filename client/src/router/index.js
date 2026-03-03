@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import i18n from '@/i18n'
+import LandingPage from '../views/landing/LandingPage.vue'
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'pt', 'eu', 'ca', 'gl']
 
@@ -17,9 +18,9 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => isLandingDomain
-            ? import('../views/landing/LandingPage.vue')
-            : import('../views/dashboard/DashboardHome.vue'),
+        component: isLandingDomain
+            ? LandingPage
+            : () => import('../views/dashboard/DashboardHome.vue'),
         meta: { requiresAuth: !isLandingDomain }
     },
     {
