@@ -68,7 +68,18 @@
         "contact_subtitle": "Nous sommes là pour vous aider. Si vous trouvez un bug ou avez des suggestions, contactez-nous.",
         "email_support": "Contacter le Support",
         "member_a": "Membre de Club A",
-        "member_b": "Membre de Club B"
+        "member_b": "Membre de Club B",
+        "member_c": "Membre de Club C",
+        "most_popular": "Le plus populaire",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "Pour les clubs de tir gérant plusieurs membres.",
+        "club_pro_all_features": "Toutes les fonctionnalités Pro+ incluses",
+        "club_pro_license_mgmt": "Gestion des licences d'activation",
+        "from": "à partir de",
+        "whitelabel_feature_1": "Identité visuelle & logo personnalisés",
+        "whitelabel_feature_2": "Disciplines de tir spécifiques",
+        "whitelabel_feature_3": "Gestion des licences d'activation",
+        "whitelabel_feature_4": "Support B2B dédié"
     },
     "auth": {
         "login_title": "Bon retour",

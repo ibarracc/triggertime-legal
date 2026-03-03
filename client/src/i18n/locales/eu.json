@@ -68,7 +68,18 @@
         "contact_subtitle": "Laguntzeko hemen gaude. Akatsen bat aurkitu baduzu edo iradokizunak badituzu, jarri gurekin harremanetan.",
         "email_support": "Laguntza Mezua",
         "member_a": "A Klubeko Bazkidea",
-        "member_b": "B Klubeko Bazkidea"
+        "member_b": "B Klubeko Bazkidea",
+        "member_c": "C Klubeko Bazkidea",
+        "most_popular": "Ezagunena",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "Hainbat kide dituzten tiro klubentzat.",
+        "club_pro_all_features": "Pro+ funtzio guztiak barne",
+        "club_pro_license_mgmt": "Aktibazio Lizentzien Kudeaketa",
+        "from": "tik",
+        "whitelabel_feature_1": "Marka eta logotipo pertsonalizatua",
+        "whitelabel_feature_2": "Tiro diziplina zehatzak",
+        "whitelabel_feature_3": "Aktibazio lizentzien kudeaketa",
+        "whitelabel_feature_4": "B2B laguntza dedikatua"
     },
     "auth": {
         "login_title": "Ongi etorri berriro",

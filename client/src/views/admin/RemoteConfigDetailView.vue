@@ -101,7 +101,7 @@
                         <td class="key-cell">{{ key }}</td>
 
                         <!-- Edit mode -->
-                        <td v-if="editingKey === key" class="value-cell edit-mode-cell">
+                        <td v-if="editingKey === key" class="edit-mode-cell">
                             <!-- Boolean toggle -->
                             <label v-if="typeof currentConfigData[key] === 'boolean'" class="boolean-toggle">
                                 <input type="checkbox" v-model="editValue" @keydown.escape="cancelEdit" />
@@ -136,15 +136,11 @@
                                 </button>
                             </div>
                             <div v-else-if="deletingKey === key" class="delete-confirm">
-                                <span class="text-[10px] text-red-400">Delete?</span>
-                                <button class="action-btn action-btn-danger" @click="executeDelete" :disabled="savingKey === key" title="Confirm delete">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                </button>
-                                <button class="action-btn" @click="cancelDelete" title="Cancel">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
+                                <span class="delete-confirm-label">Delete?</span>
+                                <button class="delete-confirm-btn delete-confirm-yes" @click="executeDelete" :disabled="savingKey === key">Yes</button>
+                                <button class="delete-confirm-btn delete-confirm-no" @click="cancelDelete">No</button>
                             </div>
-                            <div v-else class="flex gap-1">
+                            <div v-else class="flex gap-2">
                                 <button class="action-btn" @click="startEdit(key)" title="Edit">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
@@ -687,14 +683,14 @@ onMounted(() => {
 }
 
 .config-table .actions-col {
-  width: 80px;
+  width: 140px;
 }
 
 .config-table td.actions-cell {
   padding: 10px 8px;
   vertical-align: top;
   border-bottom: 1px solid var(--border-subtle);
-  width: 80px;
+  width: 140px;
 }
 
 .action-btn {
@@ -717,9 +713,15 @@ onMounted(() => {
   border-color: var(--primary);
 }
 
+.action-btn-danger {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
 .action-btn-danger:hover {
   color: #f87171;
   border-color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
 }
 
 /* ── Diff Table ── */
@@ -824,6 +826,11 @@ onMounted(() => {
 
 /* ── Edit Mode ── */
 .edit-mode-cell {
+  padding: 10px 12px;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
   max-width: 0;
   overflow: visible !important;
 }
@@ -878,6 +885,7 @@ onMounted(() => {
   cursor: pointer;
   font-family: monospace;
   font-size: 11px;
+  padding: 5px 0;
 }
 
 .boolean-toggle input[type="checkbox"] {
@@ -895,7 +903,43 @@ onMounted(() => {
 .delete-confirm {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+.delete-confirm-label {
+  font-size: 11px;
+  color: #f87171;
+  font-weight: 500;
+}
+
+.delete-confirm-btn {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.delete-confirm-yes {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.delete-confirm-yes:hover {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: #f87171;
+}
+
+.delete-confirm-no {
+  color: var(--text-secondary);
+}
+
+.delete-confirm-no:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
 }
 
 /* ── Add Key Form ── */

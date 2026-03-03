@@ -83,7 +83,7 @@
           </AppCard>
           
           <AppCard hoverable class="border-warning-subtle">
-            <template #header><span class="text-2xl mr-2 text-warning">📊</span> {{ $t('landing.prem_excel_title') }}</template>
+            <template #header><span class="text-2xl mr-2 text-warning">📥</span> {{ $t('landing.prem_excel_title') }}</template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_excel_desc') }}
             </p>
@@ -131,7 +131,7 @@
             <!-- Pro+ Plan -->
             <AppCard class="pricing-card pro-card relative">
               <div class="best-value absolute top-0 right-8 transform -translate-y-1/2">
-                <AppBadge variant="primary">Pro+</AppBadge>
+                <AppBadge variant="primary">{{ $t('landing.most_popular') }}</AppBadge>
               </div>
               <h3 class="text-2xl mb-2 text-primary">Pro+</h3>
               <div class="price font-heading text-4xl font-bold mb-6">$4.99<span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
@@ -147,6 +147,24 @@
               
               <router-link to="/register" class="btn btn-primary w-full text-center mt-auto">{{ $t('subscription.upgrade_now') }}</router-link>
             </AppCard>
+
+            <!-- Club Pro+ Plan -->
+            <AppCard class="pricing-card club-card relative">
+              <div class="best-value absolute top-0 right-8 transform -translate-y-1/2">
+                <AppBadge variant="neutral">Club</AppBadge>
+              </div>
+              <h3 class="text-2xl mb-2 text-info">{{ $t('landing.club_pro_title') }}</h3>
+              <div class="price font-heading text-4xl font-bold mb-6"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99<span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
+              <p class="text-secondary mb-8">{{ $t('landing.club_pro_desc') }}</p>
+
+              <ul class="pricing-features mb-8 text-left">
+                <li>✓ {{ $t('landing.club_pro_all_features') }}</li>
+                <li>✓ {{ $t('landing.club_pro_license_mgmt') }}</li>
+                <li>✓ {{ $t('subscription.priority_support') }}</li>
+              </ul>
+
+              <a href="mailto:help@triggertime.es?subject=Club Pro+ Quote" class="btn btn-secondary w-full text-center mt-auto">{{ $t('landing.request_quote') }}</a>
+            </AppCard>
         </div>
       </div>
     </section>
@@ -157,21 +175,38 @@
         <div class="whitelabel-content flex-1">
           <AppBadge variant="neutral" class="mb-4">B2B</AppBadge>
           <h2 class="section-title mb-6 text-left">{{ $t('landing.whitelabel_title') }}</h2>
-          <p class="text-secondary mb-8 leading-relaxed">
+          <p class="text-secondary mb-6 leading-relaxed">
             {{ $t('landing.whitelabel_desc') }}
           </p>
-          <a href="mailto:help@triggertime.es?subject=Custom Whitelabel Quote" class="btn btn-secondary">{{ $t('landing.request_quote') }}</a>
+          <ul class="whitelabel-features mb-8">
+            <li>✓ {{ $t('landing.whitelabel_feature_1') }}</li>
+            <li>✓ {{ $t('landing.whitelabel_feature_2') }}</li>
+            <li>✓ {{ $t('landing.whitelabel_feature_3') }}</li>
+            <li>✓ {{ $t('landing.whitelabel_feature_4') }}</li>
+          </ul>
+          <a href="mailto:help@triggertime.es?subject=Custom Whitelabel Quote" class="btn btn-primary">{{ $t('landing.request_quote') }}</a>
         </div>
         <div class="whitelabel-image flex-1 text-right">
           <div class="glass-card mockup-card inline-block text-left p-8">
-            <h3 class="mb-4">{{ $t('profile.b2b_licenses') }}</h3>
-            <div class="bg-elevated p-4 rounded-lg border border-subtle mb-4 flex justify-between">
+            <div class="mockup-club-header mb-5">
+              <span class="mockup-club-icon">🏛️</span>
+              <div>
+                <div class="mockup-club-name">My Shooting Club</div>
+                <div class="text-secondary mockup-club-sub">{{ $t('landing.club_pro_title') }}</div>
+              </div>
+            </div>
+            <div class="mockup-section-label mb-3">{{ $t('profile.b2b_licenses') }}</div>
+            <div class="bg-elevated p-4 rounded-lg border border-subtle mb-3 flex justify-between">
               <span class="text-secondary">{{ $t('landing.member_a') }}</span>
               <AppBadge variant="success">{{ $t('dashboard.active') }}</AppBadge>
             </div>
-            <div class="bg-elevated p-4 rounded-lg border border-subtle flex justify-between">
+            <div class="bg-elevated p-4 rounded-lg border border-subtle mb-3 flex justify-between">
               <span class="text-secondary">{{ $t('landing.member_b') }}</span>
-              <AppBadge variant="neutral">{{ $t('common.no_data') }}</AppBadge>
+              <AppBadge variant="success">{{ $t('dashboard.active') }}</AppBadge>
+            </div>
+            <div class="bg-elevated p-4 rounded-lg border border-subtle flex justify-between">
+              <span class="text-secondary">{{ $t('landing.member_c') }}</span>
+              <AppBadge variant="neutral">{{ $t('dashboard.inactive') }}</AppBadge>
             </div>
           </div>
         </div>
@@ -277,9 +312,9 @@ import AppCard from '@/components/ui/AppCard.vue'
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
-  max-width: 900px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
@@ -293,6 +328,49 @@ import AppCard from '@/components/ui/AppCard.vue'
   border-color: rgba(193, 255, 114, 0.4);
   background: linear-gradient(180deg, rgba(193, 255, 114, 0.05) 0%, rgba(10, 10, 15, 0) 100%), var(--bg-surface);
   box-shadow: 0 10px 40px rgba(193, 255, 114, 0.05);
+}
+
+.club-card {
+  border-color: rgba(96, 165, 250, 0.4);
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0.05) 0%, rgba(10, 10, 15, 0) 100%), var(--bg-surface);
+  box-shadow: 0 10px 40px rgba(96, 165, 250, 0.05);
+}
+
+.text-info { color: #60A5FA; }
+
+.whitelabel-features {
+  list-style: none;
+  padding: 0;
+}
+
+.whitelabel-features li {
+  padding: 6px 0;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+.mockup-club-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mockup-club-icon { font-size: 2rem; line-height: 1; }
+
+.mockup-club-name { font-weight: 700; font-size: 1rem; }
+
+.mockup-club-sub { font-size: 0.875rem; }
+
+.mockup-section-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.mockup-card .flex.justify-between span {
+  white-space: nowrap;
 }
 
 .pricing-features {
@@ -313,7 +391,8 @@ import AppCard from '@/components/ui/AppCard.vue'
 
 .mockup-card {
   width: 100%;
-  max-width: 450px;
+  min-width: 360px;
+  max-width: 480px;
 }
 
 @media (min-width: 993px) {
@@ -323,6 +402,10 @@ import AppCard from '@/components/ui/AppCard.vue'
     justify-content: space-between;
     gap: 4rem;
   }
+}
+
+@media (max-width: 1100px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 992px) {

@@ -24,13 +24,13 @@ class LicensesController extends AppController
     /**
      * Helper to get the base query for licenses an admin is allowed to see.
      */
-    private function getAccessibleLicensesQuery()
+    private function getAccessibleLicensesQuery(bool $withDeleted = false)
     {
         $payload = $this->request->getAttribute('jwt_payload');
         $role = $payload['role'] ?? null;
         $userId = $payload['sub'] ?? null;
 
-        $query = $this->ActivationLicenses->find()->contain(['Instances', 'Devices']);
+        $query = $this->ActivationLicenses->find('all', withDeleted: $withDeleted)->contain(['Instances', 'Devices']);
 
         if ($role === 'club_admin' && $userId) {
             // A club admin can only see licenses attached to instances they manage
@@ -55,7 +55,7 @@ class LicensesController extends AppController
     public function index()
     {
         $this->request->allowMethod(['get']);
-        $licenses = $this->getAccessibleLicensesQuery()->all();
+        $licenses = $this->getAccessibleLicensesQuery(withDeleted: true)->all();
         return $this->response->withType('application/json')->withStringBody(json_encode(['success' => true, 'licenses' => $licenses]));
     }
 
@@ -185,14 +185,10 @@ class LicensesController extends AppController
     {
         $this->request->allowMethod(['post']);
 
-        $license = $this->getAccessibleLicensesQuery()->where(['ActivationLicenses.id' => $id])->first();
+        $license = $this->getAccessibleLicensesQuery(withDeleted: true)->where(['ActivationLicenses.id' => $id])->first();
         if (!$license) {
             throw new \Cake\Http\Exception\NotFoundException('License not found or inaccessible');
         }
-
-        // Toggle disabled flag (assuming `disabled` or similar column exists. If it relies on deleted_at soft delete, use that)
-        // Let's implement active toggle via a soft delete for now if there is no disabled flag
-        // Actually, user said "enable/disable", so deleted_at soft delete works perfectly for disabling.
 
         if ($license->deleted_at !== null) {
             $this->ActivationLicenses->restore($license); // Requires restoring capability from SoftDelete plugin

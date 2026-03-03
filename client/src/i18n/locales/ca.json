@@ -68,7 +68,18 @@
         "contact_subtitle": "Estem aquí per ajudar-te. Si has trobat un error o tens suggeriments, escriu-nos.",
         "email_support": "Contactar Suport",
         "member_a": "Soci Club A",
-        "member_b": "Soci Club B"
+        "member_b": "Soci Club B",
+        "member_c": "Soci Club C",
+        "most_popular": "Més popular",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "Per a clubs de tir amb diversos socis.",
+        "club_pro_all_features": "Totes les funcions Pro+ incloses",
+        "club_pro_license_mgmt": "Gestió de Llicències d'Activació",
+        "from": "des de",
+        "whitelabel_feature_1": "Marca i logotip personalitzats",
+        "whitelabel_feature_2": "Disciplines de tir específiques",
+        "whitelabel_feature_3": "Gestió de llicències d'activació",
+        "whitelabel_feature_4": "Suport B2B dedicat"
     },
     "auth": {
         "login_title": "Benvingut de nou",

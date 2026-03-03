@@ -68,7 +68,18 @@
         "contact_subtitle": "Estamos aqui para o apoiar. Se encontrou um erro ou tem sugestões, contacte-nos.",
         "email_support": "Suporte por Email",
         "member_a": "Membro do Clube A",
-        "member_b": "Membro do Clube B"
+        "member_b": "Membro do Clube B",
+        "member_c": "Membro do Clube C",
+        "most_popular": "Mais Popular",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "Para clubes de tiro com vários membros.",
+        "club_pro_all_features": "Todas as funcionalidades Pro+ incluídas",
+        "club_pro_license_mgmt": "Gestão de Licenças de Ativação",
+        "from": "a partir de",
+        "whitelabel_feature_1": "Marca e logotipo personalizados",
+        "whitelabel_feature_2": "Disciplinas de tiro específicas",
+        "whitelabel_feature_3": "Gestão de licenças de ativação",
+        "whitelabel_feature_4": "Suporte B2B dedicado"
     },
     "auth": {
         "login_title": "Bem-vindo de volta",

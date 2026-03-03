@@ -16,32 +16,108 @@
 
         <section class="mb-8">
           <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.collection_heading') }}</h3>
+
+          <h4 class="font-heading text-lg mb-2 text-white">{{ $t('privacy.collection_account_heading') }}</h4>
           <p class="text-secondary leading-relaxed mb-4">
-            {{ $t('privacy.collection_text') }}
+            {{ $t('privacy.collection_account_text') }}
+          </p>
+
+          <h4 class="font-heading text-lg mb-2 text-white">{{ $t('privacy.collection_training_heading') }}</h4>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.collection_training_text') }}
+          </p>
+
+          <h4 class="font-heading text-lg mb-2 text-white">{{ $t('privacy.collection_device_heading') }}</h4>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.collection_device_text') }}
+          </p>
+
+          <h4 class="font-heading text-lg mb-2 text-white">{{ $t('privacy.collection_payment_heading') }}</h4>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.collection_payment_text') }}
           </p>
         </section>
 
         <section class="mb-8">
-          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.training_heading') }}</h3>
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.usage_heading') }}</h3>
           <p class="text-secondary leading-relaxed mb-4">
-            {{ $t('privacy.training_text') }}
+            {{ $t('privacy.usage_text') }}
           </p>
           <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
-            <li><strong class="text-white">{{ $t('privacy.data_type_label') }}</strong> {{ $t('privacy.data_type_text') }}</li>
-            <li><strong class="text-white">{{ $t('privacy.storage_label') }}</strong> {{ $t('privacy.storage_text') }}</li>
+            <li>{{ $t('privacy.usage_item_1') }}</li>
+            <li>{{ $t('privacy.usage_item_2') }}</li>
+            <li>{{ $t('privacy.usage_item_3') }}</li>
+            <li>{{ $t('privacy.usage_item_4') }}</li>
+            <li>{{ $t('privacy.usage_item_5') }}</li>
           </ul>
         </section>
 
         <section class="mb-8">
-          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.transfer_heading') }}</h3>
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.storage_heading') }}</h3>
           <p class="text-secondary leading-relaxed mb-4">
-            {{ $t('privacy.transfer_text') }}
+            {{ $t('privacy.storage_text') }}
           </p>
           <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
-            <li>{{ $t('privacy.transfer_item_1') }}</li>
-            <li>{{ $t('privacy.transfer_item_2') }}</li>
-            <li>{{ $t('privacy.transfer_item_3') }}</li>
+            <li>{{ $t('privacy.storage_item_1') }}</li>
+            <li>{{ $t('privacy.storage_item_2') }}</li>
+            <li>{{ $t('privacy.storage_item_3') }}</li>
+            <li>{{ $t('privacy.storage_item_4') }}</li>
           </ul>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.sync_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.sync_text') }}
+          </p>
+          <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
+            <li>{{ $t('privacy.sync_item_1') }}</li>
+            <li>{{ $t('privacy.sync_item_2') }}</li>
+            <li>{{ $t('privacy.sync_item_3') }}</li>
+            <li>{{ $t('privacy.sync_item_4') }}</li>
+            <li>{{ $t('privacy.sync_item_5') }}</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.third_party_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.third_party_text') }}
+          </p>
+          <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
+            <li><strong class="text-white">{{ $t('privacy.third_party_item_1_label') }}</strong> {{ $t('privacy.third_party_item_1_text') }}</li>
+          </ul>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.third_party_no_analytics') }}
+          </p>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.rights_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.rights_text') }}
+          </p>
+          <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
+            <li>{{ $t('privacy.rights_item_1') }}</li>
+            <li>{{ $t('privacy.rights_item_2') }}</li>
+            <li>{{ $t('privacy.rights_item_3') }}</li>
+            <li>{{ $t('privacy.rights_item_4') }}</li>
+            <li>{{ $t('privacy.rights_item_5') }}</li>
+          </ul>
+          <p class="text-secondary leading-relaxed mb-4">
+            <i18n-t keypath="privacy.rights_contact">
+              <template #email>
+                <a href="mailto:help@triggertime.es" class="text-primary hover:underline">help@triggertime.es</a>
+              </template>
+            </i18n-t>
+          </p>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.retention_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.retention_text') }}
+          </p>
         </section>
 
         <section class="mb-8">
@@ -55,9 +131,9 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.third_party_heading') }}</h3>
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.children_heading') }}</h3>
           <p class="text-secondary leading-relaxed mb-4">
-            {{ $t('privacy.third_party_text') }}
+            {{ $t('privacy.children_text') }}
           </p>
         </section>
 
@@ -98,9 +174,11 @@ import AppCard from '@/components/ui/AppCard.vue'
 .mb-12 { margin-bottom: 3rem; }
 .mb-8 { margin-bottom: 2rem; }
 .mb-4 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 0.5rem; }
 .border-b { border-bottom: 1px solid var(--border-subtle); }
 .text-4xl { font-size: 2.25rem; }
 .text-xl { font-size: 1.25rem; }
+.text-lg { font-size: 1.125rem; }
 .text-sm { font-size: 0.875rem; }
 .leading-relaxed { line-height: 1.75; }
 .font-heading { font-family: var(--font-heading); font-weight: 700; }

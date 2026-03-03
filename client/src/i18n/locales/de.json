@@ -68,7 +68,18 @@
         "contact_subtitle": "Wir sind hier, um Sie zu unterstützen. Wenn Sie einen Fehler gefunden haben oder Vorschläge haben, kontaktieren Sie uns.",
         "email_support": "Support-E-Mail",
         "member_a": "Clubmitglied A",
-        "member_b": "Clubmitglied B"
+        "member_b": "Clubmitglied B",
+        "member_c": "Clubmitglied C",
+        "most_popular": "Am beliebtesten",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "Für Schützenvereine mit mehreren Mitgliedern.",
+        "club_pro_all_features": "Alle Pro+-Funktionen inklusive",
+        "club_pro_license_mgmt": "Aktivierungslizenzverwaltung",
+        "from": "ab",
+        "whitelabel_feature_1": "Eigenes Branding & Logo",
+        "whitelabel_feature_2": "Spezifische Schießdisziplinen",
+        "whitelabel_feature_3": "Verwaltung von Aktivierungslizenzen",
+        "whitelabel_feature_4": "Dedizierter B2B-Support"
     },
     "auth": {
         "login_title": "Willkommen zurück",

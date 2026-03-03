@@ -31,7 +31,7 @@
             <tr v-for="version in versions" :key="version.id" class="hover:bg-white/5 transition-colors group">
               <td>
                 <div class="font-medium text-sm text-primary">
-                  {{ version.instance ? version.instance.name : 'Unknown Instance' }}
+                  {{ version.instance ? version.instance.name : 'Global' }}
                 </div>
               </td>
               <td>
@@ -81,7 +81,7 @@
       <div class="form-group">
         <label class="form-label">Instance</label>
         <select v-model="modalData.instance_id" class="form-select text-black">
-          <option :value="null">-- Select Instance --</option>
+          <option :value="null">Global</option>
           <option v-for="inst in instances" :key="inst.id" :value="inst.id">{{ inst.name }}</option>
         </select>
         <div v-if="modalState.errors?.instance_id?.[0]" class="text-red-500 text-xs mt-1">{{ modalState.errors.instance_id[0] }}</div>

@@ -68,7 +68,18 @@
         "contact_subtitle": "We're here to support you. If you found a bug or have suggestions, reach out to us.",
         "email_support": "Email Support",
         "member_a": "Club Member A",
-        "member_b": "Club Member B"
+        "member_b": "Club Member B",
+        "member_c": "Club Member C",
+        "most_popular": "Most Popular",
+        "club_pro_title": "Club Pro+",
+        "club_pro_desc": "For shooting clubs managing multiple members.",
+        "club_pro_all_features": "All Pro+ features included",
+        "club_pro_license_mgmt": "Activation License Management",
+        "from": "from",
+        "whitelabel_feature_1": "Custom branding & logo",
+        "whitelabel_feature_2": "Specific shooting disciplines",
+        "whitelabel_feature_3": "Activation license management",
+        "whitelabel_feature_4": "Dedicated B2B support"
     },
     "auth": {
         "login_title": "Welcome Back",
