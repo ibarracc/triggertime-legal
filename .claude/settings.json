@@ -34,7 +34,11 @@
       "Bash(echo \"PHPStan exit: $?\")",
       "Bash(composer validate)",
       "Bash(composer update --lock --no-interaction)",
-      "Bash(echo \"PHPUnit: $?\")"
+      "Bash(echo \"PHPUnit: $?\")",
+      "Bash(composer update josegonzalez/dotenv --no-scripts)",
+      "Bash(grep -o \"fonts.googleapis\\\\|Outfit\\\\|Inter\" /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/*.css)",
+      "Bash(chmod +x /Users/ajibarra/work/Sites/triggertime-site/.githooks/pre-commit)",
+      "Bash(chmod +x /Users/ajibarra/work/Sites/triggertime-site/.githooks/pre-push)"
     ],
     "additionalDirectories": [
       "/Users/ajibarra/work/Sites/triggertime-site"

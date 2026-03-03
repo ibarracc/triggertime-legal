@@ -18,6 +18,9 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
+    allowedHosts: [
+      'triggertime.ddev.site'
+    ],
     hmr: {
       host: 'triggertime.ddev.site',
       protocol: 'wss',
