@@ -294,9 +294,10 @@ return [
             'timezone' => 'UTC',
 
             /*
-             * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support
+             * For MariaDB/MySQL use 'utf8mb4'; for PostgreSQL use 'utf8'.
+             * Override via DB_ENCODING environment variable.
              */
-            'encoding' => 'utf8mb4',
+            'encoding' => env('DB_ENCODING', 'utf8mb4'),
 
             /*
              * If your MySQL server is configured with `skip-character-set-client-handshake`
