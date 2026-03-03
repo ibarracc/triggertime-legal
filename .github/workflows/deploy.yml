@@ -62,8 +62,9 @@ jobs:
             set -e
             cd /var/www/triggertime
             composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-            mkdir -p tmp/cache/models tmp/cache/persistent tmp/cache/views tmp/sessions tmp/tests logs
-            chmod -R 775 tmp logs
+            sudo mkdir -p tmp/cache/models tmp/cache/persistent tmp/cache/views tmp/sessions tmp/tests logs
+            sudo chmod -R 775 tmp logs
+            sudo chown -R deploy:www-data tmp logs
             bin/cake migrations migrate --no-lock
             sudo systemctl reload php8.4-fpm
             echo "Deployment complete."
