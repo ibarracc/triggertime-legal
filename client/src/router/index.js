@@ -26,13 +26,13 @@ const routes = [
         path: '/privacy',
         name: 'Privacy',
         component: () => import('../views/public/PrivacyPolicy.vue'),
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: false, title: 'Privacy Policy' }
     },
     {
         path: '/terms',
         name: 'Terms',
         component: () => import('../views/public/TermsOfService.vue'),
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: false, title: 'Terms of Service' }
     },
 
     // Public App Routes
@@ -40,25 +40,25 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('../views/public/LoginView.vue'),
-        meta: { requiresGuest: true }
+        meta: { requiresGuest: true, title: 'Login' }
     },
     {
         path: '/register',
         name: 'Register',
         component: () => import('../views/public/RegisterView.vue'),
-        meta: { requiresGuest: true }
+        meta: { requiresGuest: true, title: 'Register' }
     },
     {
         path: '/forgot-password',
         name: 'ForgotPassword',
         component: () => import('../views/public/ForgotPasswordView.vue'),
-        meta: { requiresGuest: true }
+        meta: { requiresGuest: true, title: 'Forgot Password' }
     },
     {
         path: '/reset-password/:token',
         name: 'ResetPassword',
         component: () => import('../views/public/ResetPasswordView.vue'),
-        meta: { requiresGuest: true }
+        meta: { requiresGuest: true, title: 'Reset Password' }
     },
     {
         path: '/upgrade',
@@ -72,12 +72,14 @@ const routes = [
     {
         path: '/checkout/:token',
         name: 'CheckoutLanding',
-        component: () => import('../views/public/CheckoutLanding.vue')
+        component: () => import('../views/public/CheckoutLanding.vue'),
+        meta: { title: 'Checkout' }
     },
     {
         path: '/checkout-success',
         name: 'CheckoutSuccess',
-        component: () => import('../views/public/CheckoutSuccessView.vue')
+        component: () => import('../views/public/CheckoutSuccessView.vue'),
+        meta: { title: 'Checkout Complete' }
     },
 
     // Authenticated Dashboard Routes
@@ -85,25 +87,25 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('../views/dashboard/DashboardHome.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: 'Dashboard' }
     },
     {
         path: '/dashboard/subscription',
         name: 'Subscription',
         component: () => import('../views/dashboard/SubscriptionView.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: 'Subscription' }
     },
     {
         path: '/dashboard/devices',
         name: 'Devices',
         component: () => import('../views/dashboard/DevicesView.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: 'My Devices' }
     },
     {
         path: '/dashboard/profile',
         name: 'Profile',
         component: () => import('../views/dashboard/ProfileView.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: 'Profile' }
     },
 
     // Admin Routes
@@ -120,58 +122,61 @@ const routes = [
             {
                 path: 'dashboard',
                 name: 'AdminDashboard',
+                meta: { title: 'Admin | Dashboard' },
                 component: () => import('../views/admin/AdminDashboardView.vue')
             },
             {
                 path: 'users',
                 name: 'AdminUsers',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Users' },
                 component: () => import('../views/admin/UsersView.vue')
             },
             {
                 path: 'licenses',
                 name: 'AdminLicenses',
+                meta: { title: 'Admin | Licenses' },
                 component: () => import('../views/admin/LicensesView.vue')
             },
             {
                 path: 'licenses/import',
                 name: 'AdminLicensesImport',
+                meta: { title: 'Admin | Import Licenses' },
                 component: () => import('../views/admin/LicenseImportView.vue')
             },
             {
                 path: 'devices',
                 name: 'AdminDevices',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Devices' },
                 component: () => import('../views/admin/DevicesView.vue')
             },
             {
                 path: 'instances',
                 name: 'AdminInstances',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Instances' },
                 component: () => import('../views/admin/InstancesView.vue')
             },
             {
                 path: 'versions',
                 name: 'AdminVersions',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Versions' },
                 component: () => import('../views/admin/VersionsView.vue')
             },
             {
                 path: 'subscriptions',
                 name: 'AdminSubscriptions',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Subscriptions' },
                 component: () => import('../views/admin/SubscriptionsView.vue')
             },
             {
                 path: 'remote-configs',
                 name: 'AdminRemoteConfigs',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Remote Configs' },
                 component: () => import('../views/admin/RemoteConfigsView.vue')
             },
             {
                 path: 'remote-configs/:id',
                 name: 'AdminRemoteConfigDetail',
-                meta: { requiresSuperAdmin: true },
+                meta: { requiresSuperAdmin: true, title: 'Admin | Remote Config' },
                 component: () => import('../views/admin/RemoteConfigDetailView.vue')
             }
         ]
@@ -180,7 +185,8 @@ const routes = [
     {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
-        component: () => import('../views/public/NotFoundView.vue')
+        component: () => import('../views/public/NotFoundView.vue'),
+        meta: { title: 'Not Found' }
     }
 ]
 
@@ -229,6 +235,11 @@ router.beforeEach((to, from) => {
     if (to.meta.requiresSuperAdmin && !authStore.isAdmin) {
         return { name: 'AdminLicenses' } // redirect club admins trying to poke around
     }
+})
+
+router.afterEach((to) => {
+    const title = to.meta.title
+    document.title = title ? `TriggerTime | ${title}` : 'TriggerTime'
 })
 
 export default router
