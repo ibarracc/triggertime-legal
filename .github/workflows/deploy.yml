@@ -30,9 +30,10 @@ jobs:
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.DO_SSH_HOST }}" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Deploy files via rsync
         run: |
@@ -49,12 +50,15 @@ jobs:
             --exclude='.ddev/' \
             --exclude='docs/' \
             --exclude='tests/' \
-            -e "ssh -i ~/.ssh/deploy_key" \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes -o BatchMode=yes" \
             ./ ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }}:/var/www/triggertime/
 
       - name: Post-deploy tasks
         run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} << 'ENDSSH'
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
+            ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SSH_HOST }} << 'ENDSSH'
             set -e
             cd /var/www/triggertime
             composer install --no-dev --optimize-autoloader --no-interaction
