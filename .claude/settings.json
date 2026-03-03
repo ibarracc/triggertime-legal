@@ -31,7 +31,10 @@
       "Bash(SECURITY_SALT=f76f1c8475585c46c6acd3ddcb8f5e0f15de524637bb4080a08c4afe7cfc9144 php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress)",
       "Bash(echo \"PHPUnit exit: $?\")",
       "Bash(echo \"PHPCS exit: $?\")",
-      "Bash(echo \"PHPStan exit: $?\")"
+      "Bash(echo \"PHPStan exit: $?\")",
+      "Bash(composer validate)",
+      "Bash(composer update --lock --no-interaction)",
+      "Bash(echo \"PHPUnit: $?\")"
     ],
     "additionalDirectories": [
       "/Users/ajibarra/work/Sites/triggertime-site"
