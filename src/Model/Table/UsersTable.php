@@ -59,6 +59,10 @@ class UsersTable extends Table
             ->allowEmptyString('language')
             ->maxLength('language', 5);
 
+        $validator
+            ->boolean('marketing_optin')
+            ->allowEmptyString('marketing_optin');
+
         return $validator;
     }
 }

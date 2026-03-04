@@ -24,6 +24,7 @@ class UsersFixture extends TestFixture
                 'password_hash' => '$2y$10$72vI/zC71e8D7DrmXOTN6em/6W8k7cOoI6n3u2T4C2Tpw/s4kO53O',
                 'role' => 'admin',
                 'stripe_customer_id' => null,
+                'marketing_optin' => false,
                 'created' => '2026-01-01 00:00:00',
                 'modified' => '2026-01-01 00:00:00',
             ],
