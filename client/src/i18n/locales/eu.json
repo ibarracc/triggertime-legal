@@ -98,7 +98,11 @@
         "creating_account": "Kontua sortzen...",
         "password_mismatch": "Pasahitzak ez datoz bat",
         "accept_terms": "{terms} eta {privacy} onartzen ditut",
-        "accept_terms_required": "Zerbitzu Baldintzak eta Pribatutasun Politika onartu behar dituzu kontu bat sortzeko"
+        "accept_terms_required": "Zerbitzu Baldintzak eta Pribatutasun Politika onartu behar dituzu kontu bat sortzeko",
+        "or_continue_with": "Edo jarraitu honekin",
+        "sign_in_google": "Google-rekin hasi saioa",
+        "sign_in_apple": "Apple-rekin hasi saioa",
+        "social_login_failed": "Saioa hasteko errorea. Saiatu berriro."
     },
     "dashboard": {
         "welcome": "Ongi etorri berriro, {name}",

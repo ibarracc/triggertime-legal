@@ -98,7 +98,11 @@
         "creating_account": "Konto wird erstellt...",
         "password_mismatch": "Passwörter stimmen nicht überein",
         "accept_terms": "Ich akzeptiere die {terms} und die {privacy}",
-        "accept_terms_required": "Sie müssen die Nutzungsbedingungen und die Datenschutzrichtlinie akzeptieren, um ein Konto zu erstellen"
+        "accept_terms_required": "Sie müssen die Nutzungsbedingungen und die Datenschutzrichtlinie akzeptieren, um ein Konto zu erstellen",
+        "or_continue_with": "Oder weiter mit",
+        "sign_in_google": "Mit Google anmelden",
+        "sign_in_apple": "Mit Apple anmelden",
+        "social_login_failed": "Soziale Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
     },
     "dashboard": {
         "welcome": "Willkommen zurück, {name}",

@@ -26,5 +26,14 @@ export const authApi = {
 
     updatePassword(currentPassword, newPassword) {
         return api.post('/web/me/password', { current: currentPassword, new: newPassword });
+    },
+
+    socialLogin(provider, idToken, firstName, lastName) {
+        return api.post('/web/auth/social-login', {
+            provider,
+            id_token: idToken,
+            first_name: firstName,
+            last_name: lastName,
+        });
     }
 };

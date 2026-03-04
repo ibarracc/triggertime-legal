@@ -98,7 +98,11 @@
         "creating_account": "Creando cuenta...",
         "password_mismatch": "Las contraseñas no coinciden",
         "accept_terms": "Acepto los {terms} y la {privacy}",
-        "accept_terms_required": "Debes aceptar los Términos de Servicio y la Política de Privacidad para crear una cuenta"
+        "accept_terms_required": "Debes aceptar los Términos de Servicio y la Política de Privacidad para crear una cuenta",
+        "or_continue_with": "O continuar con",
+        "sign_in_google": "Iniciar sesión con Google",
+        "sign_in_apple": "Iniciar sesión con Apple",
+        "social_login_failed": "Error de inicio de sesión social. Inténtalo de nuevo."
     },
     "dashboard": {
         "welcome": "Bienvenido de nuevo, {name}",

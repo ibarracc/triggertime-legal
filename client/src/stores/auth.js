@@ -39,6 +39,18 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function socialLogin(provider, idToken, firstName, lastName) {
+        try {
+            const response = await authApi.socialLogin(provider, idToken, firstName, lastName)
+            if (response.success) {
+                setAuthData(response.token, response.user, response.user.subscriptions?.[0])
+                return { success: true }
+            }
+        } catch (error) {
+            return { success: false, error: error.response?.data?.error?.message || 'Social login failed' }
+        }
+    }
+
     async function fetchUser() {
         if (!token.value) return
         try {
@@ -85,6 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
         isFree,
         login,
         register,
+        socialLogin,
         fetchUser,
         setAuthData,
         logout

@@ -98,7 +98,11 @@
         "creating_account": "Création du compte...",
         "password_mismatch": "Les mots de passe ne correspondent pas",
         "accept_terms": "J'accepte les {terms} et la {privacy}",
-        "accept_terms_required": "Vous devez accepter les Conditions d'Utilisation et la Politique de Confidentialité pour créer un compte"
+        "accept_terms_required": "Vous devez accepter les Conditions d'Utilisation et la Politique de Confidentialité pour créer un compte",
+        "or_continue_with": "Ou continuer avec",
+        "sign_in_google": "Se connecter avec Google",
+        "sign_in_apple": "Se connecter avec Apple",
+        "social_login_failed": "Échec de la connexion sociale. Veuillez réessayer."
     },
     "dashboard": {
         "welcome": "Bon retour, {name}",

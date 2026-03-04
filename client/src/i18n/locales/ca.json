@@ -98,7 +98,11 @@
         "creating_account": "Creant el compte...",
         "password_mismatch": "Les contrasenyes no coincideixen",
         "accept_terms": "Accepto els {terms} i la {privacy}",
-        "accept_terms_required": "Has d'acceptar els Termes de Servei i la Política de Privacitat per crear un compte"
+        "accept_terms_required": "Has d'acceptar els Termes de Servei i la Política de Privacitat per crear un compte",
+        "or_continue_with": "O continuar amb",
+        "sign_in_google": "Inicia sessió amb Google",
+        "sign_in_apple": "Inicia sessió amb Apple",
+        "social_login_failed": "Error d'inici de sessió social. Torna-ho a provar."
     },
     "dashboard": {
         "welcome": "Benvingut de nou, {name}",
