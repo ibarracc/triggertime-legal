@@ -83,6 +83,7 @@ class AuthController extends AppController
         $firstName = $this->request->getData('first_name');
         $lastName = $this->request->getData('last_name');
         $language = $this->request->getData('language', 'en');
+        $marketingOptin = (bool)$this->request->getData('marketing_optin', false);
 
         if (!$email || !$password) {
             throw new BadRequestException('Email and password are required');
@@ -103,6 +104,7 @@ class AuthController extends AppController
         $user->first_name = $firstName;
         $user->last_name = $lastName;
         $user->language = $language;
+        $user->marketing_optin = $marketingOptin;
 
         if (!$this->Authentication->save($user)) {
             throw new BadRequestException('Could not create user account');
@@ -337,6 +339,7 @@ class AuthController extends AppController
                 $user->first_name = $firstName;
                 $user->last_name = $lastName;
                 $user->language = $this->request->getData('language', 'en');
+                $user->marketing_optin = (bool)$this->request->getData('marketing_optin', false);
 
                 if (!$this->Authentication->save($user)) {
                     throw new BadRequestException('Could not create user account');
