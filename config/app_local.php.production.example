@@ -30,7 +30,14 @@ return [
             ],
         ],
     ],
-
+    'SocialAuth' => [
+        'google' => [
+            'clientId' => env('GOOGLE_CLIENT_ID', ''),
+        ],
+        'apple' => [
+            'serviceId' => env('APPLE_SERVICE_ID', ''),
+        ],
+    ],
     'Datasources' => [
         'default' => [
             'url' => 'postgres://ttapp:REPLACE_DB_PASSWORD@localhost:5432/triggertime',

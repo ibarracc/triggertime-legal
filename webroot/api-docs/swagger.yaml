@@ -418,6 +418,100 @@ paths:
         '400':
           description: Invalid or expired token / missing fields
 
+  /v1/web/auth/social-login:
+    post:
+      summary: Login or register via social provider (Google/Apple)
+      tags:
+        - Web Public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - provider
+                - id_token
+              properties:
+                provider:
+                  type: string
+                  enum: [google, apple]
+                id_token:
+                  type: string
+                  description: ID token from the social provider
+                first_name:
+                  type: string
+                  description: Optional, used when creating a new account (Apple only)
+                last_name:
+                  type: string
+                  description: Optional, used when creating a new account (Apple only)
+                language:
+                  type: string
+                  description: Preferred language for new accounts
+      responses:
+        '200':
+          description: Login/registration successful, returns JWT token and user
+        '400':
+          description: Missing provider or id_token
+        '401':
+          description: Invalid or expired social token
+
+  /v1/web/me/social-connect:
+    post:
+      summary: Link a social provider to the authenticated user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - provider
+                - id_token
+              properties:
+                provider:
+                  type: string
+                  enum: [google, apple]
+                id_token:
+                  type: string
+                  description: ID token from the social provider
+      responses:
+        '200':
+          description: Social account connected
+        '400':
+          description: Account already connected or linked to another user
+        '401':
+          description: Invalid or expired social token
+
+  /v1/web/me/social-disconnect:
+    post:
+      summary: Disconnect a social provider from the authenticated user
+      security:
+        - bearerAuth: []
+      tags:
+        - Web Authenticated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - provider
+              properties:
+                provider:
+                  type: string
+                  enum: [google, apple]
+      responses:
+        '200':
+          description: Social account disconnected
+        '400':
+          description: Provider not found or cannot disconnect only login method
+
   /v1/web/devices/link:
     post:
       summary: Link a device to web subscription
@@ -500,7 +594,10 @@ paths:
 
   /v1/web/me/password:
     post:
-      summary: Update password for current user
+      summary: Update or set password for current user
+      description: >
+        For users with an existing password, `current` is required.
+        SSO-only users (no password set) can omit `current` to set their first password.
       security:
         - bearerAuth: []
       tags:
@@ -512,13 +609,14 @@ paths:
             schema:
               type: object
               required:
-                - current_password
-                - new_password
+                - new
               properties:
-                current_password:
+                current:
                   type: string
-                new_password:
+                  description: Current password (required if user already has a password)
+                new:
                   type: string
+                  description: New password to set
       responses:
         '200':
           description: Password updated
