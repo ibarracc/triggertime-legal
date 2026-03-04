@@ -114,8 +114,9 @@ class AuthControllerTest extends TestCase
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
+            'input' => json_encode([]),
         ]);
-        $this->_sendRequest('/api/v1/web/me', 'DELETE', json_encode([]));
+        $this->delete('/api/v1/web/me');
         $this->assertResponseCode(400);
     }
 
@@ -138,8 +139,9 @@ class AuthControllerTest extends TestCase
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
+            'input' => json_encode(['email' => 'wrong@example.com']),
         ]);
-        $this->_sendRequest('/api/v1/web/me', 'DELETE', json_encode(['email' => 'wrong@example.com']));
+        $this->delete('/api/v1/web/me');
         $this->assertResponseCode(400);
     }
 
@@ -162,8 +164,9 @@ class AuthControllerTest extends TestCase
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token,
             ],
+            'input' => json_encode(['email' => 'delete-test3@example.com']),
         ]);
-        $this->_sendRequest('/api/v1/web/me', 'DELETE', json_encode(['email' => 'delete-test3@example.com']));
+        $this->delete('/api/v1/web/me');
         $this->assertResponseOk();
         $deleteBody = json_decode((string)$this->_response->getBody(), true);
         $this->assertTrue($deleteBody['success']);
