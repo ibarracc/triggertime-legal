@@ -19,6 +19,7 @@ class User extends Entity
         'devices' => true,
         'subscriptions' => true,
         'activation_licenses' => true,
+        'social_accounts' => true,
     ];
 
     protected array $_hidden = [

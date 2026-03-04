@@ -37,6 +37,9 @@ class UsersTable extends Table
         $this->hasMany('ActivationLicenses', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('SocialAccounts', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
