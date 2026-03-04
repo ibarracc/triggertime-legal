@@ -54,6 +54,7 @@ class ApiKeyMiddleware implements MiddlewareInterface
             }
 
             $body = (string)$request->getBody();
+            $request->getBody()->rewind();
             // Expected format: "{timestamp}.{body}"
             $message = $timestamp . '.' . $body;
             $secret = $appConfig['secret'];

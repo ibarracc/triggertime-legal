@@ -554,7 +554,7 @@ const handleDeleteAccount = async () => {
   width: 44px;
   height: 24px;
   border-radius: 12px;
-  background: var(--border);
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   cursor: pointer;
   transition: background 0.2s;
