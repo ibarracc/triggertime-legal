@@ -71,6 +71,17 @@
           </label>
         </div>
 
+        <div class="terms-checkbox mb-4">
+          <label class="flex items-start gap-2 cursor-pointer text-sm text-secondary">
+            <input
+              v-model="marketingOptin"
+              type="checkbox"
+              class="terms-input mt-0.5"
+            />
+            <span>{{ $t('auth.marketing_optin') }}</span>
+          </label>
+        </div>
+
         <div v-if="errorMsg" class="error-msg mb-4">
           {{ errorMsg }}
         </div>
@@ -152,6 +163,7 @@ const language = ref(locale.value)
 const password = ref('')
 const confirmPassword = ref('')
 const termsAccepted = ref(false)
+const marketingOptin = ref(false)
 const isLoading = ref(false)
 const errorMsg = ref('')
 const socialAuth = useSocialAuth()
@@ -170,7 +182,7 @@ const handleRegister = async () => {
   isLoading.value = true
   errorMsg.value = ''
   
-  const result = await authStore.register(email.value, password.value, firstName.value, lastName.value, language.value)
+  const result = await authStore.register(email.value, password.value, firstName.value, lastName.value, language.value, marketingOptin.value)
   
   if (result.success) {
     // Sync local locale
@@ -190,7 +202,7 @@ const handleRegister = async () => {
 
 const handleGoogleLogin = async () => {
   errorMsg.value = ''
-  const result = await socialAuth.loginWithGoogle()
+  const result = await socialAuth.loginWithGoogle(marketingOptin.value)
   if (result?.success) {
     if (authStore.user?.language) {
       await setLocale(authStore.user.language)
@@ -206,7 +218,7 @@ const handleGoogleLogin = async () => {
 
 const handleAppleLogin = async () => {
   errorMsg.value = ''
-  const result = await socialAuth.loginWithApple()
+  const result = await socialAuth.loginWithApple(marketingOptin.value)
   if (result?.success) {
     if (authStore.user?.language) {
       await setLocale(authStore.user.language)
@@ -290,19 +302,25 @@ const handleAppleLogin = async () => {
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-}
-
-.sso-btn:hover {
-  background: var(--surface-hover, rgba(0, 0, 0, 0.05));
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .sso-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.sso-btn-google,
+.sso-btn-apple {
+  background: var(--bg-elevated, var(--surface));
+  border: 1px solid var(--border-subtle, var(--border));
+  color: var(--text);
+}
+
+.sso-btn-google:hover:not(:disabled),
+.sso-btn-apple:hover:not(:disabled) {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .sso-icon {
