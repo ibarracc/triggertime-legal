@@ -161,7 +161,7 @@ class AuthController extends AppController
 
         $user = $this->Authentication->find()
             ->where(['id' => $userId])
-            ->contain(['Subscriptions', 'Devices'])
+            ->contain(['Subscriptions', 'Devices', 'SocialAccounts'])
             ->first();
 
         // Check assigned licenses from club
@@ -434,6 +434,8 @@ class AuthController extends AppController
 
     /**
      * Change the authenticated user's password.
+     *
+     * SSO-only users (null password_hash) can set a password without providing a current one.
      */
     public function updatePassword()
     {
@@ -443,14 +445,20 @@ class AuthController extends AppController
         $currentPassword = $this->request->getData('current');
         $newPassword = $this->request->getData('new');
 
-        if (!$currentPassword || !$newPassword) {
-            throw new BadRequestException('Current and new password are required');
+        if (!$newPassword) {
+            throw new BadRequestException('New password is required');
         }
 
         $user = $this->Authentication->get($payload['sub']);
 
-        if (!password_verify($currentPassword, $user->password_hash)) {
-            throw new BadRequestException('Incorrect current password');
+        // If user has a password, require current password verification
+        if (!empty($user->password_hash)) {
+            if (!$currentPassword) {
+                throw new BadRequestException('Current password is required');
+            }
+            if (!password_verify($currentPassword, $user->password_hash)) {
+                throw new BadRequestException('Incorrect current password');
+            }
         }
 
         $user->password_hash = $newPassword;
@@ -464,5 +472,177 @@ class AuthController extends AppController
         }
 
         throw new BadRequestException('Failed to update password');
+    }
+
+    /**
+     * Link a social provider to the authenticated user's account.
+     */
+    public function connectSocial()
+    {
+        $this->request->allowMethod(['post']);
+        $payload = $this->request->getAttribute('jwt_payload');
+
+        $provider = $this->request->getData('provider');
+        $idToken = $this->request->getData('id_token');
+
+        if (!$provider || !$idToken) {
+            throw new BadRequestException('Provider and id_token are required');
+        }
+
+        $socialAuth = new SocialAuthService();
+        $claims = $socialAuth->verifyIdToken($provider, $idToken);
+
+        if (!$claims) {
+            throw new UnauthorizedException('Invalid or expired social token');
+        }
+
+        $user = $this->Authentication->get($payload['sub']);
+        $socialAccounts = $this->fetchTable('SocialAccounts');
+
+        // Check if this social account is already linked to another user
+        $existing = $socialAccounts->find()
+            ->where([
+                'provider' => $provider,
+                'provider_uid' => $claims['sub'],
+            ])
+            ->first();
+
+        if ($existing) {
+            if ($existing->user_id === $user->id) {
+                throw new BadRequestException('This account is already connected');
+            }
+            throw new BadRequestException('This social account is linked to a different user');
+        }
+
+        // Check if user already has this provider linked
+        $alreadyLinked = $socialAccounts->find()
+            ->where([
+                'user_id' => $user->id,
+                'provider' => $provider,
+            ])
+            ->first();
+
+        if ($alreadyLinked) {
+            throw new BadRequestException('You already have a ' . ucfirst($provider) . ' account connected');
+        }
+
+        $social = $socialAccounts->newEmptyEntity();
+        $social->id = Text::uuid();
+        $social->user_id = $user->id;
+        $social->provider = $provider;
+        $social->provider_uid = $claims['sub'];
+
+        if (!$socialAccounts->save($social)) {
+            throw new BadRequestException('Failed to connect social account');
+        }
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'message' => 'Social account connected',
+            ]));
+    }
+
+    /**
+     * Disconnect a social provider from the authenticated user's account.
+     */
+    public function disconnectSocial()
+    {
+        $this->request->allowMethod(['post']);
+        $payload = $this->request->getAttribute('jwt_payload');
+
+        $provider = $this->request->getData('provider');
+        if (!$provider) {
+            throw new BadRequestException('Provider is required');
+        }
+
+        $user = $this->Authentication->get($payload['sub']);
+
+        $socialAccounts = $this->fetchTable('SocialAccounts');
+        $account = $socialAccounts->find()
+            ->where([
+                'user_id' => $user->id,
+                'provider' => $provider,
+            ])
+            ->first();
+
+        if (!$account) {
+            throw new BadRequestException('Social account not found');
+        }
+
+        // Prevent disconnecting if user has no password and this is their only social account
+        if (empty($user->password_hash)) {
+            $remaining = $socialAccounts->find()
+                ->where(['user_id' => $user->id])
+                ->count();
+            if ($remaining <= 1) {
+                throw new BadRequestException('Cannot disconnect your only login method. Set a password first.');
+            }
+        }
+
+        if (!$socialAccounts->delete($account)) {
+            throw new BadRequestException('Failed to disconnect social account');
+        }
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'message' => 'Social account disconnected',
+            ]));
+    }
+
+    /**
+     * Soft-delete the authenticated user's account.
+     *
+     * Requires email confirmation and no active paid subscription.
+     */
+    public function deleteAccount()
+    {
+        $this->request->allowMethod(['delete']);
+        $payload = $this->request->getAttribute('jwt_payload');
+
+        $email = $this->request->getData('email');
+        if (!$email) {
+            throw new BadRequestException('Email confirmation is required');
+        }
+
+        $user = $this->Authentication->find()
+            ->where(['id' => $payload['sub']])
+            ->contain(['Subscriptions'])
+            ->first();
+
+        if (!$user) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        // Verify email matches
+        if (strtolower($email) !== strtolower($user->email)) {
+            throw new BadRequestException('Email does not match your account');
+        }
+
+        // Check for active paid subscription
+        if ($user->subscriptions) {
+            foreach ($user->subscriptions as $sub) {
+                if ($sub->status === 'active' && $sub->plan !== 'free') {
+                    if (!$sub->cancel_at_period_end || $sub->current_period_end > DateTime::now()) {
+                        throw new BadRequestException(
+                            'Cannot delete account with an active paid subscription. '
+                            . 'Please cancel your subscription and wait for it to expire.',
+                        );
+                    }
+                }
+            }
+        }
+
+        // Soft-delete user
+        if (!$this->Authentication->delete($user)) {
+            throw new BadRequestException('Failed to delete account');
+        }
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'message' => 'Your account has been deactivated and will be permanently deleted in 30 days.',
+            ]));
     }
 }

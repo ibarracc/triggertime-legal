@@ -85,6 +85,9 @@ return function (RouteBuilder $routes): void {
                     $webAuth->get('/me', ['controller' => 'Auth', 'action' => 'me']);
                     $webAuth->post('/me/profile', ['controller' => 'Auth', 'action' => 'updateProfile']);
                     $webAuth->post('/me/password', ['controller' => 'Auth', 'action' => 'updatePassword']);
+                    $webAuth->post('/me/social-connect', ['controller' => 'Auth', 'action' => 'connectSocial']);
+                    $webAuth->post('/me/social-disconnect', ['controller' => 'Auth', 'action' => 'disconnectSocial']);
+                    $webAuth->delete('/me', ['controller' => 'Auth', 'action' => 'deleteAccount']);
                     $webAuth->get('/devices', ['controller' => 'Devices', 'action' => 'index']);
                     $webAuth->post('/subscriptions/checkout', ['controller' => 'Subscriptions', 'action' => 'createCheckout']);
                     $webAuth->post('/subscriptions/portal', ['controller' => 'Subscriptions', 'action' => 'portal']);
