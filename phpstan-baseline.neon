@@ -392,12 +392,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$current_period_start\\.$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -407,52 +407,67 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$first_name\\.$#"
-			count: 2
+			count: 3
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
-			count: 3
+			count: 13
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$language\\.$#"
-			count: 3
-			path: src/Controller/Api/V1/Web/AuthController.php
-
-		-
-			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$last_name\\.$#"
-			count: 2
-			path: src/Controller/Api/V1/Web/AuthController.php
-
-		-
-			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$max_devices_allowed\\.$#"
-			count: 1
-			path: src/Controller/Api/V1/Web/AuthController.php
-
-		-
-			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$password_hash\\.$#"
 			count: 4
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$last_name\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$marketing_optin\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$max_devices_allowed\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$password_hash\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$plan\\.$#"
-			count: 1
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$provider\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$provider_uid\\.$#"
+			count: 3
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$role\\.$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$status\\.$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$subscriptions\\.$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -462,7 +477,22 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$user_id\\.$#"
-			count: 2
+			count: 6
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:connectSocial\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:deleteAccount\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:disconnectSocial\\(\\) has no return type specified\\.$#"
+			count: 1
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -487,6 +517,11 @@ parameters:
 
 		-
 			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:resetPassword\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:socialLogin\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Web/AuthController.php
 
