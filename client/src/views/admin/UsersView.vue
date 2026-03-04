@@ -83,9 +83,7 @@
 
       <div class="flex gap-4 justify-end mt-6">
         <AppButton variant="secondary" @click="deletingUser = null">{{ $t('common.cancel') }}</AppButton>
-        <button @click="executeDelete" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors">
-          {{ $t('common.delete') }}
-        </button>
+        <AppButton variant="danger" @click="executeDelete">{{ $t('common.delete') }}</AppButton>
       </div>
     </AppModal>
 

@@ -69,9 +69,7 @@
       
       <div class="flex gap-3 justify-end mt-4">
         <AppButton variant="secondary" @click="deletingDevice = null">Cancel</AppButton>
-        <button @click="executeDelete" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors">
-          Confirm Delete
-        </button>
+        <AppButton variant="danger" @click="executeDelete">Confirm Delete</AppButton>
       </div>
     </AppModal>
 

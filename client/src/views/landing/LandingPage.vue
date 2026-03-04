@@ -25,7 +25,7 @@
             </a>
             <a href="#" class="badge-link block">
               <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                  :alt="$t('landing.download_now')" class="h-12">
+                  :alt="$t('landing.download_now')" class="h-google-play">
             </a>
         </div>
       </div>
@@ -266,7 +266,8 @@ import AppCard from '@/components/ui/AppCard.vue'
 .mx-auto { margin-left: auto; margin-right: auto; }
 .w-full { width: 100%; }
 .m-0 { margin: 0; }
-.h-12 { height: 3rem; }
+.h-12 { height: 3.5rem; }
+.h-google-play { height: 5.25rem; margin: -0.875rem 0; }
 .text-2xl { font-size: 1.5rem; }
 .text-4xl { font-size: 2.5rem; }
 .text-base { font-size: 1rem; }

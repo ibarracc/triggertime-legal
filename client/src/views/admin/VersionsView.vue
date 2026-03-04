@@ -66,9 +66,7 @@
       <p class="text-[var(--text-secondary)] mb-6">Are you sure you want to delete version <strong>{{ deletingVersion?.version }}</strong>? This might affect remote configs linked to it.</p>
       <div class="flex gap-3 justify-end mt-4">
         <AppButton variant="secondary" @click="deletingVersion = null">Cancel</AppButton>
-        <button @click="executeDelete" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors">
-          Confirm Delete
-        </button>
+        <AppButton variant="danger" @click="executeDelete">Confirm Delete</AppButton>
       </div>
     </AppModal>
 
