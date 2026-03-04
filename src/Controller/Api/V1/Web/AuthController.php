@@ -6,6 +6,7 @@ namespace App\Controller\Api\V1\Web;
 use App\Controller\AppController;
 use App\Model\Table\UsersTable;
 use App\Service\JwtService;
+use App\Service\SocialAuthService;
 use Cake\Core\Configure;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
@@ -270,6 +271,120 @@ class AuthController extends AppController
         }
 
         throw new BadRequestException('Failed to reset password');
+    }
+
+    /**
+     * Authenticate or register a user via social provider (Google/Apple).
+     */
+    public function socialLogin()
+    {
+        $this->request->allowMethod(['post']);
+
+        $provider = $this->request->getData('provider');
+        $idToken = $this->request->getData('id_token');
+
+        if (!$provider || !$idToken) {
+            throw new BadRequestException('Provider and id_token are required');
+        }
+
+        $socialAuth = new SocialAuthService();
+        $claims = $socialAuth->verifyIdToken($provider, $idToken);
+
+        if (!$claims) {
+            throw new UnauthorizedException('Invalid or expired social token');
+        }
+
+        $socialAccounts = $this->fetchTable('SocialAccounts');
+
+        // 1. Check if social account already linked
+        $existing = $socialAccounts->find()
+            ->where([
+                'provider' => $provider,
+                'provider_uid' => $claims['sub'],
+            ])
+            ->first();
+
+        if ($existing) {
+            // Existing linked user — log them in
+            $user = $this->Authentication->find()
+                ->where(['id' => $existing->user_id])
+                ->contain(['Subscriptions', 'Devices'])
+                ->first();
+        } else {
+            // 2. Check if email matches an existing user
+            $user = $this->Authentication->find()
+                ->where(['email' => $claims['email']])
+                ->contain(['Subscriptions', 'Devices'])
+                ->first();
+
+            if ($user) {
+                // Link social account to existing user
+                $social = $socialAccounts->newEmptyEntity();
+                $social->id = Text::uuid();
+                $social->user_id = $user->id;
+                $social->provider = $provider;
+                $social->provider_uid = $claims['sub'];
+                $socialAccounts->save($social);
+            } else {
+                // 3. Create new user
+                $firstName = $claims['first_name'] ?? $this->request->getData('first_name');
+                $lastName = $claims['last_name'] ?? $this->request->getData('last_name');
+
+                $user = $this->Authentication->newEmptyEntity();
+                $user->id = Text::uuid();
+                $user->email = $claims['email'];
+                $user->role = 'user';
+                $user->first_name = $firstName;
+                $user->last_name = $lastName;
+                $user->language = $this->request->getData('language', 'en');
+
+                if (!$this->Authentication->save($user)) {
+                    throw new BadRequestException('Could not create user account');
+                }
+
+                // Link social account
+                $social = $socialAccounts->newEmptyEntity();
+                $social->id = Text::uuid();
+                $social->user_id = $user->id;
+                $social->provider = $provider;
+                $social->provider_uid = $claims['sub'];
+                $socialAccounts->save($social);
+
+                // Auto-create free subscription
+                $subs = $this->fetchTable('Subscriptions');
+                $sub = $subs->newEmptyEntity();
+                $sub->id = Text::uuid();
+                $sub->user_id = $user->id;
+                $sub->plan = 'free';
+                $sub->status = 'active';
+                $sub->max_devices_allowed = Configure::read("Subscriptions.{$sub->plan}.max_devices_allowed");
+                $sub->current_period_start = DateTime::now();
+                $subs->save($sub);
+
+                // Auto-link B2B licenses
+                $licenses = $this->fetchTable('ActivationLicenses');
+                $licenses->updateAll(
+                    ['user_id' => $user->id],
+                    ['email' => $user->email, 'user_id IS' => null],
+                );
+
+                $user->subscriptions = [$sub];
+            }
+        }
+
+        $jwt = new JwtService();
+        $token = $jwt->generateToken([
+            'sub' => $user->id,
+            'email' => $user->email,
+            'role' => $user->role,
+        ]);
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'token' => $token,
+                'user' => $user,
+            ]));
     }
 
     /**

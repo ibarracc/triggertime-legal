@@ -73,6 +73,7 @@ return function (RouteBuilder $routes): void {
                 $web->post('/auth/register', ['controller' => 'Auth', 'action' => 'register']);
                 $web->post('/auth/forgot-password', ['controller' => 'Auth', 'action' => 'forgotPassword']);
                 $web->post('/auth/reset-password', ['controller' => 'Auth', 'action' => 'resetPassword']);
+                $web->post('/auth/social-login', ['controller' => 'Auth', 'action' => 'socialLogin']);
 
                 // Authenticated Endpoints (JWT)
                 $web->scope('/', function (RouteBuilder $webAuth): void {
