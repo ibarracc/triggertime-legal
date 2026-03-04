@@ -4,6 +4,9 @@
       <div class="text-center mb-8">
         <h1 class="mb-2">{{ $t('auth.login_title') }}</h1>
         <p class="text-secondary">{{ $t('auth.login_subtitle') }}</p>
+        <div v-if="route.query.deactivated" class="alert alert-info mb-4">
+          {{ $t('auth.account_deactivated') }}
+        </div>
       </div>
 
       <form @submit.prevent="handleLogin">
@@ -243,14 +246,7 @@ const handleAppleLogin = async () => {
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-}
-
-.sso-btn:hover {
-  background: var(--surface-hover, rgba(0, 0, 0, 0.05));
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .sso-btn:disabled {
@@ -258,7 +254,29 @@ const handleAppleLogin = async () => {
   cursor: not-allowed;
 }
 
+.sso-btn-google,
+.sso-btn-apple {
+  background: var(--bg-elevated, var(--surface));
+  border: 1px solid var(--border-subtle, var(--border));
+  color: var(--text);
+}
+
+.sso-btn-google:hover:not(:disabled),
+.sso-btn-apple:hover:not(:disabled) {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 .sso-icon {
   flex-shrink: 0;
+}
+
+.alert-info {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 10px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
 }
 </style>
