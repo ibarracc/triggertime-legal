@@ -50,8 +50,7 @@ class UsersTable extends Table
             ->notEmptyString('email');
 
         $validator
-            ->requirePresence('password_hash', 'create')
-            ->notEmptyString('password_hash');
+            ->allowEmptyString('password_hash');
 
         $validator
             ->allowEmptyString('language')
