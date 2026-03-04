@@ -50,8 +50,19 @@ class MakePasswordHashNullable extends BaseMigration
             $columnList = implode(', ', $columnNames);
 
             $this->execute("INSERT INTO \"tmp_users_pw_nullable\" ($columnList) SELECT $columnList FROM \"users\"");
+
+            // Preserve indexes before dropping original table
+            $indexes = $this->fetchAll(
+                "SELECT sql FROM sqlite_master WHERE type='index' AND tbl_name='users' AND sql IS NOT NULL"
+            );
+
             $this->execute('DROP TABLE "users"');
             $this->execute('ALTER TABLE "tmp_users_pw_nullable" RENAME TO "users"');
+
+            // Recreate indexes on the renamed table
+            foreach ($indexes as $idx) {
+                $this->execute($idx['sql']);
+            }
 
             $this->execute('PRAGMA foreign_keys = ON');
         } else {
@@ -103,8 +114,19 @@ class MakePasswordHashNullable extends BaseMigration
             $columnList = implode(', ', $columnNames);
 
             $this->execute("INSERT INTO \"tmp_users_pw_notnull\" ($columnList) SELECT $columnList FROM \"users\"");
+
+            // Preserve indexes before dropping original table
+            $indexes = $this->fetchAll(
+                "SELECT sql FROM sqlite_master WHERE type='index' AND tbl_name='users' AND sql IS NOT NULL"
+            );
+
             $this->execute('DROP TABLE "users"');
             $this->execute('ALTER TABLE "tmp_users_pw_notnull" RENAME TO "users"');
+
+            // Recreate indexes on the renamed table
+            foreach ($indexes as $idx) {
+                $this->execute($idx['sql']);
+            }
 
             $this->execute('PRAGMA foreign_keys = ON');
         } else {

@@ -8,8 +8,8 @@ class CreateUsers extends BaseMigration
 {
     public function change(): void
     {
-        $table = $this->table('users', ['id' => false, 'primary_key' => 'id']);
-        $table->addColumn('id', 'uuid', ['identity' => true])
+        $table = $this->table('users', ['id' => false, 'primary_key' => ['id']]);
+        $table->addColumn('id', 'uuid')
             ->addColumn('email', 'string', [
                 'limit' => 255,
                 'null' => false,
