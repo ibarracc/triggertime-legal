@@ -5,8 +5,8 @@ export const authApi = {
         return api.post('/web/auth/login', { email, password });
     },
 
-    register(email, password, firstName, lastName, language) {
-        return api.post('/web/auth/register', { email, password, first_name: firstName, last_name: lastName, language });
+    register(email, password, firstName, lastName, language, marketingOptin = false) {
+        return api.post('/web/auth/register', { email, password, first_name: firstName, last_name: lastName, language, marketing_optin: marketingOptin });
     },
 
     forgotPassword(email) {
@@ -28,12 +28,25 @@ export const authApi = {
         return api.post('/web/me/password', { current: currentPassword, new: newPassword });
     },
 
-    socialLogin(provider, idToken, firstName, lastName) {
+    socialLogin(provider, idToken, firstName, lastName, marketingOptin = false) {
         return api.post('/web/auth/social-login', {
             provider,
             id_token: idToken,
             first_name: firstName,
             last_name: lastName,
+            marketing_optin: marketingOptin,
         });
+    },
+
+    connectSocial(provider, idToken) {
+        return api.post('/web/me/social-connect', { provider, id_token: idToken });
+    },
+
+    disconnectSocial(provider) {
+        return api.post('/web/me/social-disconnect', { provider });
+    },
+
+    deleteAccount(email) {
+        return api.delete('/web/me', { data: { email } });
     }
 };
