@@ -174,10 +174,25 @@ class AuthController extends AppController
             ->where(['club_admin_id' => $userId])
             ->all();
 
+        // Determine if user can delete account (no active paid subscription)
+        $canDeleteAccount = true;
+        if ($user->subscriptions) {
+            foreach ($user->subscriptions as $sub) {
+                if ($sub->status === 'active' && $sub->plan !== 'free') {
+                    if (!$sub->cancel_at_period_end || $sub->current_period_end > DateTime::now()) {
+                        $canDeleteAccount = false;
+                        break;
+                    }
+                }
+            }
+        }
+
         return $this->response->withType('application/json')
             ->withStringBody((string)json_encode([
                 'success' => true,
                 'user' => $user,
+                'has_password' => !empty($user->password_hash),
+                'can_delete_account' => $canDeleteAccount,
                 'b2b_licenses' => $licenses,
                 'instances' => $instances,
             ]));
@@ -402,6 +417,9 @@ class AuthController extends AppController
         $user->first_name = $this->request->getData('first_name');
         $user->last_name = $this->request->getData('last_name');
         $user->language = $this->request->getData('language', $user->language);
+        if ($this->request->getData('marketing_optin') !== null) {
+            $user->marketing_optin = (bool)$this->request->getData('marketing_optin');
+        }
 
         if ($this->Authentication->save($user)) {
             return $this->response->withType('application/json')
