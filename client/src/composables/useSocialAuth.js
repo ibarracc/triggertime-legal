@@ -29,45 +29,74 @@ export function useSocialAuth() {
         googleInitialized = true
     }
 
-    async function loginWithGoogle() {
+    async function getGoogleIdToken() {
+        await initGoogle()
+
+        return new Promise((resolve, reject) => {
+            /* global google */
+            google.accounts.id.initialize({
+                client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+                use_fedcm_for_button: true,
+                callback: (response) => {
+                    if (response.credential) {
+                        resolve(response.credential)
+                    } else {
+                        reject(new Error('No credential received'))
+                    }
+                },
+            })
+
+            // Use renderButton for FedCM-compatible click-based sign-in
+            const wrapper = document.createElement('div')
+            wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0'
+            document.body.appendChild(wrapper)
+
+            google.accounts.id.renderButton(wrapper, {
+                type: 'standard',
+                size: 'large',
+            })
+
+            requestAnimationFrame(() => {
+                const btn = wrapper.querySelector('[role="button"]')
+                if (btn) {
+                    btn.click()
+                } else {
+                    wrapper.remove()
+                    reject(new Error('Google Sign-In not available'))
+                }
+                setTimeout(() => wrapper.remove(), 500)
+            })
+        })
+    }
+
+    async function getAppleIdToken() {
+        await loadScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js')
+
+        /* global AppleID */
+        AppleID.auth.init({
+            clientId: import.meta.env.VITE_APPLE_SERVICE_ID,
+            scope: 'name email',
+            redirectURI: window.location.origin + '/auth/apple-callback',
+            usePopup: true,
+        })
+
+        const response = await AppleID.auth.signIn()
+
+        return {
+            idToken: response.authorization.id_token,
+            firstName: response.user?.name?.firstName || null,
+            lastName: response.user?.name?.lastName || null,
+        }
+    }
+
+    async function loginWithGoogle(marketingOptin = false) {
         isLoading.value = true
         error.value = ''
 
         try {
-            await initGoogle()
+            const idToken = await getGoogleIdToken()
 
-            const idToken = await new Promise((resolve, reject) => {
-                /* global google */
-                google.accounts.id.initialize({
-                    client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-                    callback: (response) => {
-                        if (response.credential) {
-                            resolve(response.credential)
-                        } else {
-                            reject(new Error('No credential received'))
-                        }
-                    },
-                })
-
-                google.accounts.id.prompt((notification) => {
-                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                        // Fallback: use the button-based flow with popup
-                        const buttonDiv = document.createElement('div')
-                        buttonDiv.style.display = 'none'
-                        document.body.appendChild(buttonDiv)
-                        google.accounts.id.renderButton(buttonDiv, {
-                            type: 'standard',
-                            click_listener: () => {},
-                        })
-                        const btn = buttonDiv.querySelector('[role="button"]')
-                        if (btn) btn.click()
-                        else reject(new Error('Google Sign-In not available'))
-                        buttonDiv.remove()
-                    }
-                })
-            })
-
-            const result = await authStore.socialLogin('google', idToken)
+            const result = await authStore.socialLogin('google', idToken, null, null, marketingOptin)
             if (!result.success) {
                 error.value = result.error
             }
@@ -80,28 +109,14 @@ export function useSocialAuth() {
         }
     }
 
-    async function loginWithApple() {
+    async function loginWithApple(marketingOptin = false) {
         isLoading.value = true
         error.value = ''
 
         try {
-            await loadScript('https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js')
+            const { idToken, firstName, lastName } = await getAppleIdToken()
 
-            /* global AppleID */
-            AppleID.auth.init({
-                clientId: import.meta.env.VITE_APPLE_SERVICE_ID,
-                scope: 'name email',
-                redirectURI: window.location.origin + '/auth/apple-callback',
-                usePopup: true,
-            })
-
-            const response = await AppleID.auth.signIn()
-
-            const idToken = response.authorization.id_token
-            const firstName = response.user?.name?.firstName || null
-            const lastName = response.user?.name?.lastName || null
-
-            const result = await authStore.socialLogin('apple', idToken, firstName, lastName)
+            const result = await authStore.socialLogin('apple', idToken, firstName, lastName, marketingOptin)
             if (!result.success) {
                 error.value = result.error
             }
@@ -121,6 +136,8 @@ export function useSocialAuth() {
     return {
         isLoading,
         error,
+        getGoogleIdToken,
+        getAppleIdToken,
         loginWithGoogle,
         loginWithApple,
     }
