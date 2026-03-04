@@ -27,9 +27,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function register(email, password, firstName, lastName, language) {
+    async function register(email, password, firstName, lastName, language, marketingOptin = false) {
         try {
-            const response = await authApi.register(email, password, firstName, lastName, language)
+            const response = await authApi.register(email, password, firstName, lastName, language, marketingOptin)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
                 return { success: true }
@@ -39,9 +39,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function socialLogin(provider, idToken, firstName, lastName) {
+    async function socialLogin(provider, idToken, firstName, lastName, marketingOptin = false) {
         try {
-            const response = await authApi.socialLogin(provider, idToken, firstName, lastName)
+            const response = await authApi.socialLogin(provider, idToken, firstName, lastName, marketingOptin)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
                 return { success: true }
