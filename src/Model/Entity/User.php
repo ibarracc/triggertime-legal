@@ -15,10 +15,12 @@ class User extends Entity
         'role' => true,
         'stripe_customer_id' => true,
         'language' => true,
+        'marketing_optin' => true,
         'created_at' => true,
         'devices' => true,
         'subscriptions' => true,
         'activation_licenses' => true,
+        'social_accounts' => true,
     ];
 
     protected array $_hidden = [

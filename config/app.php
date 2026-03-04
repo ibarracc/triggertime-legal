@@ -84,6 +84,19 @@ return [
     ],
 
     /*
+     * Social authentication provider configuration.
+     * Client IDs are used to verify the audience (aud) claim in provider ID tokens.
+     */
+    'SocialAuth' => [
+        'google' => [
+            'clientId' => env('GOOGLE_CLIENT_ID', ''),
+        ],
+        'apple' => [
+            'serviceId' => env('APPLE_SERVICE_ID', ''),
+        ],
+    ],
+
+    /*
      * Apply timestamps with the last modified time to static assets (js, css, images).
      * Will append a querystring parameter containing the time the file was modified.
      * This is useful for busting browser caches.
@@ -134,6 +147,14 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
+        ],
+
+        'social_auth' => [
+            'className' => FileEngine::class,
+            'prefix' => 'social_auth_',
+            'path' => CACHE . 'social_auth' . DS,
+            'serialize' => true,
+            'duration' => '+24 hours',
         ],
     ],
 

@@ -38,7 +38,11 @@
       "Bash(composer update josegonzalez/dotenv --no-scripts)",
       "Bash(grep -o \"fonts.googleapis\\\\|Outfit\\\\|Inter\" /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/*.css)",
       "Bash(chmod +x /Users/ajibarra/work/Sites/triggertime-site/.githooks/pre-commit)",
-      "Bash(chmod +x /Users/ajibarra/work/Sites/triggertime-site/.githooks/pre-push)"
+      "Bash(chmod +x /Users/ajibarra/work/Sites/triggertime-site/.githooks/pre-push)",
+      "Bash(grep -o \"features-grid\\\\|LandingPage\\\\|pricing-grid\" /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/index-*.css)",
+      "Bash(grep -o \"LoginView\\\\|RegisterView\" /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/index-*.css)",
+      "Bash(grep -o \"__vite__mapDeps[^\\)]*\\)\" /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/index-*.js)",
+      "Bash(grep -o '\"\"assets/LoginView[^\"\"]*\"\"' /Users/ajibarra/work/Sites/triggertime-site/webroot/spa/assets/index-*.js)"
     ],
     "additionalDirectories": [
       "/Users/ajibarra/work/Sites/triggertime-site"

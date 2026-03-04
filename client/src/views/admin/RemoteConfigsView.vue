@@ -43,7 +43,7 @@
               </td>
               <td>
                 <div class="text-secondary">
-                   {{ getKeyCount(config.config_data) }} keys (+ legacy flags)
+                   {{ getKeyCount(config.config_data) }} keys
                 </div>
               </td>
               <td>
@@ -76,9 +76,7 @@
       <p class="text-[var(--text-secondary)] mb-6">Are you sure you want to delete this remote config payload?</p>
       <div class="flex gap-3 justify-end mt-4">
         <AppButton variant="secondary" @click="deletingConfig = null">Cancel</AppButton>
-        <button @click="executeDelete" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors">
-          Confirm Delete
-        </button>
+        <AppButton variant="danger" @click="executeDelete">Confirm Delete</AppButton>
       </div>
     </AppModal>
 

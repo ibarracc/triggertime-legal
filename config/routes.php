@@ -73,6 +73,7 @@ return function (RouteBuilder $routes): void {
                 $web->post('/auth/register', ['controller' => 'Auth', 'action' => 'register']);
                 $web->post('/auth/forgot-password', ['controller' => 'Auth', 'action' => 'forgotPassword']);
                 $web->post('/auth/reset-password', ['controller' => 'Auth', 'action' => 'resetPassword']);
+                $web->post('/auth/social-login', ['controller' => 'Auth', 'action' => 'socialLogin']);
 
                 // Authenticated Endpoints (JWT)
                 $web->scope('/', function (RouteBuilder $webAuth): void {
@@ -84,6 +85,9 @@ return function (RouteBuilder $routes): void {
                     $webAuth->get('/me', ['controller' => 'Auth', 'action' => 'me']);
                     $webAuth->post('/me/profile', ['controller' => 'Auth', 'action' => 'updateProfile']);
                     $webAuth->post('/me/password', ['controller' => 'Auth', 'action' => 'updatePassword']);
+                    $webAuth->post('/me/social-connect', ['controller' => 'Auth', 'action' => 'connectSocial']);
+                    $webAuth->post('/me/social-disconnect', ['controller' => 'Auth', 'action' => 'disconnectSocial']);
+                    $webAuth->delete('/me', ['controller' => 'Auth', 'action' => 'deleteAccount']);
                     $webAuth->get('/devices', ['controller' => 'Devices', 'action' => 'index']);
                     $webAuth->post('/subscriptions/checkout', ['controller' => 'Subscriptions', 'action' => 'createCheckout']);
                     $webAuth->post('/subscriptions/portal', ['controller' => 'Subscriptions', 'action' => 'portal']);

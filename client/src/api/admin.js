@@ -38,6 +38,7 @@ export const adminApi = {
     getRemoteConfig: (id) => api.get(`/admin/remote-config/${id}`),
     createRemoteConfig: (data) => api.post('/admin/remote-config', data),
     updateRemoteConfig: (id, data) => api.put(`/admin/remote-config/${id}`, data),
+    deleteRemoteConfig: (id) => api.delete(`/admin/remote-config/${id}`),
 
     // Versions
     getVersions: () => api.get('/admin/versions'),

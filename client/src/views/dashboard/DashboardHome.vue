@@ -40,7 +40,7 @@
         <template #header>
           <div class="flex justify-between items-center min-w-0">
             <span class="truncate">{{ $t('nav.devices') }}</span>
-            <span class="text-sm text-secondary shrink-0">{{ devices.length }}</span>
+            <span v-if="devices.length" class="text-sm text-secondary shrink-0">{{ devices.length }}</span>
           </div>
         </template>
 
@@ -67,7 +67,7 @@
           </div>
         </div>
 
-        <router-link to="/dashboard/devices" class="btn btn-secondary w-full">{{ $t('dashboard.manage_devices') }}</router-link>
+        <router-link to="/dashboard/devices" class="btn btn-secondary w-full mt-4">{{ $t('dashboard.manage_devices') }}</router-link>
       </AppCard>
       <!-- Edit Device Name Modal -->
       <AppModal :is-open="showEditModal" @close="showEditModal = false" :title="$t('devices.edit_device')" size="sm">

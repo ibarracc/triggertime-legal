@@ -27,15 +27,27 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function register(email, password, firstName, lastName, language) {
+    async function register(email, password, firstName, lastName, language, marketingOptin = false) {
         try {
-            const response = await authApi.register(email, password, firstName, lastName, language)
+            const response = await authApi.register(email, password, firstName, lastName, language, marketingOptin)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
                 return { success: true }
             }
         } catch (error) {
             return { success: false, error: error.response?.data?.error?.message || error.response?.data?.message || 'Registration failed' }
+        }
+    }
+
+    async function socialLogin(provider, idToken, firstName, lastName, marketingOptin = false) {
+        try {
+            const response = await authApi.socialLogin(provider, idToken, firstName, lastName, marketingOptin)
+            if (response.success) {
+                setAuthData(response.token, response.user, response.user.subscriptions?.[0])
+                return { success: true }
+            }
+        } catch (error) {
+            return { success: false, error: error.response?.data?.error?.message || 'Social login failed' }
         }
     }
 
@@ -85,6 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
         isFree,
         login,
         register,
+        socialLogin,
         fetchUser,
         setAuthData,
         logout

@@ -37,6 +37,9 @@ class UsersTable extends Table
         $this->hasMany('ActivationLicenses', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('SocialAccounts', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -50,12 +53,15 @@ class UsersTable extends Table
             ->notEmptyString('email');
 
         $validator
-            ->requirePresence('password_hash', 'create')
-            ->notEmptyString('password_hash');
+            ->allowEmptyString('password_hash');
 
         $validator
             ->allowEmptyString('language')
             ->maxLength('language', 5);
+
+        $validator
+            ->boolean('marketing_optin')
+            ->allowEmptyString('marketing_optin');
 
         return $validator;
     }
