@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1\Web;
 
 use App\Controller\AppController;
+use App\Mailer\UserMailer;
 use App\Model\Table\UsersTable;
+use App\Service\EmailVerificationService;
 use App\Service\JwtService;
 use App\Service\SocialAuthService;
 use Cake\Core\Configure;
@@ -12,10 +14,9 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\UnauthorizedException;
 use Cake\I18n\DateTime;
 use Cake\Log\Log;
-use Cake\Mailer\Mailer;
 use Cake\Routing\Router;
 use Cake\Utility\Text;
-use Exception;
+use Throwable;
 
 class AuthController extends AppController
 {
@@ -128,6 +129,17 @@ class AuthController extends AppController
             ['email' => $user->email, 'user_id IS' => null],
         );
 
+        // Send welcome + activation email
+        try {
+            $verificationService = new EmailVerificationService();
+            $activationUrl = $verificationService->generateSignedUrl($user->id);
+            $mailer = new UserMailer();
+            $mailer->welcomeActivation($user, $activationUrl);
+            $mailer->deliver();
+        } catch (Throwable $e) {
+            Log::error('Welcome email failed: ' . $e->getMessage());
+        }
+
         $jwt = new JwtService();
         $token = $jwt->generateToken([
             'sub' => $user->id,
@@ -142,6 +154,83 @@ class AuthController extends AppController
                 'success' => true,
                 'token' => $token,
                 'user' => $user,
+            ]));
+    }
+
+    /**
+     * Verify a user's email via HMAC-signed URL.
+     *
+     * GET /api/v1/web/auth/verify-email?uid=...&exp=...&sig=...
+     */
+    public function verifyEmail()
+    {
+        $this->request->allowMethod(['get']);
+
+        $uid = $this->request->getQuery('uid');
+        $exp = $this->request->getQuery('exp');
+        $sig = $this->request->getQuery('sig');
+
+        if (!$uid || !$exp || !$sig) {
+            throw new BadRequestException('Missing verification parameters');
+        }
+
+        $service = new EmailVerificationService();
+        $userId = $service->verifySignedUrl((string)$uid, (string)$exp, (string)$sig);
+
+        if (!$userId) {
+            throw new BadRequestException('Invalid or expired verification link');
+        }
+
+        $user = $this->Authentication->find()->where(['id' => $userId])->first();
+        if (!$user) {
+            throw new BadRequestException('User not found');
+        }
+
+        if ($user->email_verified_at === null) {
+            $user->email_verified_at = DateTime::now();
+            $this->Authentication->save($user);
+        }
+
+        $frontendUrl = env('FRONTEND_URL', Router::fullBaseUrl());
+
+        return $this->redirect($frontendUrl . '/dashboard?verified=1');
+    }
+
+    /**
+     * Resend the email verification link.
+     */
+    public function resendVerification()
+    {
+        $this->request->allowMethod(['post']);
+        $payload = $this->request->getAttribute('jwt_payload');
+        if (!$payload) {
+            throw new UnauthorizedException('Missing or invalid token payload');
+        }
+
+        $user = $this->Authentication->get($payload['sub']);
+
+        if ($user->email_verified_at !== null) {
+            return $this->response->withType('application/json')
+                ->withStringBody((string)json_encode([
+                    'success' => true,
+                    'message' => 'Email already verified',
+                ]));
+        }
+
+        try {
+            $verificationService = new EmailVerificationService();
+            $activationUrl = $verificationService->generateSignedUrl($user->id);
+            $mailer = new UserMailer();
+            $mailer->welcomeActivation($user, $activationUrl);
+            $mailer->deliver();
+        } catch (Throwable $e) {
+            Log::error('Verification email failed: ' . $e->getMessage());
+        }
+
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'message' => 'Verification email sent',
             ]));
     }
 
@@ -229,16 +318,11 @@ class AuthController extends AppController
 
             // Send Email
             try {
-                $mailer = new Mailer('default');
-                $mailer->setTo($user->email)
-                    ->setSubject('TriggerTime - Password Reset')
-                    ->deliver(
-                        "You requested a password reset. Please click on the link below to set a new password:\n\n"
-                        . $resetLink,
-                    );
-            } catch (Exception $e) {
-                // Log and continue, or fail depending on strictness
-                Log::error('Mail sending failed: ' . $e->getMessage());
+                $userMailer = new UserMailer();
+                $userMailer->passwordReset($user, $resetLink);
+                $userMailer->deliver();
+            } catch (Throwable $e) {
+                Log::error('Password reset email failed: ' . $e->getMessage());
             }
         }
 
@@ -355,6 +439,7 @@ class AuthController extends AppController
                 $user->last_name = $lastName;
                 $user->language = $this->request->getData('language', 'en');
                 $user->marketing_optin = (bool)$this->request->getData('marketing_optin', false);
+                $user->email_verified_at = DateTime::now();
 
                 if (!$this->Authentication->save($user)) {
                     throw new BadRequestException('Could not create user account');
@@ -385,6 +470,15 @@ class AuthController extends AppController
                     ['user_id' => $user->id],
                     ['email' => $user->email, 'user_id IS' => null],
                 );
+
+                // Send welcome email for SSO users
+                try {
+                    $mailer = new UserMailer();
+                    $mailer->welcomeSso($user, $provider);
+                    $mailer->deliver();
+                } catch (Throwable $e) {
+                    Log::error('SSO welcome email failed: ' . $e->getMessage());
+                }
 
                 $user->subscriptions = [$sub];
             }

@@ -5,6 +5,7 @@ namespace App\Service;
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use RuntimeException;
 
 class EmailVerificationService
 {
@@ -44,7 +45,12 @@ class EmailVerificationService
             return null;
         }
 
-        $expectedSig = $this->sign($uid, $exp);
+        try {
+            $expectedSig = $this->sign($uid, $exp);
+        } catch (RuntimeException) {
+            return null;
+        }
+
         if (!hash_equals($expectedSig, $sig)) {
             return null;
         }
@@ -61,10 +67,15 @@ class EmailVerificationService
      */
     private function sign(string $userId, string $expiry): string
     {
+        $salt = Configure::read('Security.salt');
+        if (empty($salt)) {
+            throw new RuntimeException('Security.salt is not configured');
+        }
+
         return hash_hmac(
             'sha256',
             $userId . ':' . $expiry,
-            Configure::read('Security.salt'),
+            $salt,
         );
     }
 }

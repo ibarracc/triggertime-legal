@@ -74,6 +74,7 @@ return function (RouteBuilder $routes): void {
                 $web->post('/auth/forgot-password', ['controller' => 'Auth', 'action' => 'forgotPassword']);
                 $web->post('/auth/reset-password', ['controller' => 'Auth', 'action' => 'resetPassword']);
                 $web->post('/auth/social-login', ['controller' => 'Auth', 'action' => 'socialLogin']);
+                $web->get('/auth/verify-email', ['controller' => 'Auth', 'action' => 'verifyEmail']);
 
                 // Authenticated Endpoints (JWT)
                 $web->scope('/', function (RouteBuilder $webAuth): void {
@@ -91,6 +92,7 @@ return function (RouteBuilder $routes): void {
                     $webAuth->get('/devices', ['controller' => 'Devices', 'action' => 'index']);
                     $webAuth->post('/subscriptions/checkout', ['controller' => 'Subscriptions', 'action' => 'createCheckout']);
                     $webAuth->post('/subscriptions/portal', ['controller' => 'Subscriptions', 'action' => 'portal']);
+                    $webAuth->post('/auth/resend-verification', ['controller' => 'Auth', 'action' => 'resendVerification']);
                 });
             });
 
