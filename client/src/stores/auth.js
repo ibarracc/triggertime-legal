@@ -14,6 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
         subscription.value?.plan === 'pro' && subscription.value?.status === 'active'
     )
     const isFree = computed(() => subscription.value?.plan === 'free')
+    const isVerified = computed(() => !!user.value?.email_verified_at)
 
     async function login(email, password) {
         try {
@@ -95,6 +96,7 @@ export const useAuthStore = defineStore('auth', () => {
         isClubAdmin,
         isProPlus,
         isFree,
+        isVerified,
         login,
         register,
         socialLogin,

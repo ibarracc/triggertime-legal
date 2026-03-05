@@ -21,7 +21,7 @@ const routes = [
         component: isLandingDomain
             ? LandingPage
             : () => import('../views/dashboard/DashboardHome.vue'),
-        meta: { requiresAuth: !isLandingDomain }
+        meta: { requiresAuth: !isLandingDomain, requiresVerified: !isLandingDomain }
     },
     {
         path: '/privacy',
@@ -62,6 +62,12 @@ const routes = [
         meta: { requiresGuest: true, title: 'Reset Password' }
     },
     {
+        path: '/verify-email',
+        name: 'VerifyEmail',
+        component: () => import('../views/public/VerifyEmailView.vue'),
+        meta: { requiresAuth: true, title: 'Verify Email' }
+    },
+    {
         path: '/upgrade',
         name: 'UpgradeRedirect',
         redirect: to => {
@@ -88,32 +94,32 @@ const routes = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('../views/dashboard/DashboardHome.vue'),
-        meta: { requiresAuth: true, title: 'Dashboard' }
+        meta: { requiresAuth: true, requiresVerified: true, title: 'Dashboard' }
     },
     {
         path: '/dashboard/subscription',
         name: 'Subscription',
         component: () => import('../views/dashboard/SubscriptionView.vue'),
-        meta: { requiresAuth: true, title: 'Subscription' }
+        meta: { requiresAuth: true, requiresVerified: true, title: 'Subscription' }
     },
     {
         path: '/dashboard/devices',
         name: 'Devices',
         component: () => import('../views/dashboard/DevicesView.vue'),
-        meta: { requiresAuth: true, title: 'My Devices' }
+        meta: { requiresAuth: true, requiresVerified: true, title: 'My Devices' }
     },
     {
         path: '/dashboard/profile',
         name: 'Profile',
         component: () => import('../views/dashboard/ProfileView.vue'),
-        meta: { requiresAuth: true, title: 'Profile' }
+        meta: { requiresAuth: true, requiresVerified: true, title: 'Profile' }
     },
 
     // Admin Routes
     {
         path: '/admin',
         component: () => import('../views/admin/AdminLayout.vue'),
-        meta: { requiresAuth: true, requiresAdminRole: true },
+        meta: { requiresAuth: true, requiresVerified: true, requiresAdminRole: true },
         children: [
             {
                 path: '',
@@ -226,6 +232,19 @@ router.beforeEach((to, from) => {
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         return { name: 'Login', query: { redirect: to.fullPath } }
     } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+        return { name: 'Dashboard' }
+    }
+
+    // Redirect unverified users to verification page
+    if (to.meta.requiresVerified && authStore.isAuthenticated && !authStore.isVerified) {
+        // Allow access if user data hasn't loaded yet (isVerified will be false initially)
+        if (authStore.user !== null) {
+            return { name: 'VerifyEmail', query: to.query }
+        }
+    }
+
+    // Redirect verified users away from verify-email page
+    if (to.name === 'VerifyEmail' && authStore.isAuthenticated && authStore.isVerified) {
         return { name: 'Dashboard' }
     }
 

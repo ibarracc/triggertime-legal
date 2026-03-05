@@ -104,7 +104,16 @@
         "sign_in_apple": "Sign in with Apple",
         "social_login_failed": "Social login failed. Please try again.",
         "marketing_optin": "I agree to receive marketing communications about product updates, offers, and tips",
-        "account_deactivated": "Your account has been deactivated and will be permanently deleted in 30 days."
+        "account_deactivated": "Your account has been deactivated and will be permanently deleted in 30 days.",
+        "verify_email_title": "Verify Your Email",
+        "verify_email_subtitle": "We've sent a verification link to your email address. Please check your inbox and click the link to activate your account.",
+        "verify_email_sent_to": "Verification email sent to {email}",
+        "verify_email_resend": "Resend Verification Email",
+        "verify_email_resend_success": "Verification email resent!",
+        "verify_email_resend_cooldown": "Please wait before requesting another email",
+        "verify_email_check_spam": "Didn't receive it? Check your spam folder or click resend.",
+        "verify_email_success": "Your email has been verified! Welcome to TriggerTime.",
+        "verify_email_subscribe_cta": "Subscribe to Pro+ while you wait"
     },
     "dashboard": {
         "welcome": "Welcome back, {name}",

@@ -190,9 +190,9 @@ const handleRegister = async () => {
 
     const upgradeToken = route.query.upgrade_token
     if (upgradeToken) {
-        router.push(`/checkout/${upgradeToken}`)
+        router.push({ name: 'VerifyEmail', query: { upgrade_token: upgradeToken, intent: 'subscribe' } })
     } else {
-        router.push('/dashboard')
+        router.push({ name: 'VerifyEmail' })
     }
   } else {
     errorMsg.value = result.error

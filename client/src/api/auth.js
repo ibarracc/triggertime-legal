@@ -48,5 +48,9 @@ export const authApi = {
 
     deleteAccount(email) {
         return api.delete('/web/me', { data: { email } });
-    }
+    },
+
+    resendVerification() {
+        return api.post('/web/auth/resend-verification');
+    },
 };
