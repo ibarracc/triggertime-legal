@@ -16,6 +16,7 @@ class User extends Entity
         'stripe_customer_id' => true,
         'language' => true,
         'marketing_optin' => true,
+        'email_verified_at' => true,
         'created_at' => true,
         'devices' => true,
         'subscriptions' => true,
