@@ -16,9 +16,10 @@ class EmailVerificationService
      * Generate a signed email verification URL.
      *
      * @param string $userId The user ID to generate the URL for.
+     * @param string $lang The user's preferred language code.
      * @return string
      */
-    public function generateSignedUrl(string $userId): string
+    public function generateSignedUrl(string $userId, string $lang = 'en'): string
     {
         $expiry = (string)(time() + self::EXPIRY_SECONDS);
         $sig = $this->sign($userId, $expiry);
@@ -29,6 +30,7 @@ class EmailVerificationService
             'uid' => $userId,
             'exp' => $expiry,
             'sig' => $sig,
+            'lang' => $lang,
         ]);
     }
 

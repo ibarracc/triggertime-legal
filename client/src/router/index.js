@@ -212,7 +212,7 @@ const router = createRouter({
     }
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
     const authStore = useAuthStore()
 
     // Handle ?lang= query param from external links
@@ -235,9 +235,13 @@ router.beforeEach((to, from) => {
         return { name: 'Dashboard' }
     }
 
+    // Ensure user data is loaded before checking roles/verification
+    if (authStore.isAuthenticated) {
+        await authStore.ensureUser()
+    }
+
     // Redirect unverified users to verification page
     if (to.meta.requiresVerified && authStore.isAuthenticated && !authStore.isVerified) {
-        // Allow access if user data hasn't loaded yet (isVerified will be false initially)
         if (authStore.user !== null) {
             return { name: 'VerifyEmail', query: to.query }
         }

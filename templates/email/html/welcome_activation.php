@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Welcome + Email Activation template.
  *
@@ -12,7 +13,7 @@ $name = !empty($firstName) ? $firstName : __('there');
     <?= __('Welcome to TriggerTime!') ?>
 </h1>
 <p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#4a4a5a;">
-    <?= __('Hi {0}, thanks for creating your account.', h($name)) ?>
+    <?= __('Hi {0}, thanks for creating your account. Just one more step before you get started!', h($name)) ?>
 </p>
 <p style="margin:0 0 28px;font-size:16px;line-height:1.6;color:#4a4a5a;">
     <?= __('Please verify your email address by clicking the button below to activate your account:') ?>

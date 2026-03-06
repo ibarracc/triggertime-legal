@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Welcome to TriggerTime!"
+msgstr "Welcome to TriggerTime!"
+
+msgid "Hi {0}, thanks for creating your account. Just one more step before you get started!"
+msgstr "Bonjour {0}, merci d'avoir créé votre compte. Plus qu'une étape avant de commencer !"
+
+msgid "Please verify your email address by clicking the button below to activate your account:"
+msgstr "Please verify your email address by clicking the button below to activate your account:"
+
+msgid "Activate Your Account"
+msgstr "Activez votre compte"
+
+msgid "This link expires in 7 days. If you did not create an account, you can safely ignore this email."
+msgstr "This link expires in 7 days. If you did not create an account, you can safely ignore this email."
+
+msgid "If the button doesn't work, copy and paste this URL into your browser:"
+msgstr "If the button doesn't work, copy and paste this URL into your browser:"
+
+msgid "Hi {0}, your account has been created using {1}."
+msgstr "Hi {0}, your account has been created using {1}."
+
+msgid "You're all set! Start exploring your dashboard to manage your devices and subscriptions."
+msgstr "You're all set! Start exploring your dashboard to manage your devices and subscriptions."
+
+msgid "Go to Dashboard"
+msgstr "Go to Dashboard"
+
+msgid "Reset Your Password"
+msgstr "Reset Your Password"
+
+msgid "Hi {0}, we received a request to reset your password."
+msgstr "Hi {0}, we received a request to reset your password."
+
+msgid "Click the button below to set a new password:"
+msgstr "Click the button below to set a new password:"
+
+msgid "Reset Password"
+msgstr "Reset Password"
+
+msgid "This link expires in 24 hours. If you didn't request a password reset, you can safely ignore this email."
+msgstr "This link expires in 24 hours. If you didn't request a password reset, you can safely ignore this email."
+
+msgid "All rights reserved."
+msgstr "All rights reserved."
+
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
+msgid "Terms of Service"
+msgstr "Terms of Service"
+
+msgid "there"
+msgstr "there"
+
+msgid "Welcome!"
+msgstr "Welcome!"
+
+msgid "TriggerTime - {0}"
+msgstr "TriggerTime - {0}"

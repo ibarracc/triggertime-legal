@@ -16,6 +16,16 @@ export const useAuthStore = defineStore('auth', () => {
     const isFree = computed(() => subscription.value?.plan === 'free')
     const isVerified = computed(() => !!user.value?.email_verified_at)
 
+    let _fetchPromise = null
+
+    async function ensureUser() {
+        if (user.value || !token.value) return
+        if (!_fetchPromise) {
+            _fetchPromise = fetchUser()
+        }
+        await _fetchPromise
+    }
+
     async function login(email, password) {
         try {
             const response = await authApi.login(email, password)
@@ -101,6 +111,7 @@ export const useAuthStore = defineStore('auth', () => {
         register,
         socialLogin,
         fetchUser,
+        ensureUser,
         setAuthData,
         logout
     }

@@ -53,4 +53,8 @@ export const authApi = {
     resendVerification() {
         return api.post('/web/auth/resend-verification');
     },
+
+    verifyEmail(uid, exp, sig) {
+        return api.get('/web/auth/verify-email', { params: { uid, exp, sig } });
+    },
 };

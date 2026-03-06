@@ -21,17 +21,17 @@ $logoUrl = 'https://triggertime.es/triggertime.png';
 
                     <!-- Dark header with logo -->
                     <tr>
-                        <td style="background-color:#0A0A0F;padding:28px 40px;">
+                        <td style="background-color:#13131A;padding:28px 40px;text-align:center;">
                             <a href="https://triggertime.es" style="text-decoration:none;display:inline-flex;align-items:center;gap:12px;">
                                 <img src="<?= h($logoUrl) ?>" alt="TriggerTime" width="44" height="44" style="border-radius:12px;display:inline-block;vertical-align:middle;box-shadow:0 4px 12px rgba(0,0,0,0.4);">
-                                <span style="font-family:Outfit,'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:800;color:#F0F0F5;letter-spacing:-0.3px;vertical-align:middle;">Trigger<span style="color:#C1FF72;">Time</span></span>
+                                <span style="font-family:Outfit,'Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:800;color:#F0F0F5;letter-spacing:-0.3px;vertical-align:middle;">Trigger<span style="color:#C1FF72;">Time</span></span>
                             </a>
                         </td>
                     </tr>
 
                     <!-- Divider -->
                     <tr>
-                        <td style="background-color:#0A0A0F;padding:0 40px;">
+                        <td style="background-color:#13131A;padding:0 40px;">
                             <div style="height:1px;background-color:#1C1C26;"></div>
                         </td>
                     </tr>

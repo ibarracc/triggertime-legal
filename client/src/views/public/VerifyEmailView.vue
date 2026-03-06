@@ -128,7 +128,25 @@ const handleLogout = () => {
   router.push('/login')
 }
 
-onMounted(() => {
+onMounted(async () => {
+  const { uid, exp, sig } = route.query
+
+  if (uid && exp && sig) {
+    isResending.value = true
+    try {
+      const response = await authApi.verifyEmail(uid, exp, sig)
+      if (response.success) {
+        await authStore.fetchUser()
+        router.replace('/dashboard?verified=1')
+      }
+    } catch (err) {
+      errorMsg.value = err.response?.data?.message || 'Verification link is invalid or has expired.'
+    } finally {
+      isResending.value = false
+    }
+    return
+  }
+
   // Start with initial cooldown to prevent immediate resend after registration
   startCooldown()
 })
@@ -136,10 +154,10 @@ onMounted(() => {
 
 <style scoped>
 .auth-container {
+  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 160px);
+  align-items: safe center;
   padding: 40px 20px;
 }
 

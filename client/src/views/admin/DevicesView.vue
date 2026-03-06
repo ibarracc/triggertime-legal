@@ -31,7 +31,7 @@
             <tr v-for="device in devices" :key="device.id" class="hover:bg-white/5 transition-colors group">
               <td>
                 <div class="font-mono text-sm tracking-wider text-primary">{{ device.device_uuid }}</div>
-                <div class="text-xs text-secondary">{{ device.platform }} v{{ device.os_version }}</div>
+                <div class="text-xs text-secondary">{{ device.os_version }}</div>
               </td>
               <td>
                 <div class="font-medium">{{ device.hardware_model }}</div>

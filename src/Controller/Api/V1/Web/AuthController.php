@@ -132,7 +132,7 @@ class AuthController extends AppController
         // Send welcome + activation email
         try {
             $verificationService = new EmailVerificationService();
-            $activationUrl = $verificationService->generateSignedUrl($user->id);
+            $activationUrl = $verificationService->generateSignedUrl($user->id, $user->language ?? 'en');
             $mailer = new UserMailer();
             $mailer->welcomeActivation($user, $activationUrl);
             $mailer->deliver();
@@ -191,9 +191,11 @@ class AuthController extends AppController
             $this->Authentication->save($user);
         }
 
-        $frontendUrl = env('FRONTEND_URL', Router::fullBaseUrl());
-
-        return $this->redirect($frontendUrl . '/dashboard?verified=1');
+        return $this->response->withType('application/json')
+            ->withStringBody((string)json_encode([
+                'success' => true,
+                'message' => 'Email verified successfully',
+            ]));
     }
 
     /**
@@ -219,7 +221,7 @@ class AuthController extends AppController
 
         try {
             $verificationService = new EmailVerificationService();
-            $activationUrl = $verificationService->generateSignedUrl($user->id);
+            $activationUrl = $verificationService->generateSignedUrl($user->id, $user->language ?? 'en');
             $mailer = new UserMailer();
             $mailer->welcomeActivation($user, $activationUrl);
             $mailer->deliver();
@@ -314,7 +316,8 @@ class AuthController extends AppController
 
             // Construct frontend reset URL
             $frontendUrl = env('FRONTEND_URL', Router::fullBaseUrl());
-            $resetLink = $frontendUrl . '/reset-password/' . $token;
+            $lang = $user->language ?? 'en';
+            $resetLink = $frontendUrl . '/reset-password/' . $token . '?lang=' . urlencode($lang);
 
             // Send Email
             try {

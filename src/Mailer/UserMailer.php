@@ -11,6 +11,33 @@ use Cake\Routing\Router;
 class UserMailer extends Mailer
 {
     /**
+     * Locale to apply during email rendering.
+     *
+     * @var string|null
+     */
+    private ?string $targetLocale = null;
+
+    /**
+     * Override deliver() to apply the target locale during template rendering.
+     *
+     * @param string $content Email body content.
+     * @return array<mixed>
+     */
+    public function deliver(string $content = ''): array
+    {
+        if ($this->targetLocale !== null) {
+            $previousLocale = I18n::getLocale();
+            I18n::setLocale($this->targetLocale);
+            $result = parent::deliver($content);
+            I18n::setLocale($previousLocale);
+
+            return $result;
+        }
+
+        return parent::deliver($content);
+    }
+
+    /**
      * Welcome + email activation for normal signups.
      *
      * @param \App\Model\Entity\User $user The user entity.
@@ -19,8 +46,11 @@ class UserMailer extends Mailer
      */
     public function welcomeActivation(User $user, string $activationUrl): void
     {
+        $locale = $user->language ?? 'en';
+        $this->targetLocale = $locale;
+
         $previousLocale = I18n::getLocale();
-        I18n::setLocale($user->language ?? 'en');
+        I18n::setLocale($locale);
 
         $this
             ->setTo($user->email)
@@ -29,7 +59,7 @@ class UserMailer extends Mailer
             ->setViewVars([
                 'activationUrl' => $activationUrl,
                 'firstName' => $user->first_name,
-                'locale' => $user->language ?? 'en',
+                'locale' => $locale,
             ])
             ->viewBuilder()
             ->setTemplate('welcome_activation')
@@ -47,8 +77,11 @@ class UserMailer extends Mailer
      */
     public function welcomeSso(User $user, string $provider): void
     {
+        $locale = $user->language ?? 'en';
+        $this->targetLocale = $locale;
+
         $previousLocale = I18n::getLocale();
-        I18n::setLocale($user->language ?? 'en');
+        I18n::setLocale($locale);
 
         $baseUrl = env('FRONTEND_URL', Router::fullBaseUrl());
 
@@ -60,7 +93,7 @@ class UserMailer extends Mailer
                 'dashboardUrl' => $baseUrl . '/dashboard',
                 'firstName' => $user->first_name,
                 'provider' => $provider,
-                'locale' => $user->language ?? 'en',
+                'locale' => $locale,
             ])
             ->viewBuilder()
             ->setTemplate('welcome_sso')
@@ -78,8 +111,11 @@ class UserMailer extends Mailer
      */
     public function passwordReset(User $user, string $resetUrl): void
     {
+        $locale = $user->language ?? 'en';
+        $this->targetLocale = $locale;
+
         $previousLocale = I18n::getLocale();
-        I18n::setLocale($user->language ?? 'en');
+        I18n::setLocale($locale);
 
         $this
             ->setTo($user->email)
@@ -88,7 +124,7 @@ class UserMailer extends Mailer
             ->setViewVars([
                 'resetUrl' => $resetUrl,
                 'firstName' => $user->first_name,
-                'locale' => $user->language ?? 'en',
+                'locale' => $locale,
             ])
             ->viewBuilder()
             ->setTemplate('password_reset')

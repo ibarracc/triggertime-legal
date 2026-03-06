@@ -235,10 +235,10 @@ const handleAppleLogin = async () => {
 
 <style scoped>
 .auth-container {
+  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 160px);
+  align-items: safe center;
   padding: 40px 20px;
 }
 
