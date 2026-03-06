@@ -119,7 +119,6 @@
         "new_password_placeholder": "Pasahitz sendo bat sortu",
         "confirm_password_placeholder": "Errepikatu zure pasahitz berria",
         "password_reset_title": "Pasahitza Berrezarri!",
-        "go_to_login": "Joan Saio-hasierara",
         "invalid_reset_token": "Berrezarpen tokena baliogabea edo falta da.",
         "reset_password_failed": "Ezin izan da pasahitza berrezarri.",
         "reset_link_expired_error": "Errore bat gertatu da. Egiaztatu esteka iraungitu den.",

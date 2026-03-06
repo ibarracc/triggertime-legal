@@ -11,7 +11,7 @@
         </div>
         <h1 class="mb-2">{{ $t('auth.password_reset_title') }}</h1>
         <p class="text-secondary mb-8">{{ successMsg }}</p>
-        <AppButton @click="$router.push('/login')" class="w-full">{{ $t('auth.go_to_login') }}</AppButton>
+        <AppButton @click="$router.push('/login')" class="w-full">{{ $t('auth.back_to_login') }}</AppButton>
       </div>
 
       <template v-else>

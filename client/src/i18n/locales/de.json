@@ -119,7 +119,6 @@
         "new_password_placeholder": "Erstelle ein sicheres Passwort",
         "confirm_password_placeholder": "Wiederhole dein neues Passwort",
         "password_reset_title": "Passwort zurückgesetzt!",
-        "go_to_login": "Zur Anmeldung",
         "invalid_reset_token": "Ungültiges oder fehlendes Zurücksetz-Token.",
         "reset_password_failed": "Passwort zurücksetzen fehlgeschlagen.",
         "reset_link_expired_error": "Ein Fehler ist aufgetreten. Prüfe ob der Link abgelaufen ist.",

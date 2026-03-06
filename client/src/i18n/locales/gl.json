@@ -119,7 +119,6 @@
         "new_password_placeholder": "Crea un contrasinal robusto",
         "confirm_password_placeholder": "Repite o teu novo contrasinal",
         "password_reset_title": "Contrasinal restablecido!",
-        "go_to_login": "Ir ao Inicio de Sesión",
         "invalid_reset_token": "Token de restablecemento inválido ou ausente.",
         "reset_password_failed": "Non se puido restablecer o contrasinal.",
         "reset_link_expired_error": "Produciuse un erro. Comproba se o enlace caducou.",

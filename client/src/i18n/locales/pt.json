@@ -119,7 +119,6 @@
         "new_password_placeholder": "Crie uma senha forte",
         "confirm_password_placeholder": "Repita sua nova senha",
         "password_reset_title": "Senha redefinida!",
-        "go_to_login": "Ir para o Login",
         "invalid_reset_token": "Token de redefinição inválido ou ausente.",
         "reset_password_failed": "Falha ao redefinir a senha.",
         "reset_link_expired_error": "Ocorreu um erro. Verifique se o link expirou.",

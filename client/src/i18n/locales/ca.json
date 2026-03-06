@@ -119,7 +119,6 @@
         "new_password_placeholder": "Crea una contrasenya forta",
         "confirm_password_placeholder": "Repeteix la teva nova contrasenya",
         "password_reset_title": "Contrasenya restablerta!",
-        "go_to_login": "Anar a l'Inici de Sessió",
         "invalid_reset_token": "Token de restabliment invàlid o absent.",
         "reset_password_failed": "No s'ha pogut restablir la contrasenya.",
         "reset_link_expired_error": "S'ha produït un error. Comprova si l'enllaç ha caducat.",

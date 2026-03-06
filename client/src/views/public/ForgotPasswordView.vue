@@ -11,7 +11,7 @@
         </div>
         <h1 class="mb-2">{{ $t('auth.check_inbox_title') }}</h1>
         <p class="text-secondary mb-8">{{ successMsg }}</p>
-        <router-link to="/login" class="text-primary hover-underline text-sm">{{ $t('auth.back_to_login') }}</router-link>
+        <AppButton @click="$router.push('/login')" class="w-full">{{ $t('auth.back_to_login') }}</AppButton>
       </div>
 
       <template v-else>
