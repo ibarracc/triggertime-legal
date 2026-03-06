@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller\Api\V1\Web;
 
 use App\Service\EmailVerificationService;
-use Cake\Core\Configure;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Security;
 
 class AuthControllerTest extends TestCase
 {
@@ -188,7 +188,7 @@ class AuthControllerTest extends TestCase
 
     public function testVerifyEmailAcceptsValidSignature(): void
     {
-        Configure::write('Security.salt', 'test-salt-for-verification-tests-must-be-long-enough');
+        Security::setSalt('test-salt-for-verification-tests-must-be-long-enough');
 
         $this->configRequest([
             'headers' => ['Content-Type' => 'application/json'],

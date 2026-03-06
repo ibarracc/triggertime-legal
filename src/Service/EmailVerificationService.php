@@ -5,6 +5,7 @@ namespace App\Service;
 
 use Cake\Core\Configure;
 use Cake\Routing\Router;
+use Cake\Utility\Security;
 use RuntimeException;
 
 class EmailVerificationService
@@ -67,7 +68,7 @@ class EmailVerificationService
      */
     private function sign(string $userId, string $expiry): string
     {
-        $salt = Configure::read('Security.salt');
+        $salt = Security::getSalt();
         if (empty($salt)) {
             throw new RuntimeException('Security.salt is not configured');
         }

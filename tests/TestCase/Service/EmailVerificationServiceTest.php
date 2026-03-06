@@ -6,6 +6,7 @@ namespace App\Test\TestCase\Service;
 use App\Service\EmailVerificationService;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Security;
 
 class EmailVerificationServiceTest extends TestCase
 {
@@ -14,7 +15,7 @@ class EmailVerificationServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Configure::write('Security.salt', 'test-salt-for-unit-tests-must-be-long-enough');
+        Security::setSalt('test-salt-for-unit-tests-must-be-long-enough');
         Configure::write('App.fullBaseUrl', 'https://triggertime.es');
         $this->service = new EmailVerificationService();
     }
@@ -45,7 +46,7 @@ class EmailVerificationServiceTest extends TestCase
     public function testVerifySignedUrlRejectsExpiredUrl(): void
     {
         $expiry = (string)(time() - 1);
-        $sig = hash_hmac('sha256', 'user-uuid-123:' . $expiry, Configure::read('Security.salt'));
+        $sig = hash_hmac('sha256', 'user-uuid-123:' . $expiry, Security::getSalt());
 
         $result = $this->service->verifySignedUrl('user-uuid-123', $expiry, $sig);
 
