@@ -3,7 +3,6 @@
  * Branded email layout for TriggerTime.
  *
  * @var \Cake\View\View $this
- * @var string $content
  */
 ?>
 <!DOCTYPE html>
@@ -27,7 +26,7 @@
                     <!-- Content -->
                     <tr>
                         <td style="background-color:#ffffff;padding:40px 32px;">
-                            <?= $content ?>
+                            <?= $this->fetch('content') ?>
                         </td>
                     </tr>
                     <!-- Footer -->
