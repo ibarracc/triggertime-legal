@@ -1,5 +1,9 @@
 <template>
   <div class="dashboard-home">
+    <div v-if="verificationSuccess" class="success-banner mb-6">
+        {{ $t('auth.verify_email_success') }}
+    </div>
+
     <div class="header-section mb-8">
       <h1 class="mb-2">{{ $t('dashboard.welcome', { name: auth.user?.first_name || $t('dashboard.shooter_fallback') }) }}</h1>
       <p class="text-secondary">{{ $t('dashboard.dashboard_subtitle') }}</p>
@@ -93,6 +97,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { devicesApi } from '@/api/devices'
 import { useI18n } from 'vue-i18n'
@@ -102,9 +107,11 @@ import AppModal from '@/components/ui/AppModal.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 
+const route = useRoute()
 const auth = useAuthStore()
 const { locale } = useI18n()
 const devices = ref([])
+const verificationSuccess = ref(route.query.verified === '1')
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -190,6 +197,16 @@ const handleEditDevice = async () => {
 .border { border: 1px solid var(--border-subtle); }
 .rounded-lg { border-radius: 12px; }
 .font-body { font-family: var(--font-body); font-weight: normal; }
+
+.success-banner {
+  color: var(--success);
+  font-size: 0.9375rem;
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 8px;
+}
 
 .cancel-banner {
   display: flex;

@@ -4,18 +4,21 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1;
 
 use App\Controller\AppController;
+use App\Model\Table\ActivationLicensesTable;
+use App\Model\Table\DevicesTable;
+use App\Model\Table\InstancesTable;
+use App\Model\Table\SubscriptionsTable;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\I18n\DateTime;
 
-/**
- * @property \App\Model\Table\ActivationLicensesTable $ActivationLicenses
- * @property \App\Model\Table\DevicesTable $Devices
- * @property \App\Model\Table\SubscriptionsTable $Subscriptions
- * @property \App\Model\Table\InstancesTable $Instances
- */
 class DevicesController extends AppController
 {
+    private ActivationLicensesTable $ActivationLicenses;
+    private DevicesTable $Devices;
+    private SubscriptionsTable $Subscriptions;
+    private InstancesTable $Instances;
+
     /**
      * @inheritDoc
      */

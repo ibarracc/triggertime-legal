@@ -19,13 +19,21 @@ class ApiKeyMiddlewareTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Configure::write('ApiKeys.verify_signature', true);
+        Configure::write('ApiKeys', [
+            'verify_signature' => true,
+            'keys' => [
+                $this->apiKey => [
+                    'app_instance' => 'com.ibarracc.triggertime',
+                    'secret' => $this->secret,
+                ],
+            ],
+        ]);
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        Configure::write('ApiKeys.verify_signature', false);
+        Configure::delete('ApiKeys');
     }
 
     public function testInvalidSignatureReturns401(): void
@@ -64,9 +72,10 @@ class ApiKeyMiddlewareTest extends TestCase
         ]);
         $this->post('/api/v1/devices/register', $body);
         // Should not be rejected by middleware (401).
-        // May get 500 due to missing DB tables in test env — that's fine,
-        // it proves the request passed signature verification.
-        $this->assertResponseCode(500);
+        // The request may succeed (200) or fail due to DB issues (500) — either
+        // proves the request passed signature verification.
+        $statusCode = $this->_response->getStatusCode();
+        $this->assertNotEquals(401, $statusCode, 'Request should pass HMAC signature verification');
     }
 
     public function testMissingSignatureHeadersReturns401(): void

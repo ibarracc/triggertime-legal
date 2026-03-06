@@ -1,30 +1,39 @@
 <template>
   <div class="container auth-container">
     <AppCard class="auth-card">
+
+      <div v-if="successMsg" class="text-center">
+        <div class="success-icon mb-4">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h1 class="mb-2">{{ $t('auth.password_reset_title') }}</h1>
+        <p class="text-secondary mb-8">{{ successMsg }}</p>
+        <AppButton @click="$router.push('/login')" class="w-full">{{ $t('auth.go_to_login') }}</AppButton>
+      </div>
+
+      <template v-else>
       <div class="text-center mb-8">
-        <h1 class="mb-2">New Password</h1>
-        <p class="text-secondary">Enter your new secure password below.</p>
+        <h1 class="mb-2">{{ $t('auth.new_password_title') }}</h1>
+        <p class="text-secondary">{{ $t('auth.new_password_subtitle') }}</p>
       </div>
 
-      <div v-if="successMsg" class="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl mb-6 text-sm text-center">
-        <p class="mb-4">{{ successMsg }}</p>
-        <AppButton @click="$router.push('/login')" class="w-full">Go to Login</AppButton>
-      </div>
-
-      <form v-else @submit.prevent="handleReset">
+      <form @submit.prevent="handleReset">
         <AppInput
           v-model="password"
-          label="New Password"
+          :label="$t('auth.new_password_title')"
           type="password"
-          placeholder="Create a strong password"
+          :placeholder="$t('auth.new_password_placeholder')"
           required
         />
-        
+
         <AppInput
           v-model="confirmPassword"
-          label="Confirm Password"
+          :label="$t('auth.confirm_password')"
           type="password"
-          placeholder="Repeat your new password"
+          :placeholder="$t('auth.confirm_password_placeholder')"
           required
         />
 
@@ -37,22 +46,24 @@
           class="w-full mt-4"
           :loading="isLoading"
         >
-          Reset Password
+          {{ $t('auth.reset_password') }}
         </AppButton>
       </form>
+      </template>
     </AppCard>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { authApi } from '@/api/auth'
 import AppCard from '@/components/ui/AppCard.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 
-const router = useRouter()
+const { t } = useI18n()
 const route = useRoute()
 
 const password = ref('')
@@ -63,13 +74,13 @@ const successMsg = ref('')
 
 const handleReset = async () => {
   if (password.value !== confirmPassword.value) {
-    errorMsg.value = 'Passwords do not match.'
+    errorMsg.value = t('auth.password_mismatch')
     return
   }
-  
+
   const token = route.params.token
   if (!token) {
-    errorMsg.value = 'Invalid or missing reset token.'
+    errorMsg.value = t('auth.invalid_reset_token')
     return
   }
 
@@ -81,10 +92,10 @@ const handleReset = async () => {
     if (response.success) {
       successMsg.value = response.message || 'Password has been set.'
     } else {
-      errorMsg.value = 'Failed to reset password.'
+      errorMsg.value = t('auth.reset_password_failed')
     }
   } catch (err) {
-    errorMsg.value = err.response?.data?.message || 'An error occurred. Check if the link expired.'
+    errorMsg.value = err.response?.data?.message || t('auth.reset_link_expired_error')
   } finally {
     isLoading.value = false
   }
@@ -104,6 +115,11 @@ const handleReset = async () => {
   width: 100%;
   max-width: 440px;
   padding: 2.5rem;
+}
+
+.success-icon {
+  display: flex;
+  justify-content: center;
 }
 
 .error-msg {

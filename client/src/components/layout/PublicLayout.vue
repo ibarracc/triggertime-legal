@@ -23,5 +23,7 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 .public-main {
   flex: 1;
   padding-top: 80px; /* Offset for fixed header */
+  display: flex;
+  flex-direction: column;
 }
 </style>

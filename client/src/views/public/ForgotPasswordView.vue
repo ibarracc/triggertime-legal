@@ -1,51 +1,65 @@
 <template>
   <div class="container auth-container">
     <AppCard class="auth-card">
-      <div class="text-center mb-8">
-        <h1 class="mb-2">Reset Password</h1>
-        <p class="text-secondary">Enter your email address and we'll send you a link to reset your password.</p>
+
+      <div v-if="successMsg" class="text-center">
+        <div class="sent-icon mb-4">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+        </div>
+        <h1 class="mb-2">{{ $t('auth.check_inbox_title') }}</h1>
+        <p class="text-secondary mb-8">{{ successMsg }}</p>
+        <router-link to="/login" class="text-primary hover-underline text-sm">{{ $t('auth.back_to_login') }}</router-link>
       </div>
 
-      <div v-if="successMsg" class="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl mb-6 text-sm">
-        {{ successMsg }}
-      </div>
-
-      <form v-else @submit.prevent="handleForgot">
-        <AppInput
-          v-model="email"
-          label="Email Address"
-          type="email"
-          placeholder="you@example.com"
-          required
-        />
-        
-        <div v-if="errorMsg" class="error-msg my-4">
-          {{ errorMsg }}
+      <template v-else>
+        <div class="text-center mb-8">
+          <h1 class="mb-2">{{ $t('auth.reset_password') }}</h1>
+          <p class="text-secondary">{{ $t('auth.forgot_password_subtitle') }}</p>
         </div>
 
-        <AppButton
-          type="submit"
-          class="w-full mt-4"
-          :loading="isLoading"
-        >
-          Send Reset Link
-        </AppButton>
-      </form>
+        <form @submit.prevent="handleForgot">
+          <AppInput
+            v-model="email"
+            :label="$t('common.email')"
+            type="email"
+            :placeholder="$t('auth.email_placeholder')"
+            required
+          />
 
-      <div class="text-center mt-6 text-sm text-secondary">
-        Remember your password? 
-        <router-link to="/login" class="text-primary hover-underline">Back to login</router-link>
-      </div>
+          <div v-if="errorMsg" class="error-msg my-4">
+            {{ errorMsg }}
+          </div>
+
+          <AppButton
+            type="submit"
+            class="w-full mt-4"
+            :loading="isLoading"
+          >
+            {{ $t('auth.send_reset_link') }}
+          </AppButton>
+        </form>
+
+        <div class="text-center mt-6 text-sm text-secondary">
+          {{ $t('auth.remember_password') }}
+          <router-link to="/login" class="text-primary hover-underline">{{ $t('auth.back_to_login') }}</router-link>
+        </div>
+      </template>
     </AppCard>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { authApi } from '@/api/auth'
 import AppCard from '@/components/ui/AppCard.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppButton from '@/components/ui/AppButton.vue'
+
+const { t } = useI18n()
 
 const email = ref('')
 const isLoading = ref(false)
@@ -63,10 +77,10 @@ const handleForgot = async () => {
     if (response.success) {
       successMsg.value = response.message || 'Check your email for the reset link.'
     } else {
-      errorMsg.value = 'Failed to send reset link.'
+      errorMsg.value = t('auth.forgot_password_failed')
     }
   } catch (err) {
-    errorMsg.value = err.response?.data?.message || 'An error occurred. Please try again.'
+    errorMsg.value = err.response?.data?.message || t('auth.error_try_again')
   } finally {
     isLoading.value = false
   }
@@ -86,6 +100,11 @@ const handleForgot = async () => {
   width: 100%;
   max-width: 440px;
   padding: 2.5rem;
+}
+
+.sent-icon {
+  display: flex;
+  justify-content: center;
 }
 
 .error-msg {

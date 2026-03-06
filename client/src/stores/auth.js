@@ -14,6 +14,17 @@ export const useAuthStore = defineStore('auth', () => {
         subscription.value?.plan === 'pro' && subscription.value?.status === 'active'
     )
     const isFree = computed(() => subscription.value?.plan === 'free')
+    const isVerified = computed(() => !!user.value?.email_verified_at)
+
+    let _fetchPromise = null
+
+    async function ensureUser() {
+        if (user.value || !token.value) return
+        if (!_fetchPromise) {
+            _fetchPromise = fetchUser()
+        }
+        await _fetchPromise
+    }
 
     async function login(email, password) {
         try {
@@ -95,10 +106,12 @@ export const useAuthStore = defineStore('auth', () => {
         isClubAdmin,
         isProPlus,
         isFree,
+        isVerified,
         login,
         register,
         socialLogin,
         fetchUser,
+        ensureUser,
         setAuthData,
         logout
     }

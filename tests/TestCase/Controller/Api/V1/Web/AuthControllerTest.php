@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller\Api\V1\Web;
 
+use App\Service\EmailVerificationService;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Security;
 
 class AuthControllerTest extends TestCase
 {
@@ -170,5 +172,97 @@ class AuthControllerTest extends TestCase
         $this->assertResponseOk();
         $deleteBody = json_decode((string)$this->_response->getBody(), true);
         $this->assertTrue($deleteBody['success']);
+    }
+
+    public function testVerifyEmailRejectsMissingParams(): void
+    {
+        $this->get('/api/v1/web/auth/verify-email');
+        $this->assertResponseCode(400);
+    }
+
+    public function testVerifyEmailRejectsInvalidSignature(): void
+    {
+        $this->get('/api/v1/web/auth/verify-email?uid=fake-id&exp=9999999999&sig=invalidsig');
+        $this->assertResponseCode(400);
+    }
+
+    public function testVerifyEmailAcceptsValidSignature(): void
+    {
+        Security::setSalt('test-salt-for-verification-tests-must-be-long-enough');
+
+        $this->configRequest([
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $this->post('/api/v1/web/auth/register', json_encode([
+            'email' => 'verify-test@example.com',
+            'password' => 'securepassword123',
+            'first_name' => 'Verify',
+            'last_name' => 'Test',
+        ]));
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $userId = $body['user']['id'];
+        $this->assertNull($body['user']['email_verified_at']);
+
+        $service = new EmailVerificationService();
+        $url = $service->generateSignedUrl($userId);
+        $parsed = parse_url($url);
+        parse_str($parsed['query'], $query);
+
+        $this->get('/api/v1/web/auth/verify-email?' . http_build_query($query));
+        $this->assertResponseOk();
+        $verifyBody = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($verifyBody['success']);
+    }
+
+    public function testResendVerificationRequiresAuth(): void
+    {
+        $this->configRequest([
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $this->post('/api/v1/web/auth/resend-verification');
+        $this->assertResponseCode(401);
+    }
+
+    public function testResendVerificationSucceeds(): void
+    {
+        $this->configRequest([
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $this->post('/api/v1/web/auth/register', json_encode([
+            'email' => 'resend-test@example.com',
+            'password' => 'securepassword123',
+            'first_name' => 'Resend',
+            'last_name' => 'Test',
+        ]));
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $token = $body['token'];
+
+        $this->configRequest([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+            ],
+        ]);
+        $this->post('/api/v1/web/auth/resend-verification');
+        $this->assertResponseOk();
+        $resendBody = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($resendBody['success']);
+    }
+
+    public function testRegisterReturnsUnverifiedUser(): void
+    {
+        $this->configRequest([
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $this->post('/api/v1/web/auth/register', json_encode([
+            'email' => 'unverified-test@example.com',
+            'password' => 'securepassword123',
+            'first_name' => 'Test',
+            'last_name' => 'User',
+        ]));
+        $this->assertResponseOk();
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($body['success']);
+        $this->assertNull($body['user']['email_verified_at']);
     }
 }
