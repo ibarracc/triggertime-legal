@@ -106,6 +106,7 @@ class AuthController extends AppController
         $user->last_name = $lastName;
         $user->language = $language;
         $user->marketing_optin = $marketingOptin;
+        $user->email_verified_at = null;
 
         if (!$this->Authentication->save($user)) {
             throw new BadRequestException('Could not create user account');

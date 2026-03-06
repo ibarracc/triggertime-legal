@@ -45,3 +45,29 @@ if [ "$needs_build" = "1" ]; then
         echo "✓ Vue SPA already up to date."
     fi
 fi
+
+echo "==> PHP CodeSniffer (cs-check)..."
+composer cs-check
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "✗ CS check failed. Run 'composer cs-fix' to auto-fix, then try again."
+    exit 1
+fi
+
+echo "==> PHPStan..."
+php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "✗ PHPStan failed. Fix the errors above before pushing."
+    exit 1
+fi
+
+echo "==> PHPUnit tests..."
+composer test
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "✗ Tests failed. Fix failing tests before pushing."
+    exit 1
+fi
+
+echo "✓ All pre-push checks passed!"

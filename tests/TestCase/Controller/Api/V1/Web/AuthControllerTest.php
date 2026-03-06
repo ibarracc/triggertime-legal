@@ -209,8 +209,9 @@ class AuthControllerTest extends TestCase
         parse_str($parsed['query'], $query);
 
         $this->get('/api/v1/web/auth/verify-email?' . http_build_query($query));
-        $this->assertResponseCode(302);
-        $this->assertHeaderContains('Location', 'verified=1');
+        $this->assertResponseOk();
+        $verifyBody = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($verifyBody['success']);
     }
 
     public function testResendVerificationRequiresAuth(): void

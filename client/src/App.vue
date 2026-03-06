@@ -40,4 +40,5 @@ onMounted(() => {
     <router-view />
   </component>
   <CookieConsent />
+  <!-- pre-push hook -->
 </template>

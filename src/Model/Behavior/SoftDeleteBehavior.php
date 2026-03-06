@@ -49,11 +49,11 @@ class SoftDeleteBehavior extends Behavior
      * @param \Cake\Datasource\EntityInterface $entity The entity being deleted.
      * @param \ArrayObject<string, mixed> $options Delete options.
      */
-    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): bool
+    public function beforeDelete(EventInterface $event, EntityInterface $entity, ArrayObject $options): void
     {
         // If hardDelete is explicitly passed in options, allow the actual delete
         if (isset($options['hardDelete']) && $options['hardDelete'] === true) {
-            return true;
+            return;
         }
 
         $field = $this->getConfig('field');
@@ -68,8 +68,7 @@ class SoftDeleteBehavior extends Behavior
 
         // Stop the physical deletion process
         $event->stopPropagation();
-
-        return true;
+        $event->setResult(true);
     }
 
     /**
