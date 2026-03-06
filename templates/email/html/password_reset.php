@@ -8,13 +8,13 @@
  */
 $name = !empty($firstName) ? $firstName : __('there');
 ?>
-<h1 style="margin:0 0 16px;font-family:Outfit,'Helvetica Neue',Arial,sans-serif;font-size:26px;font-weight:700;color:#F0F0F5;letter-spacing:-0.3px;">
+<h1 style="margin:0 0 16px;font-family:Outfit,'Helvetica Neue',Arial,sans-serif;font-size:26px;font-weight:700;color:#0A0A0F;letter-spacing:-0.3px;">
     <?= __('Reset Your Password') ?>
 </h1>
-<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#C0C0CC;">
+<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#4a4a5a;">
     <?= __('Hi {0}, we received a request to reset your password.', h($name)) ?>
 </p>
-<p style="margin:0 0 28px;font-size:16px;line-height:1.6;color:#C0C0CC;">
+<p style="margin:0 0 28px;font-size:16px;line-height:1.6;color:#4a4a5a;">
     <?= __('Click the button below to set a new password:') ?>
 </p>
 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
