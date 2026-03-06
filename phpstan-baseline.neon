@@ -397,6 +397,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
+			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email_verified_at\\.$#"
 			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
@@ -412,7 +417,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
-			count: 13
+			count: 15
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -457,7 +462,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$role\\.$#"
-			count: 2
+			count: 3
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -516,6 +521,11 @@ parameters:
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:resendVerification\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
 			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:resetPassword\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Web/AuthController.php
@@ -536,13 +546,28 @@ parameters:
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:verifyEmail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Mailer\\\\UserMailer\\:\\:welcomeActivation\\(\\) expects App\\\\Model\\\\Entity\\\\User, Cake\\\\Datasource\\\\EntityInterface given\\.$#"
+			count: 2
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Mailer\\\\UserMailer\\:\\:welcomeSso\\(\\) expects App\\\\Model\\\\Entity\\\\User, Cake\\\\Datasource\\\\EntityInterface given\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
 			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\AuthController\\:\\:\\$Authentication \\(App\\\\Model\\\\Table\\\\UsersTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
 			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
-			count: 1
+			count: 2
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -684,6 +709,16 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of method Cake\\\\Http\\\\Response\\:\\:withStringBody\\(\\) expects string\\|null, string\\|false given\\.$#"
 			count: 1
 			path: src/Controller/PagesController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Model\\\\Entity\\\\User\\:\\:\\$email\\.$#"
+			count: 3
+			path: src/Mailer/UserMailer.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Model\\\\Entity\\\\User\\:\\:\\$first_name\\.$#"
+			count: 3
+			path: src/Mailer/UserMailer.php
 
 		-
 			message: "#^Type Cake\\\\ORM\\\\Table in generic type Cake\\\\ORM\\\\Query\\\\SelectQuery\\<Cake\\\\ORM\\\\Table\\> in PHPDoc tag @param for parameter \\$query is not subtype of template type TSubject of array\\|Cake\\\\Datasource\\\\EntityInterface of class Cake\\\\ORM\\\\Query\\\\SelectQuery\\.$#"
