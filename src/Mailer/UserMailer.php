@@ -25,6 +25,7 @@ class UserMailer extends Mailer
         $this
             ->setTo($user->email)
             ->setSubject(__('TriggerTime - {0}', __('Activate Your Account')))
+            ->setEmailFormat('html')
             ->setViewVars([
                 'activationUrl' => $activationUrl,
                 'firstName' => $user->first_name,
@@ -54,6 +55,7 @@ class UserMailer extends Mailer
         $this
             ->setTo($user->email)
             ->setSubject(__('TriggerTime - {0}', __('Welcome!')))
+            ->setEmailFormat('html')
             ->setViewVars([
                 'dashboardUrl' => $baseUrl . '/dashboard',
                 'firstName' => $user->first_name,
@@ -82,6 +84,7 @@ class UserMailer extends Mailer
         $this
             ->setTo($user->email)
             ->setSubject(__('TriggerTime - {0}', __('Reset Your Password')))
+            ->setEmailFormat('html')
             ->setViewVars([
                 'resetUrl' => $resetUrl,
                 'firstName' => $user->first_name,
