@@ -53,6 +53,8 @@ jobs:
             sudo chmod -R 775 tmp logs
             sudo chown -R deploy:www-data tmp logs
             bin/cake migrations migrate --no-lock
+            bin/cake cache clear_all
+            rm -rf /var/www/triggertime/tmp/cache/models/*
             sudo systemctl reload php8.4-fpm
             echo "Deployment complete."
           ENDSSH
