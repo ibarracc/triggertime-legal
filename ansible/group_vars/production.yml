@@ -1,0 +1,15 @@
+---
+domain: triggertime.es
+deploy_path: /var/www/triggertime
+deploy_user: deploy
+deploy_rsync_delete: true
+db_name: triggertime
+db_app_user: cakeapp
+db_backup_user: cakeapp_backup
+db_migration_user: cakeapp_migrate
+alert_email: support@triggertime.es
+nginx_rate_limit_api: "10r/s"
+nginx_rate_limit_api_burst: 20
+nginx_rate_limit_login: "3r/m"
+nginx_rate_limit_login_burst: 5
+certbot_email: support@triggertime.es

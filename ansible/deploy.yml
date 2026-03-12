@@ -1,0 +1,8 @@
+---
+- name: Deploy application
+  hosts: all
+  become: true
+  vars_files:
+    - "vault/{{ env_name }}.yml"
+  roles:
+    - deploy

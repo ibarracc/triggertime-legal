@@ -1,0 +1,37 @@
+---
+- name: Create backup directory
+  ansible.builtin.file:
+    path: /var/backups/postgresql
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Deploy pgpass file for backup user
+  ansible.builtin.copy:
+    content: "localhost:*:{{ db_name }}:{{ db_backup_user }}:{{ vault_db_backup_password }}"
+    dest: /root/.pgpass
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Deploy pg-backup script
+  ansible.builtin.template:
+    src: pg-backup.sh.j2
+    dest: /usr/local/bin/pg-backup.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Schedule daily backup cron
+  ansible.builtin.cron:
+    name: "PostgreSQL daily backup"
+    job: "/usr/local/bin/pg-backup.sh"
+    minute: "{{ backup_minute }}"
+    hour: "{{ backup_hour }}"
+    user: root
+
+- name: Run initial backup to verify
+  ansible.builtin.command: /usr/local/bin/pg-backup.sh
+  changed_when: true
+  ignore_errors: true

@@ -1,0 +1,11 @@
+---
+ssh_port: 2222
+ssh_user: deploy
+fail2ban_maxretry: 3
+fail2ban_bantime: 3600
+fail2ban_findtime: 600
+backup_retention_days: 30
+backup_hour: "2"
+backup_minute: "0"
+cloudflare_ip_update_cron: "0 3 * * 1"
+php_version: "8.4"

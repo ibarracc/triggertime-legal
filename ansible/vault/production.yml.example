@@ -1,0 +1,10 @@
+---
+# Copy this to production.yml and encrypt with: ansible-vault encrypt vault/production.yml
+vault_cloudflare_api_token: "your-cloudflare-api-token"
+vault_db_app_password: "generate-a-strong-password"
+vault_db_backup_password: "generate-a-strong-password"
+vault_db_migration_password: "generate-a-strong-password"
+vault_mailgun_smtp_host: "smtp.mailgun.org"
+vault_mailgun_smtp_port: 2525  # DO blocks 25/465/587 — use 2525
+vault_mailgun_smtp_user: "postmaster@mg.triggertime.es"
+vault_mailgun_smtp_password: "your-mailgun-smtp-password"

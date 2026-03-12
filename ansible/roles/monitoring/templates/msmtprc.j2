@@ -1,0 +1,13 @@
+# Managed by Ansible — do not edit manually
+account default
+host {{ vault_mailgun_smtp_host }}
+port {{ vault_mailgun_smtp_port }}
+auth on
+user {{ vault_mailgun_smtp_user }}
+password {{ vault_mailgun_smtp_password }}
+tls on
+tls_starttls on
+tls_certcheck on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+from {{ alert_email }}
+logfile /var/log/msmtp.log

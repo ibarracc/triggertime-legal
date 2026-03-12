@@ -1,0 +1,81 @@
+# Managed by Ansible — do not edit manually
+# Vhost for {{ domain }}
+
+upstream php-fpm {
+    server unix:/run/php/php{{ php_version }}-fpm.sock;
+}
+
+# HTTP → HTTPS redirect
+server {
+    listen 80;
+    listen [::]:80;
+    server_name {{ domain }} www.{{ domain }};
+    return 301 https://{{ domain }}$request_uri;
+}
+
+# HTTPS server
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name {{ domain }} www.{{ domain }};
+
+    root {{ deploy_path }}/webroot;
+    index index.php;
+
+    # Include snippets
+    include /etc/nginx/snippets/cloudflare-realip.conf;
+    include /etc/nginx/snippets/ssl-params.conf;
+    include /etc/nginx/snippets/security-headers.conf;
+
+    # Logging
+    access_log /var/log/nginx/{{ domain }}.access.log;
+    error_log /var/log/nginx/{{ domain }}.error.log;
+
+    # Login rate limiting (must come before general /api/)
+    location = /api/v1/web/auth/login {
+        limit_req zone=login burst={{ nginx_rate_limit_login_burst }} nodelay;
+
+        try_files $uri $uri/ /index.php?$args;
+        include fastcgi_params;
+        fastcgi_pass php-fpm;
+        fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+    }
+
+    # API rate limiting
+    location /api/ {
+        limit_req zone=api burst={{ nginx_rate_limit_api_burst }} nodelay;
+
+        try_files $uri $uri/ /index.php?$args;
+        include fastcgi_params;
+        fastcgi_pass php-fpm;
+        fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+    }
+
+    # PHP handler
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass php-fpm;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_intercept_errors on;
+    }
+
+    # Static assets (re-include security headers since add_header in location overrides parent)
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        include /etc/nginx/snippets/security-headers.conf;
+        expires 1y;
+        add_header Cache-Control "public, immutable" always;
+        try_files $uri =404;
+    }
+
+    # SPA fallback — all non-API, non-static routes go to CakePHP
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    # Deny dotfiles
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+}

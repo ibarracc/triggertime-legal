@@ -1,0 +1,9 @@
+# Managed by Ansible — do not edit manually
+if [ -n "$SSH_CLIENT" ]; then
+  # Skip alerts for automated deploy user (Ansible/CI sessions)
+  if [ "$(whoami)" != "{{ deploy_user }}" ]; then
+    IP=$(echo $SSH_CLIENT | awk '{print $1}')
+    echo "SSH login: $(whoami) from $IP at $(date)" \
+      | mail -s "SSH Alert: $(hostname)" {{ alert_email }}
+  fi
+fi

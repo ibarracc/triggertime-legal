@@ -1,0 +1,65 @@
+---
+- name: Disable server tokens
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: '^\s*server_tokens'
+    line: "        server_tokens off;"
+    insertafter: 'http {'
+  notify: Test and reload Nginx
+
+- name: Include rate-limiting in nginx.conf http block
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: 'include.*rate-limiting'
+    line: "        include /etc/nginx/snippets/rate-limiting.conf;"
+    insertafter: 'http {'
+  notify: Test and reload Nginx
+
+- name: Deploy security headers snippet
+  ansible.builtin.template:
+    src: security-headers.conf.j2
+    dest: /etc/nginx/snippets/security-headers.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Test and reload Nginx
+
+- name: Deploy rate-limiting snippet
+  ansible.builtin.template:
+    src: rate-limiting.conf.j2
+    dest: /etc/nginx/snippets/rate-limiting.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Test and reload Nginx
+
+- name: Deploy SSL params snippet
+  ansible.builtin.template:
+    src: ssl-params.conf.j2
+    dest: /etc/nginx/snippets/ssl-params.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Test and reload Nginx
+
+- name: Deploy vhost configuration
+  ansible.builtin.template:
+    src: vhost.conf.j2
+    dest: "/etc/nginx/sites-available/{{ domain }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Test and reload Nginx
+
+- name: Enable vhost
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ domain }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain }}.conf"
+    state: link
+  notify: Test and reload Nginx
+
+- name: Remove default site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Test and reload Nginx

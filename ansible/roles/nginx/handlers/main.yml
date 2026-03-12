@@ -1,0 +1,4 @@
+---
+- name: Test and reload Nginx
+  ansible.builtin.shell: nginx -t && systemctl reload nginx
+  listen: "Test and reload Nginx"

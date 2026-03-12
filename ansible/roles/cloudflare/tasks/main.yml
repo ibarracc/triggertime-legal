@@ -1,0 +1,135 @@
+---
+- name: Look up Cloudflare zone ID
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones?name={{ domain }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+    return_content: true
+  register: cf_zone
+  delegate_to: localhost
+  become: false
+
+- name: Set zone ID fact
+  ansible.builtin.set_fact:
+    cf_zone_id: "{{ cf_zone.json.result[0].id }}"
+
+- name: Set SSL/TLS mode to Full (Strict)
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/settings/ssl"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      value: "strict"
+  delegate_to: localhost
+  become: false
+
+- name: Enable Always Use HTTPS
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/settings/always_use_https"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      value: "on"
+  delegate_to: localhost
+  become: false
+
+- name: Set Minimum TLS Version to 1.2
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/settings/min_tls_version"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      value: "1.2"
+  delegate_to: localhost
+  become: false
+
+- name: Enable HSTS
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/settings/security_header"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      value:
+        strict_transport_security:
+          enabled: true
+          max_age: 31536000
+          include_subdomains: true
+          preload: true
+          nosniff: true
+  delegate_to: localhost
+  become: false
+
+- name: Enable Bot Fight Mode
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/bot_management"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      fight_mode: true
+    status_code: [200, 403]
+  delegate_to: localhost
+  become: false
+  ignore_errors: true
+
+- name: Set Browser Cache TTL to 4 hours
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/settings/browser_cache_ttl"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      value: 14400
+  delegate_to: localhost
+  become: false
+
+- name: Check existing cache rules
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/rulesets?phase=http_request_cache_settings"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+    return_content: true
+  register: cf_cache_rules
+  delegate_to: localhost
+  become: false
+
+- name: Create cache bypass rule for API paths
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/rulesets"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ vault_cloudflare_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      name: "Bypass cache for API"
+      kind: "zone"
+      phase: "http_request_cache_settings"
+      rules:
+        - expression: '(starts_with(http.request.uri.path, "/api/"))'
+          description: "Bypass cache for API endpoints"
+          action: "set_cache_settings"
+          action_parameters:
+            cache: false
+    status_code: [200, 409]
+  delegate_to: localhost
+  become: false
+  when: cf_cache_rules.json.result | length == 0

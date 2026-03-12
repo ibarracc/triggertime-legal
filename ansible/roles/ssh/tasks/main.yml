@@ -1,0 +1,91 @@
+---
+- name: Ensure deploy user exists
+  ansible.builtin.user:
+    name: "{{ ssh_user }}"
+    groups: sudo
+    append: true
+    shell: /bin/bash
+    state: present
+
+- name: Check if public key exists on control machine
+  ansible.builtin.stat:
+    path: "~/.ssh/do_deploy_key.pub"
+  delegate_to: localhost
+  become: false
+  register: ssh_pubkey_file
+
+- name: Ensure deploy user has authorized_keys
+  ansible.posix.authorized_key:
+    user: "{{ ssh_user }}"
+    key: "{{ lookup('file', '~/.ssh/do_deploy_key.pub') }}"
+    state: present
+  when: ssh_pubkey_file.stat.exists
+
+- name: Allow new SSH port in UFW before changing sshd
+  community.general.ufw:
+    rule: allow
+    port: "{{ ssh_port }}"
+    proto: tcp
+    comment: "SSH"
+
+- name: Also keep port 22 open during transition
+  community.general.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+    comment: "SSH-legacy"
+
+- name: Deploy sshd_config
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: "0644"
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
+
+- name: Flush handlers to apply sshd config now
+  ansible.builtin.meta: flush_handlers
+
+- name: Update Ansible connection port
+  ansible.builtin.set_fact:
+    ansible_port: "{{ ssh_port }}"
+
+- name: Wait for SSH on new port
+  ansible.builtin.wait_for:
+    port: "{{ ssh_port }}"
+    host: "{{ ansible_host }}"
+    delay: 2
+    timeout: 30
+  delegate_to: localhost
+  become: false
+
+- name: Remove legacy port 22 rule from UFW
+  community.general.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+    delete: true
+  ignore_errors: true
+
+- name: Install fail2ban
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+    update_cache: true
+
+- name: Deploy fail2ban jail config
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban
+
+- name: Enable and start fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    enabled: true
+    state: started

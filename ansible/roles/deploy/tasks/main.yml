@@ -1,0 +1,67 @@
+---
+- name: Sync application code
+  become: false
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}/../"
+    dest: "{{ deploy_path }}/"
+    delete: "{{ deploy_rsync_delete }}"
+    rsync_opts:
+      - "--exclude=.git/"
+      - "--exclude=vendor/"
+      - "--exclude=node_modules/"
+      - "--exclude=client/"
+      - "--exclude=logs/"
+      - "--exclude=tmp/"
+      - "--exclude=docs/"
+      - "--exclude=tests/"
+      - "--exclude=config/app_local.php"
+      - "--exclude=config/.env"
+      - "--exclude=.ddev/"
+      - "--exclude=ansible/"
+      - "--exclude=webroot/uploads/"
+      - "-e ssh -i {{ ansible_ssh_private_key_file | default('~/.ssh/do_deploy_key') }} -p {{ ansible_port | default(ssh_port) }}"
+
+- name: Run composer install
+  ansible.builtin.command:
+    cmd: composer install --no-dev --optimize-autoloader --no-interaction
+    chdir: "{{ deploy_path }}"
+  changed_when: true
+
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ deploy_path }}/{{ item }}"
+    state: directory
+    owner: "{{ deploy_user }}"
+    group: www-data
+    mode: "0775"
+  loop:
+    - tmp/cache/models
+    - tmp/cache/persistent
+    - tmp/cache/views
+    - tmp/sessions
+    - logs
+
+- name: Run database migrations
+  ansible.builtin.shell:
+    cmd: >
+      DATABASE_URL="postgres://{{ db_migration_user }}:{{ vault_db_migration_password }}@localhost/{{ db_name }}"
+      bin/cake migrations migrate --no-lock
+    chdir: "{{ deploy_path }}"
+  changed_when: true
+
+- name: Clear CakePHP cache
+  ansible.builtin.command:
+    cmd: bin/cake cache clear_all
+    chdir: "{{ deploy_path }}"
+  changed_when: true
+
+- name: Build schema cache
+  ansible.builtin.command:
+    cmd: bin/cake schema_cache build
+    chdir: "{{ deploy_path }}"
+  changed_when: true
+
+- name: Reload PHP-FPM
+  ansible.builtin.systemd:
+    name: "php{{ php_version }}-fpm"
+    state: reloaded

@@ -1,0 +1,62 @@
+---
+- name: Install mail tools
+  ansible.builtin.apt:
+    name:
+      - msmtp
+      - msmtp-mta
+      - mailutils
+    state: present
+    update_cache: true
+
+- name: Deploy msmtp config
+  ansible.builtin.template:
+    src: msmtprc.j2
+    dest: /etc/msmtprc
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Create msmtp log file
+  ansible.builtin.file:
+    path: /var/log/msmtp.log
+    state: touch
+    owner: root
+    group: root
+    mode: "0660"
+  changed_when: false
+
+- name: Install logwatch
+  ansible.builtin.apt:
+    name: logwatch
+    state: present
+
+- name: Ensure logwatch conf directory exists
+  ansible.builtin.file:
+    path: /etc/logwatch/conf
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Deploy logwatch config
+  ansible.builtin.template:
+    src: logwatch.conf.j2
+    dest: /etc/logwatch/conf/logwatch.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Deploy SSH login alert script
+  ansible.builtin.template:
+    src: ssh-alert.sh.j2
+    dest: /etc/profile.d/ssh-alert.sh
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Send test email to verify SMTP
+  ansible.builtin.shell: |
+    echo "Ansible monitoring test from $(hostname) at $(date)" \
+      | mail -s "Test: Monitoring configured on $(hostname)" {{ alert_email }}
+  changed_when: false
+  ignore_errors: true

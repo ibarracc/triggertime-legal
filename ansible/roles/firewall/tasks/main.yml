@@ -1,0 +1,69 @@
+---
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: Set UFW default deny incoming
+  community.general.ufw:
+    default: deny
+    direction: incoming
+
+- name: Set UFW default allow outgoing
+  community.general.ufw:
+    default: allow
+    direction: outgoing
+
+- name: Allow SSH on custom port
+  community.general.ufw:
+    rule: allow
+    port: "{{ ssh_port }}"
+    proto: tcp
+    comment: "SSH"
+
+- name: Ensure Nginx snippets directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/snippets
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Deploy Cloudflare IP update script
+  ansible.builtin.template:
+    src: update-cloudflare-ips.sh.j2
+    dest: /usr/local/bin/update-cloudflare-ips.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Run Cloudflare IP update script now
+  ansible.builtin.command: /usr/local/bin/update-cloudflare-ips.sh
+  changed_when: true
+
+- name: Schedule weekly Cloudflare IP update
+  ansible.builtin.cron:
+    name: "Update Cloudflare IPs"
+    job: "/usr/local/bin/update-cloudflare-ips.sh"
+    cron_file: cloudflare-ip-update
+    user: root
+    special_time: weekly
+  when: cloudflare_ip_update_cron is not defined
+
+- name: Schedule Cloudflare IP update with custom cron expression
+  ansible.builtin.cron:
+    name: "Update Cloudflare IPs"
+    job: "/usr/local/bin/update-cloudflare-ips.sh"
+    cron_file: cloudflare-ip-update
+    user: root
+    minute: "{{ cloudflare_ip_update_cron.split()[0] }}"
+    hour: "{{ cloudflare_ip_update_cron.split()[1] }}"
+    day: "{{ cloudflare_ip_update_cron.split()[2] }}"
+    month: "{{ cloudflare_ip_update_cron.split()[3] }}"
+    weekday: "{{ cloudflare_ip_update_cron.split()[4] }}"
+  when: cloudflare_ip_update_cron is defined
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled

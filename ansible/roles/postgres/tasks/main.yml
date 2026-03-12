@@ -1,0 +1,117 @@
+---
+- name: Gather package facts for PostgreSQL version detection
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Ensure PostgreSQL listens on localhost only
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ ansible_facts['packages']['postgresql'][0]['version'] | regex_search('^[0-9]+') }}/main/postgresql.conf"
+    regexp: "^#?listen_addresses"
+    line: "listen_addresses = 'localhost'"
+  notify: Restart PostgreSQL
+
+- name: Create application database user
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_app_user }}"
+    password: "{{ vault_db_app_password }}"
+    state: present
+
+- name: Grant app user DML privileges on database
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_app_user }}"
+    type: table
+    objs: ALL_IN_SCHEMA
+    privs: SELECT,INSERT,UPDATE,DELETE
+    schema: public
+
+- name: Grant app user sequence usage
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_app_user }}"
+    type: sequence
+    objs: ALL_IN_SCHEMA
+    privs: USAGE,SELECT
+    schema: public
+
+- name: Set default privileges for app user on future tables
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_app_user }}"
+    type: default_privs
+    objs: TABLES
+    privs: SELECT,INSERT,UPDATE,DELETE
+    schema: public
+
+- name: Set default privileges for app user on future sequences
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_app_user }}"
+    type: default_privs
+    objs: SEQUENCES
+    privs: USAGE,SELECT
+    schema: public
+
+- name: Create backup user
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_backup_user }}"
+    password: "{{ vault_db_backup_password }}"
+    role_attr_flags: ""
+    state: present
+
+- name: Grant pg_read_all_data to backup user
+  become_user: postgres
+  community.postgresql.postgresql_membership:
+    groups: pg_read_all_data
+    target_roles: "{{ db_backup_user }}"
+
+- name: Create migration user
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_migration_user }}"
+    password: "{{ vault_db_migration_password }}"
+    state: present
+
+- name: Grant migration user full privileges on database
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_migration_user }}"
+    type: database
+    privs: ALL
+
+- name: Grant migration user full privileges on schema
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ db_name }}"
+    roles: "{{ db_migration_user }}"
+    type: schema
+    objs: public
+    privs: ALL
+
+- name: Harden pg_hba.conf — local connections use scram-sha-256
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ ansible_facts['packages']['postgresql'][0]['version'] | regex_search('^[0-9]+') }}/main/pg_hba.conf"
+    regexp: "^local\\s+all\\s+all"
+    line: "local   all             all                                     scram-sha-256"
+  notify: Restart PostgreSQL
+
+- name: Harden pg_hba.conf — IPv4 localhost only scram-sha-256
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ ansible_facts['packages']['postgresql'][0]['version'] | regex_search('^[0-9]+') }}/main/pg_hba.conf"
+    regexp: "^host\\s+all\\s+all\\s+127"
+    line: "host    all             all             127.0.0.1/32            scram-sha-256"
+  notify: Restart PostgreSQL
+
+- name: Remove any remote access lines from pg_hba.conf
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ ansible_facts['packages']['postgresql'][0]['version'] | regex_search('^[0-9]+') }}/main/pg_hba.conf"
+    regexp: "^host\\s+all\\s+all\\s+0\\.0\\.0\\.0"
+    state: absent
+  notify: Restart PostgreSQL
