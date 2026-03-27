@@ -2,7 +2,9 @@
 - name: Deploy application
   hosts: all
   become: true
-  vars_files:
-    - "vault/{{ env_name }}.yml"
+  pre_tasks:
+    - name: Load vault secrets
+      ansible.builtin.include_vars:
+        file: "vault/{{ env_name }}.yml"
   roles:
     - deploy

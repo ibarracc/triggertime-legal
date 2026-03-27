@@ -4,7 +4,7 @@ deploy_path: /var/www/triggertime
 deploy_user: deploy
 deploy_rsync_delete: true
 db_name: triggertime
-db_app_user: cakeapp
+db_app_user: ttapp
 db_backup_user: cakeapp_backup
 db_migration_user: cakeapp_migrate
 alert_email: support@triggertime.es

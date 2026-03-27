@@ -8,7 +8,7 @@ NGINX_REALIP_CONF="/etc/nginx/snippets/cloudflare-realip.conf"
 # Remove old Cloudflare UFW rules (delete in reverse order to preserve numbering)
 ufw status numbered | grep 'Cloudflare' | \
   awk -F'[][]' '{print $2}' | sort -rn | \
-  while read -r num; do ufw --force delete "$num"; done
+  while read -r num; do ufw --force delete "$num"; done || true
 
 # Start fresh Nginx realip config
 echo "# Managed by update-cloudflare-ips.sh — do not edit manually" > "$NGINX_REALIP_CONF"

@@ -9,7 +9,7 @@
 
 - name: Check if public key exists on control machine
   ansible.builtin.stat:
-    path: "~/.ssh/do_deploy_key.pub"
+    path: "{{ ansible_ssh_private_key_file }}.pub"
   delegate_to: localhost
   become: false
   register: ssh_pubkey_file
@@ -17,7 +17,7 @@
 - name: Ensure deploy user has authorized_keys
   ansible.posix.authorized_key:
     user: "{{ ssh_user }}"
-    key: "{{ lookup('file', '~/.ssh/do_deploy_key.pub') }}"
+    key: "{{ lookup('file', ansible_ssh_private_key_file ~ '.pub') }}"
     state: present
   when: ssh_pubkey_file.stat.exists
 
@@ -45,7 +45,36 @@
     validate: "sshd -t -f %s"
   notify: Restart sshd
 
-- name: Flush handlers to apply sshd config now
+- name: Check if ssh.socket is active (Ubuntu 24.04+ socket activation)
+  ansible.builtin.command: systemctl is-active ssh.socket
+  register: ssh_socket_active
+  changed_when: false
+  failed_when: false
+
+- name: Create ssh.socket override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/ssh.socket.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: ssh_socket_active.rc == 0
+
+- name: Override ssh.socket to use custom port
+  ansible.builtin.copy:
+    content: |
+      [Socket]
+      ListenStream=
+      ListenStream=0.0.0.0:{{ ssh_port }}
+      ListenStream=[::]:{{ ssh_port }}
+    dest: /etc/systemd/system/ssh.socket.d/override.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: ssh_socket_active.rc == 0
+  notify: Restart ssh socket
+
+- name: Flush handlers to apply SSH changes now
   ansible.builtin.meta: flush_handlers
 
 - name: Update Ansible connection port
