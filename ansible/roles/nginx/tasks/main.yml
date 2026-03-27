@@ -63,3 +63,9 @@
     path: /etc/nginx/sites-enabled/default
     state: absent
   notify: Test and reload Nginx
+
+- name: Remove old triggertime vhost (pre-Ansible)
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/triggertime
+    state: absent
+  notify: Test and reload Nginx

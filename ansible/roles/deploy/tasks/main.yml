@@ -19,7 +19,11 @@
       - "--exclude=.ddev/"
       - "--exclude=ansible/"
       - "--exclude=webroot/uploads/"
-      - "-e ssh -i {{ ansible_ssh_private_key_file | default('~/.ssh/do_deploy_key') }} -p {{ ansible_port | default(ssh_port) }}"
+
+- name: Fix webroot permissions for www-data
+  ansible.builtin.command:
+    cmd: find {{ deploy_path }}/webroot -type d -exec chmod 755 {} +
+  changed_when: true
 
 - name: Run composer install
   ansible.builtin.command:
