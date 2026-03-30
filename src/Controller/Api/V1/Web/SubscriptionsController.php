@@ -117,6 +117,7 @@ class SubscriptionsController extends AppController
                     ],
                 ],
                 'mode' => 'subscription',
+                'allow_promotion_codes' => true,
             ];
 
             if (!empty($sessionMetadata)) {
