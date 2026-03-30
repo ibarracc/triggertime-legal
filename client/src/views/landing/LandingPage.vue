@@ -115,10 +115,11 @@
             <!-- Free Plan -->
             <AppCard class="pricing-card">
               <h3 class="text-2xl mb-2">{{ $t('dashboard.free_plan') }}</h3>
-              <div class="price font-heading text-4xl font-bold mb-6">$0<span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.forever') }}</span></div>
+              <div class="price font-heading text-4xl font-bold mb-6">$0 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.forever') }}</span></div>
               <p class="text-secondary mb-8">{{ $t('subscription.free_plan_desc') }}</p>
               
               <ul class="pricing-features mb-8 text-left">
+                <li>✓ {{ $t('subscription.free_sessions_limit') }}</li>
                 <li>✓ {{ $t('landing.feat_tracking_title') }}</li>
                 <li>✓ {{ $t('landing.feat_stopwatch_title') }}</li>
                 <li>✓ {{ $t('landing.feat_issf_title') }}</li>
@@ -134,15 +135,14 @@
                 <AppBadge variant="primary">{{ $t('landing.most_popular') }}</AppBadge>
               </div>
               <h3 class="text-2xl mb-2 text-primary">Pro+</h3>
-              <div class="price font-heading text-4xl font-bold mb-6">$4.99<span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
+              <div class="price font-heading text-4xl font-bold mb-6">$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
               <p class="text-secondary mb-8">{{ $t('subscription.pro_plan_desc') }}</p>
               
               <ul class="pricing-features mb-8 text-left">
-
+                <li>✓ {{ $t('landing.prem_unlimited_title') }}</li>
                 <li>✓ {{ $t('landing.prem_timer_title') }}</li>
                 <li>✓ {{ $t('landing.prem_excel_title') }}</li>
-                <li>✓ {{ $t('landing.prem_unlimited_title') }}</li>
-                <li>✓ {{ $t('subscription.advanced_analytics') }}</li>
+                <li>✓ {{ $t('landing.prem_custom_title') }}</li>
               </ul>
               
               <router-link to="/register" class="btn btn-primary w-full text-center mt-auto">{{ $t('subscription.upgrade_now') }}</router-link>
@@ -154,13 +154,14 @@
                 <AppBadge variant="neutral">Club</AppBadge>
               </div>
               <h3 class="text-2xl mb-2 text-info">{{ $t('landing.club_pro_title') }}</h3>
-              <div class="price font-heading text-4xl font-bold mb-6"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99<span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
+              <div class="price font-heading text-4xl font-bold mb-6"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_user_month') }}</span></div>
+              <div class="text-sm text-secondary mb-2">{{ $t('landing.club_pro_min_users') }}</div>
               <p class="text-secondary mb-8">{{ $t('landing.club_pro_desc') }}</p>
 
               <ul class="pricing-features mb-8 text-left">
                 <li>✓ {{ $t('landing.club_pro_all_features') }}</li>
                 <li>✓ {{ $t('landing.club_pro_license_mgmt') }}</li>
-                <li>✓ {{ $t('subscription.priority_support') }}</li>
+                <li>✓ {{ $t('landing.club_pro_admin_dashboard') }}</li>
               </ul>
 
               <a href="mailto:help@triggertime.es?subject=Club Pro+ Quote" class="btn btn-secondary w-full text-center mt-auto">{{ $t('landing.request_quote') }}</a>
