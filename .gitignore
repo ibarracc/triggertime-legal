@@ -52,6 +52,5 @@ yarn-debug.log
 yarn-error.log
 client/.vite/
 
-# Ansible vault (encrypted secrets — created manually, never committed)
-ansible/vault/*.yml
+# Ansible vault — encrypted files are safe to commit
 !ansible/vault/*.yml.example
