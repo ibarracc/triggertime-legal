@@ -48,7 +48,9 @@ jobs:
           ansible-playbook -i ansible/inventory/production.yml \
             ansible/deploy.yml \
             --vault-password-file .vault_pass \
-            -e "ansible_ssh_private_key_file=~/.ssh/deploy_key"
+            -e "ansible_ssh_private_key_file=~/.ssh/deploy_key" \
+            -e "ansible_host=${{ secrets.DO_SSH_HOST }}" \
+            -e "ansible_port=${{ secrets.DO_SSH_PORT }}"
 
       - name: Cleanup
         if: always()
