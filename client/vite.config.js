@@ -10,6 +10,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  base: '/spa/',
   build: {
     outDir: '../webroot/spa',
     emptyOutDir: true,
