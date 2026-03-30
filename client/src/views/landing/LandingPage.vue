@@ -154,8 +154,7 @@
                 <AppBadge variant="neutral">Club</AppBadge>
               </div>
               <h3 class="text-2xl mb-2 text-info">{{ $t('landing.club_pro_title') }}</h3>
-              <div class="price font-heading text-4xl font-bold mb-2"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }}</span></div>
-              <div class="text-sm text-secondary mb-6">{{ $t('landing.club_pro_per_user') }}</div>
+              <div class="price font-heading text-4xl font-bold mb-6"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }} *</span></div>
               <p class="text-secondary mb-8">{{ $t('landing.club_pro_desc') }}</p>
 
               <ul class="pricing-features mb-8 text-left">
@@ -165,6 +164,7 @@
               </ul>
 
               <a href="mailto:help@triggertime.es?subject=Club Pro+ Quote" class="btn btn-secondary w-full text-center mt-auto">{{ $t('landing.request_quote') }}</a>
+              <div class="club-footnote text-xs text-secondary mt-4 text-center">* {{ $t('landing.club_pro_per_user') }}</div>
             </AppCard>
         </div>
       </div>
