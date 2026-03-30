@@ -3,14 +3,14 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [vue()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/spa/',
+  base: command === 'build' ? '/spa/' : '/',
   build: {
     outDir: '../webroot/spa',
     emptyOutDir: true,
@@ -31,4 +31,4 @@ export default defineConfig({
       '/api': 'http://localhost:80'
     }
   }
-})
+}))
