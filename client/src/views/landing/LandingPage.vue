@@ -102,6 +102,20 @@
               {{ $t('landing.prem_custom_desc') }}
             </p>
           </AppCard>
+
+          <AppCard hoverable class="border-warning-subtle coming-soon-card">
+            <template #header><span class="text-2xl mr-2 text-warning">☁️</span> {{ $t('landing.prem_sync_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span></template>
+            <p class="text-secondary text-left m-0">
+              {{ $t('landing.prem_sync_desc') }}
+            </p>
+          </AppCard>
+
+          <AppCard hoverable class="border-warning-subtle coming-soon-card">
+            <template #header><span class="text-2xl mr-2 text-warning">📊</span> {{ $t('landing.prem_analytics_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span></template>
+            <p class="text-secondary text-left m-0">
+              {{ $t('landing.prem_analytics_desc') }}
+            </p>
+          </AppCard>
         </div>
       </div>
     </section>
@@ -154,7 +168,7 @@
                 <AppBadge variant="neutral">Club</AppBadge>
               </div>
               <h3 class="text-2xl mb-2 text-info">{{ $t('landing.club_pro_title') }}</h3>
-              <div class="price font-heading text-4xl font-bold mb-6"><span class="text-base font-body font-normal text-secondary">{{ $t('landing.from') }} </span>$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }} *</span></div>
+              <div class="price font-heading text-4xl font-bold mb-6">$4.99 <span class="text-base font-body font-normal text-secondary">/ {{ $t('subscription.per_month') }} *</span></div>
               <p class="text-secondary mb-8">{{ $t('landing.club_pro_desc') }}</p>
 
               <ul class="pricing-features mb-8 text-left">
@@ -281,6 +295,23 @@ import AppCard from '@/components/ui/AppCard.vue'
   border-radius: 9999px !important;
   padding-left: 32px !important;
   padding-right: 32px !important;
+}
+
+.coming-soon-card {
+  opacity: 0.6;
+}
+
+.coming-soon-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--warning);
+  background: rgba(251, 191, 36, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 
 .bg-surface { background-color: var(--bg-surface); }
