@@ -32,7 +32,7 @@
         
         <div class="text-right">
           <div class="price font-heading text-2xl font-bold">
-            {{ auth.isProPlus ? '$4.99' : '$0.00' }}<span class="text-sm text-secondary font-body font-normal">/{{ $t('subscription.per_month') }}</span>
+            {{ auth.isProPlus ? '$4.99' : '$0.00' }} <span class="text-sm text-secondary font-body font-normal">/ {{ $t('subscription.per_month') }}</span>
           </div>
         </div>
       </div>
@@ -75,10 +75,16 @@
     <div class="features-list glass-card p-6 rounded-lg">
       <h3 class="mb-4">{{ $t('subscription.pro_features') }}</h3>
       <ul class="check-list text-secondary">
-        <li>{{ $t('subscription.multi_device_sync') }}</li>
-        <li>{{ $t('subscription.advanced_analytics') }}</li>
-        <li>{{ $t('subscription.priority_support') }}</li>
         <li>{{ $t('subscription.unlimited_sessions') }}</li>
+        <li>{{ $t('subscription.shot_timer') }}</li>
+        <li>{{ $t('subscription.export_excel') }}</li>
+        <li>{{ $t('subscription.custom_disciplines') }}</li>
+      </ul>
+
+      <h4 class="coming-soon-title mt-6 mb-3">{{ $t('subscription.coming_soon') }}</h4>
+      <ul class="check-list check-list-muted text-secondary">
+        <li>{{ $t('subscription.coming_soon_sync') }}</li>
+        <li>{{ $t('subscription.coming_soon_analytics') }}</li>
       </ul>
     </div>
   </div>
@@ -171,6 +177,24 @@ const startCheckout = async () => {
   left: 0;
   color: var(--primary);
   font-weight: bold;
+}
+
+.coming-soon-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mt-6 { margin-top: 1.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+
+.check-list-muted li {
+  opacity: 0.6;
+}
+.check-list-muted li::before {
+  content: '○';
 }
 
 .cancel-banner {
