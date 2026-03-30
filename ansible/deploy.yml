@@ -8,3 +8,4 @@
         file: "vault/{{ env_name }}.yml"
   roles:
     - deploy
+    - app-crons

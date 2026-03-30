@@ -1,0 +1,10 @@
+# TriggerTime application cron jobs — production
+# Source: deploy/crons/production
+# Deployed to /etc/cron.d/triggertime-app via ansible/roles/app-crons
+# Changes here are applied on every deploy.
+
+# Expire subscriptions that are past their cancellation date
+0 3 * * * {{ deploy_user }} cd {{ deploy_path }} && DATABASE_URL="{{ database_url }}" bin/cake expire_subscriptions >> {{ deploy_path }}/logs/cron.log 2>&1
+
+# Purge users soft-deleted more than 30 days ago
+0 4 * * * {{ deploy_user }} cd {{ deploy_path }} && DATABASE_URL="{{ database_url }}" bin/cake purge_deleted_users >> {{ deploy_path }}/logs/cron.log 2>&1

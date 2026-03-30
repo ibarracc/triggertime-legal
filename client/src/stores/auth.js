@@ -10,9 +10,15 @@ export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = computed(() => !!token.value)
     const isAdmin = computed(() => user.value?.role === 'admin')
     const isClubAdmin = computed(() => user.value?.role === 'club_admin')
-    const isProPlus = computed(() =>
-        subscription.value?.plan === 'pro' && subscription.value?.status === 'active'
-    )
+    const isProPlus = computed(() => {
+        const sub = subscription.value
+        if (sub?.plan !== 'pro' || sub?.status !== 'active') return false
+        if (sub.cancel_at_period_end && sub.current_period_end) {
+            return new Date(sub.current_period_end) > new Date()
+        }
+
+        return true
+    })
     const isFree = computed(() => subscription.value?.plan === 'free')
     const isVerified = computed(() => !!user.value?.email_verified_at)
 

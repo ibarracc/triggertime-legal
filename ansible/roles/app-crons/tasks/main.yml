@@ -1,0 +1,12 @@
+---
+- name: Set database URL for cron jobs
+  ansible.builtin.set_fact:
+    database_url: "postgres://{{ db_app_user }}:{{ vault_db_app_password }}@localhost/{{ db_name }}"
+
+- name: Install application cron jobs
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/../deploy/crons/{{ env_name }}"
+    dest: "/etc/cron.d/triggertime-app"
+    owner: root
+    group: root
+    mode: "0644"
