@@ -45,7 +45,23 @@ class SubscriptionsController extends AppController
         $stripe = new StripeClient($secretKey);
 
         // Create or retrieve customer
+        $needsNewCustomer = false;
         if (!$user->stripe_customer_id) {
+            $needsNewCustomer = true;
+        } else {
+            // Verify the stored customer still exists in Stripe (may be from a different environment)
+            try {
+                $stripe->customers->retrieve($user->stripe_customer_id);
+            } catch (Exception $e) {
+                Log::warning(
+                    'Stored Stripe customer ' . $user->stripe_customer_id
+                    . ' not found, creating new one: ' . $e->getMessage(),
+                );
+                $needsNewCustomer = true;
+            }
+        }
+
+        if ($needsNewCustomer) {
             Log::debug('Creating Stripe customer for user: ' . $user->email);
             try {
                 $customer = $stripe->customers->create([
