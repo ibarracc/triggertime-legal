@@ -78,6 +78,7 @@
         "club_pro_admin_dashboard": "Tauler d'Administració del Club",
         "from": "des de",
         "club_pro_min_users": "Mínim 10 usuaris",
+        "club_pro_per_user": "Per usuari (mínim 10 usuaris)",
         "whitelabel_feature_1": "Marca i logotip personalitzats",
         "whitelabel_feature_2": "Disciplines de tir específiques",
         "whitelabel_feature_3": "Gestió de llicències d'activació",
