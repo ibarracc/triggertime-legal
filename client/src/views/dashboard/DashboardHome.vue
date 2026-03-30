@@ -35,7 +35,7 @@
 
         <div v-else class="free-status">
           <p class="mb-4 text-secondary">{{ $t('subscription.subtitle') }}</p>
-          <div class="metric-value mb-6">$4.99<span class="text-sm text-secondary font-body">/{{ $t('subscription.per_month') }}</span></div>
+          <div class="metric-value mb-6">$4.99 <span class="text-sm text-secondary font-body">/ {{ $t('subscription.per_month') }}</span></div>
           <router-link to="/dashboard/subscription" class="btn btn-primary w-full">{{ $t('dashboard.upgrade_pro') }}</router-link>
         </div>
       </AppCard>
