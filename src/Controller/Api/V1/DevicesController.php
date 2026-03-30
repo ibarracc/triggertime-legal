@@ -176,6 +176,9 @@ class DevicesController extends AppController
 
             if ($subscription) {
                 $isActive = true;
+                if ($subscription->cancel_at_period_end && $subscription->current_period_end) {
+                    $isActive = $subscription->current_period_end > DateTime::now();
+                }
                 $statusData['plan'] = $subscription->plan ?? 'pro';
                 $statusData['email'] = $subscription->user->email;
                 $statusData['current_period_end'] = $subscription->current_period_end;
