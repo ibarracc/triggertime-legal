@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import i18n from '@/i18n'
 import LandingPage from '../views/landing/LandingPage.vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'pt', 'eu', 'ca', 'gl']
 
@@ -264,6 +265,12 @@ router.beforeEach(async (to, from) => {
 router.afterEach((to) => {
     const title = to.meta.title
     document.title = title ? `TriggerTime | ${title}` : 'TriggerTime'
+
+    const { trackEvent } = useAnalytics()
+    trackEvent('page_view', {
+        page_title: document.title,
+        page_path: to.fullPath,
+    })
 })
 
 export default router

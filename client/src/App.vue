@@ -6,12 +6,15 @@ import { useAuthStore } from '@/stores/auth'
 import PublicLayout from '@/components/layout/PublicLayout.vue'
 import DashboardLayout from '@/components/layout/DashboardLayout.vue'
 import CookieConsent from '@/components/CookieConsent.vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const route = useRoute()
 const auth = useAuthStore()
 const { locale } = useI18n()
 
 const SUPPORTED_LOCALES = ['en', 'es', 'de', 'fr', 'pt', 'eu', 'ca', 'gl']
+
+useAnalytics()
 
 watch(() => auth.user, (user) => {
   if (user?.language && SUPPORTED_LOCALES.includes(user.language)) {
