@@ -20,16 +20,19 @@ import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import AppCard from '@/components/ui/AppCard.vue'
 import AppButton from '@/components/ui/AppButton.vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { trackEvent } = useAnalytics()
 
 onMounted(async () => {
   // Refresh user data so the new subscription status is reflected immediately
   if (authStore.isAuthenticated) {
     await authStore.fetchUser()
   }
+  trackEvent('purchase', { plan: 'pro' })
 })
 
 const goToDashboard = () => {

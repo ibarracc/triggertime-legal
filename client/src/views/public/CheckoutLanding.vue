@@ -114,6 +114,7 @@ import AppButton from '@/components/ui/AppButton.vue'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import { useAuthStore } from '@/stores/auth'
 import { devicesApi } from '@/api/devices'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const route = useRoute()
 const router = useRouter()
@@ -125,6 +126,7 @@ const deviceInfo = ref(null)
 
 const token = route.params.token
 const isAlreadyLinked = ref(false)
+const { trackEvent } = useAnalytics()
 
 onMounted(async () => {
   if (!token) {
@@ -170,6 +172,7 @@ const processCheckout = async () => {
     try {
         const res = await api.post('/web/subscriptions/checkout', { upgrade_token: token })
         if (res.success && res.url) {
+            trackEvent('begin_checkout', { plan: 'pro' })
             window.location.href = res.url // Redirect to Stripe
         }
     } catch (e) {
