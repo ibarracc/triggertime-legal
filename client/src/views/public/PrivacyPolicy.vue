@@ -86,9 +86,43 @@
           </p>
           <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
             <li><strong class="text-white">{{ $t('privacy.third_party_item_1_label') }}</strong> {{ $t('privacy.third_party_item_1_text') }}</li>
+            <li><strong class="text-white">{{ $t('privacy.third_party_item_2_label') }}</strong> {{ $t('privacy.third_party_item_2_text') }}</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.analytics_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.analytics_text') }}
+          </p>
+          <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
+            <li>{{ $t('privacy.analytics_item_1') }}</li>
+            <li>{{ $t('privacy.analytics_item_2') }}</li>
+            <li>{{ $t('privacy.analytics_item_3') }}</li>
           </ul>
           <p class="text-secondary leading-relaxed mb-4">
-            {{ $t('privacy.third_party_no_analytics') }}
+            {{ $t('privacy.analytics_cookies_text') }}
+          </p>
+          <ul class="list-disc pl-6 text-secondary mb-4 space-y-2">
+            <li><strong class="text-white">_ga:</strong> {{ $t('privacy.analytics_cookie_ga') }}</li>
+            <li><strong class="text-white">_ga_*:</strong> {{ $t('privacy.analytics_cookie_ga_id') }}</li>
+          </ul>
+          <p class="text-secondary leading-relaxed mb-4">
+            <i18n-t keypath="privacy.analytics_optout">
+              <template #cookieSettings>
+                <button class="text-primary hover:underline inline-link" @click="openCookieSettings">{{ $t('privacy.analytics_optout_cookie_link') }}</button>
+              </template>
+              <template #browserAddon>
+                <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{{ $t('privacy.analytics_optout_addon_link') }}</a>
+              </template>
+            </i18n-t>
+          </p>
+        </section>
+
+        <section class="mb-8">
+          <h3 class="font-heading text-xl mb-4 text-primary">{{ $t('privacy.marketing_tools_heading') }}</h3>
+          <p class="text-secondary leading-relaxed mb-4">
+            {{ $t('privacy.marketing_tools_text') }}
           </p>
         </section>
 
@@ -164,6 +198,10 @@
 
 <script setup>
 import AppCard from '@/components/ui/AppCard.vue'
+import { useCookieConsent } from '@/composables/useCookieConsent'
+
+const { openBanner } = useCookieConsent()
+const openCookieSettings = () => openBanner()
 </script>
 
 <style scoped>
@@ -188,4 +226,11 @@ import AppCard from '@/components/ui/AppCard.vue'
 .pl-6 { padding-left: 1.5rem; }
 .space-y-2 > * + * { margin-top: 0.5rem; }
 .hover\:underline:hover { text-decoration: underline; }
+.inline-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
 </style>
