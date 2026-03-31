@@ -124,9 +124,11 @@ import AppBadge from '@/components/ui/AppBadge.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppModal from '@/components/ui/AppModal.vue'
 import AppInput from '@/components/ui/AppInput.vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const auth = useAuthStore()
 const { t, locale } = useI18n()
+const { trackEvent } = useAnalytics()
 
 const devices = ref([])
 const unlinkingId = ref(null)
@@ -192,6 +194,7 @@ const executeUnlink = async () => {
   try {
     const response = await devicesApi.unlinkDevice(deviceUuid)
     if (response.success) {
+      trackEvent('device_remove')
       devices.value = devices.value.filter(d => d.device_uuid !== deviceUuid)
       showUnlinkModal.value = false
     }
@@ -214,6 +217,7 @@ const handleLinkDevice = async () => {
             // Link the device using the 6-character code
             const linkRes = await devicesApi.linkDevice(linkToken.value)
             if (linkRes.success) {
+                trackEvent('device_add')
                 await fetchDevices()
                 showLinkModal.value = false
                 linkToken.value = ''

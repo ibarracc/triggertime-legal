@@ -68,10 +68,12 @@ import { authApi } from '@/api/auth'
 import subscriptionsApi from '@/api/subscriptions'
 import AppCard from '@/components/ui/AppCard.vue'
 import AppButton from '@/components/ui/AppButton.vue'
+import { useAnalytics } from '@/composables/useAnalytics'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { trackEvent } = useAnalytics()
 
 const isResending = ref(false)
 const cooldown = ref(0)
@@ -136,6 +138,7 @@ onMounted(async () => {
     try {
       const response = await authApi.verifyEmail(uid, exp, sig)
       if (response.success) {
+        trackEvent('email_verified')
         await authStore.fetchUser()
         router.replace('/dashboard?verified=1')
       }
