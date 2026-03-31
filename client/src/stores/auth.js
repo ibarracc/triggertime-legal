@@ -2,6 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authApi } from '@/api/auth'
 
+function trackEvent(eventName, params = {}) {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({ event: eventName, ...params })
+}
+
 export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('tt_token') || null)
     const user = ref(null)
@@ -37,6 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await authApi.login(email, password)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
+                trackEvent('login', { method: 'email' })
                 return { success: true }
             }
         } catch (error) {
@@ -49,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await authApi.register(email, password, firstName, lastName, language, marketingOptin)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
+                trackEvent('sign_up', { method: 'email' })
                 return { success: true }
             }
         } catch (error) {
@@ -61,6 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
             const response = await authApi.socialLogin(provider, idToken, firstName, lastName, marketingOptin)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
+                trackEvent('login', { method: provider })
                 return { success: true }
             }
         } catch (error) {
