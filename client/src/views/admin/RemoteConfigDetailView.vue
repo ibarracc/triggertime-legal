@@ -15,6 +15,10 @@
            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
            Download JSON
         </AppButton>
+        <AppButton v-if="!isComparing" variant="secondary" size="sm" @click="openDuplicateModal">
+           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+           Duplicate
+        </AppButton>
       </div>
     </div>
 
@@ -260,6 +264,34 @@
       </div>
     </div>
   </div>
+
+  <!-- Duplicate Modal -->
+  <AppModal :isOpen="duplicateModal.isOpen" title="Duplicate Remote Config" @close="closeDuplicateModal">
+    <div v-if="duplicateModal.error" class="bg-red-500/10 border border-red-500/20 text-red-500 p-3 rounded-lg mb-4 text-sm">
+      {{ duplicateModal.error }}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Instance</label>
+      <select v-model="duplicateModal.instance_id" class="form-select text-black" @change="onDuplicateInstanceChange">
+        <option :value="null">-- Select Instance --</option>
+        <option v-for="inst in duplicateInstances" :key="inst.id" :value="inst.id">{{ inst.name }}</option>
+      </select>
+    </div>
+
+    <div class="form-group mt-4">
+      <label class="form-label">Version (Optional)</label>
+      <select v-model="duplicateModal.version_id" class="form-select text-black" :disabled="!duplicateModal.instance_id">
+        <option :value="null">Global (All versions for this instance)</option>
+        <option v-for="ver in duplicateAvailableVersions" :key="ver.id" :value="ver.id">v{{ ver.version }}</option>
+      </select>
+    </div>
+
+    <div class="flex gap-3 justify-end mt-6">
+      <AppButton variant="secondary" @click="closeDuplicateModal">Cancel</AppButton>
+      <AppButton @click="submitDuplicate" :loading="duplicateModal.loading">Duplicate</AppButton>
+    </div>
+  </AppModal>
 </template>
 
 <script setup>
@@ -267,6 +299,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { adminApi } from '@/api/admin'
 import AppButton from '@/components/ui/AppButton.vue'
+import AppModal from '@/components/ui/AppModal.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -294,6 +327,67 @@ const newKeyName = ref('')
 const newKeyType = ref('string')
 const newKeyValue = ref('')
 const addKeyError = ref('')
+
+// Duplicate modal state
+const duplicateModal = ref({
+    isOpen: false,
+    instance_id: null,
+    version_id: null,
+    error: '',
+    loading: false,
+})
+const duplicateInstances = ref([])
+const duplicateAllVersions = ref([])
+
+const duplicateAvailableVersions = computed(() => {
+    if (!duplicateModal.value.instance_id) return []
+    return duplicateAllVersions.value.filter(v => v.instance_id === duplicateModal.value.instance_id)
+})
+
+const openDuplicateModal = async () => {
+    duplicateModal.value = {
+        isOpen: true,
+        instance_id: config.value.instance_id || null,
+        version_id: null,
+        error: '',
+        loading: false,
+    }
+    try {
+        const [instancesRes, versionsRes] = await Promise.all([
+            adminApi.getInstances(),
+            adminApi.getVersions(),
+        ])
+        duplicateInstances.value = instancesRes.instances || []
+        duplicateAllVersions.value = versionsRes.versions || []
+    } catch (err) {
+        duplicateModal.value.error = 'Failed to load instances/versions'
+    }
+}
+
+const closeDuplicateModal = () => {
+    duplicateModal.value.isOpen = false
+}
+
+const onDuplicateInstanceChange = () => {
+    duplicateModal.value.version_id = null
+}
+
+const submitDuplicate = async () => {
+    duplicateModal.value.error = ''
+    duplicateModal.value.loading = true
+    try {
+        const response = await adminApi.duplicateRemoteConfig(configId, {
+            instance_id: duplicateModal.value.instance_id,
+            version_id: duplicateModal.value.version_id,
+        })
+        closeDuplicateModal()
+        router.push({ name: 'admin-remote-config-detail', params: { id: response.config.id } })
+    } catch (err) {
+        duplicateModal.value.error = err.response?.data?.message || 'Failed to duplicate config'
+    } finally {
+        duplicateModal.value.loading = false
+    }
+}
 
 watch(newKeyType, () => {
     newKeyValue.value = newKeyType.value === 'boolean' ? false : ''
