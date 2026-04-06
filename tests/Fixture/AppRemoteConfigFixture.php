@@ -24,7 +24,16 @@ class AppRemoteConfigFixture extends TestFixture
      */
     public function init(): void
     {
-        $this->records = [];
+        $this->records = [
+            [
+                'id' => 1,
+                'instance_id' => '279fd979-5501-4ea2-9137-0160f3770c85',
+                'version_id' => 1,
+                'config_data' => '{"feature_enabled":true,"max_retries":3}',
+                'created' => '2026-03-01 00:00:00',
+                'modified' => '2026-03-01 00:00:00',
+            ],
+        ];
         parent::init();
     }
 }
