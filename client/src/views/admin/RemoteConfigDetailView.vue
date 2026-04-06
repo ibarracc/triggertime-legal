@@ -357,8 +357,12 @@ const openDuplicateModal = async () => {
             adminApi.getInstances(),
             adminApi.getVersions(),
         ])
-        duplicateInstances.value = instancesRes.instances || []
-        duplicateAllVersions.value = versionsRes.versions || []
+        if (instancesRes.success) {
+            duplicateInstances.value = instancesRes.instances || []
+        }
+        if (versionsRes.success) {
+            duplicateAllVersions.value = versionsRes.versions || []
+        }
     } catch (err) {
         duplicateModal.value.error = 'Failed to load instances/versions'
     }
@@ -373,6 +377,10 @@ const onDuplicateInstanceChange = () => {
 }
 
 const submitDuplicate = async () => {
+    if (!duplicateModal.value.instance_id) {
+        duplicateModal.value.error = 'Please select an instance'
+        return
+    }
     duplicateModal.value.error = ''
     duplicateModal.value.loading = true
     try {
