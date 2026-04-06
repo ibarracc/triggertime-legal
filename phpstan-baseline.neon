@@ -146,12 +146,27 @@ parameters:
 			path: src/Controller/Api/V1/Admin/LicensesController.php
 
 		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$config_data\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$name\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
 
 		-
 			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:add\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:duplicate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
 
