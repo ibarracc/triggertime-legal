@@ -120,4 +120,88 @@ class RemoteConfigController extends AppController
         return $this->response->withType('application/json')->withStatus(422)
             ->withStringBody((string)json_encode(['success' => false, 'message' => 'Could not delete config']));
     }
+
+    /**
+     * Duplicate a remote config to a new instance/version combination.
+     *
+     * @param string $id Source config record ID.
+     */
+    public function duplicate(string $id)
+    {
+        $this->request->allowMethod(['post']);
+        $table = $this->fetchTable('RemoteConfig');
+
+        // Load source config (throws RecordNotFoundException → 404)
+        $source = $table->get($id);
+
+        $data = $this->request->getData();
+
+        // Validate instance_id is present
+        if (empty($data['instance_id'])) {
+            return $this->response->withType('application/json')->withStatus(422)
+                ->withStringBody((string)json_encode([
+                    'success' => false,
+                    'message' => 'instance_id is required',
+                ]));
+        }
+
+        // Validate instance exists
+        $instancesTable = $this->fetchTable('Instances');
+        $instance = $instancesTable->find()->where(['id' => $data['instance_id']])->first();
+        if (!$instance) {
+            return $this->response->withType('application/json')->withStatus(422)
+                ->withStringBody((string)json_encode([
+                    'success' => false,
+                    'message' => 'Instance not found',
+                ]));
+        }
+
+        // Validate version belongs to selected instance (if provided)
+        $versionId = $data['version_id'] ?? null;
+        if ($versionId !== null) {
+            $versionsTable = $this->fetchTable('Versions');
+            $version = $versionsTable->find()
+                ->where(['id' => $versionId, 'instance_id' => $data['instance_id']])
+                ->first();
+            if (!$version) {
+                return $this->response->withType('application/json')->withStatus(422)
+                    ->withStringBody((string)json_encode([
+                        'success' => false,
+                        'message' => 'Version does not belong to the selected instance',
+                    ]));
+            }
+        }
+
+        // Check uniqueness (instance_id + version_id pair)
+        $existingConditions = [
+            'instance_id' => $data['instance_id'],
+            'version_id IS' => $versionId,
+        ];
+        $existing = $table->find()->where($existingConditions)->first();
+        if ($existing) {
+            return $this->response->withType('application/json')->withStatus(422)
+                ->withStringBody((string)json_encode([
+                    'success' => false,
+                    'message' => 'A config already exists for this instance/version combination',
+                ]));
+        }
+
+        // Create the duplicate
+        $newConfig = $table->newEntity([
+            'instance_id' => $data['instance_id'],
+            'version_id' => $versionId,
+            'config_data' => $source->config_data,
+            'app_instance' => $instance->name,
+        ]);
+
+        if ($table->save($newConfig)) {
+            $newConfig = $table->get($newConfig->id, contain: ['Instances', 'Versions']);
+
+            return $this->response->withType('application/json')->withStatus(201)
+                ->withStringBody((string)json_encode(['success' => true, 'config' => $newConfig]));
+        }
+
+        return $this->response->withType('application/json')->withStatus(422)
+            ->withStringBody((string)json_encode(['success' => false, 'errors' => $newConfig->getErrors()]));
+    }
 }
