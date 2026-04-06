@@ -106,6 +106,7 @@ return function (RouteBuilder $routes): void {
                 $admin->post('/licenses/{id}/toggle-active', ['controller' => 'Licenses', 'action' => 'toggleActive'])->setPass(['id']);
                 $admin->resources('Versions');
                 $admin->resources('RemoteConfig');
+                $admin->post('/remote-config/{id}/duplicate', ['controller' => 'RemoteConfig', 'action' => 'duplicate'])->setPass(['id']);
                 $admin->resources('Instances');
                 $admin->resources('Subscriptions');
                 $admin->resources('Devices'); // Added missing Devices resource routing
