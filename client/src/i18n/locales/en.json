@@ -35,7 +35,8 @@
         "subscription": "Subscription",
         "admin_panel": "Admin Panel",
         "home": "Home",
-        "users": "Users"
+        "users": "Users",
+        "sessions": "Sessions"
     },
     "landing": {
         "hero_badge": "Sport Shooting Analytics",
@@ -407,5 +408,30 @@
         "marketing_title": "Marketing",
         "marketing_desc": "Used to deliver relevant advertisements and track campaign effectiveness.",
         "always_on": "Always on"
+    },
+    "sessions": {
+        "title": "Sessions",
+        "subtitle": "View your synced shooting sessions.",
+        "empty": "No sessions synced yet. Sync from your TriggerTime app to see your sessions here.",
+        "date": "Date",
+        "discipline": "Discipline",
+        "type": "Type",
+        "location": "Location",
+        "total_score": "Score",
+        "total_x_count": "X Count",
+        "notes": "Notes",
+        "series": "Series",
+        "shots": "Shots",
+        "strings": "Strings",
+        "phase": "Phase",
+        "sighting": "Sighting",
+        "detail_title": "Session Detail",
+        "back_to_list": "Back to Sessions",
+        "auto_closed": "Auto-closed",
+        "filter_discipline": "All Disciplines",
+        "filter_type": "All Types",
+        "sort_newest": "Newest First",
+        "sort_oldest": "Oldest First",
+        "showing_count": "{count} sessions"
     }
 }

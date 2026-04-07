@@ -35,7 +35,8 @@
         "subscription": "Harpidetza",
         "admin_panel": "Admin Panela",
         "home": "Hasiera",
-        "users": "Erabiltzaileak"
+        "users": "Erabiltzaileak",
+        "sessions": "Saioak"
     },
     "landing": {
         "hero_badge": "Tiro Kirolaren Analisia",
@@ -404,5 +405,30 @@
         "marketing_title": "Marketinga",
         "marketing_desc": "Iragarki garrantzitsuak erakusteko eta kanpainen eraginkortasuna neurtzeko erabiltzen dira.",
         "always_on": "Beti aktibo"
+    },
+    "sessions": {
+        "title": "Saioak",
+        "subtitle": "Ikusi zure sinkronizatutako tiro saioak.",
+        "empty": "Oraindik ez dago saiorik sinkronizatuta. Sinkronizatu zure TriggerTime aplikaziotik hemen ikusteko.",
+        "date": "Data",
+        "discipline": "Diziplina",
+        "type": "Mota",
+        "location": "Kokapena",
+        "total_score": "Puntuazioa",
+        "total_x_count": "X Kopurua",
+        "notes": "Oharrak",
+        "series": "Serieak",
+        "shots": "Tiroak",
+        "strings": "Pasaldiak",
+        "phase": "Fasea",
+        "sighting": "Probak",
+        "detail_title": "Saioaren Xehetasuna",
+        "back_to_list": "Saioetara Itzuli",
+        "auto_closed": "Automatikoki itxita",
+        "filter_discipline": "Diziplina Guztiak",
+        "filter_type": "Mota Guztiak",
+        "sort_newest": "Berrienak lehenik",
+        "sort_oldest": "Zaharrenak lehenik",
+        "showing_count": "{count} saio"
     }
 }

@@ -35,7 +35,8 @@
         "subscription": "Abonnement",
         "admin_panel": "Panneau d'administration",
         "home": "Accueil",
-        "users": "Utilisateurs"
+        "users": "Utilisateurs",
+        "sessions": "Sessions"
     },
     "landing": {
         "hero_badge": "Analyses de Tir Sportif",
@@ -399,5 +400,30 @@
         "marketing_title": "Marketing",
         "marketing_desc": "Utilisés pour diffuser des publicités pertinentes et mesurer l'efficacité des campagnes.",
         "always_on": "Toujours actifs"
+    },
+    "sessions": {
+        "title": "Sessions",
+        "subtitle": "Consultez vos sessions de tir synchronisées.",
+        "empty": "Aucune session synchronisée pour le moment. Synchronisez depuis votre application TriggerTime pour les voir ici.",
+        "date": "Date",
+        "discipline": "Discipline",
+        "type": "Type",
+        "location": "Lieu",
+        "total_score": "Score",
+        "total_x_count": "Nombre de X",
+        "notes": "Notes",
+        "series": "Séries",
+        "shots": "Tirs",
+        "strings": "Passages",
+        "phase": "Phase",
+        "sighting": "Essais",
+        "detail_title": "Détail de la Session",
+        "back_to_list": "Retour aux Sessions",
+        "auto_closed": "Fermée automatiquement",
+        "filter_discipline": "Toutes les Disciplines",
+        "filter_type": "Tous les Types",
+        "sort_newest": "Plus récentes",
+        "sort_oldest": "Plus anciennes",
+        "showing_count": "{count} sessions"
     }
 }

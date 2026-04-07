@@ -104,6 +104,18 @@ const routes = [
         meta: { requiresAuth: true, requiresVerified: true, title: 'Subscription' }
     },
     {
+        path: '/dashboard/sessions',
+        name: 'sessions',
+        component: () => import('../views/dashboard/SessionsView.vue'),
+        meta: { requiresAuth: true, requiresVerified: true, title: 'Sessions' }
+    },
+    {
+        path: '/dashboard/sessions/:uuid',
+        name: 'session-detail',
+        component: () => import('../views/dashboard/SessionDetailView.vue'),
+        meta: { requiresAuth: true, requiresVerified: true, title: 'Session Detail' }
+    },
+    {
         path: '/dashboard/devices',
         name: 'Devices',
         component: () => import('../views/dashboard/DevicesView.vue'),
