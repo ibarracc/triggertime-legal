@@ -138,8 +138,8 @@ class SyncService
                     // Set ownership fields for top-level tables
                     if ($config['ownership'] === 'direct') {
                         $data['user_id'] = $userId;
+                        $data['device_uuid'] = $deviceUuid;
                     }
-                    $data['device_uuid'] = $deviceUuid;
 
                     $entity = $table->newEntity($data, [
                         'accessibleFields' => ['id' => true],

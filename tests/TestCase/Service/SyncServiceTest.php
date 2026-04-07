@@ -299,4 +299,116 @@ class SyncServiceTest extends TestCase
         $result = $this->service->hasChanges($this->userId, '2099-01-01T00:00:00+00:00');
         $this->assertFalse($result);
     }
+
+    public function testPullIncludesSoftDeletedRecords(): void
+    {
+        $uuid = 'b8b8b8b8-c9c9-4d0d-8e1e-f2f2f2f2f2f8';
+        $table = TableRegistry::getTableLocator()->get('SyncDisciplines');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Deleted Discipline',
+            'weapon_type_id' => 1,
+            'scoring_type_id' => 1,
+            'use_fm' => false,
+            'active' => true,
+            'show_previous_series_on_scoring' => false,
+            'always_editable_series' => false,
+            'modified_at' => '2026-04-01 10:00:00',
+            'deleted_at' => '2026-04-02 10:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00');
+
+        $this->assertArrayHasKey('disciplines', $result['records']);
+        $disciplines = $result['records']['disciplines'];
+        $found = array_filter($disciplines, fn($d) => $d['uuid'] === $uuid);
+        $this->assertNotEmpty($found);
+
+        $record = array_values($found)[0];
+        $this->assertTrue($record['deleted']);
+    }
+
+    public function testPullRespectsPagination(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('SyncDisciplines');
+        $uuids = [
+            'c9c9c9c9-d0d0-4e1e-8f2f-a3a3a3a3a3a9',
+            'd0d0d0d0-e1e1-4f2f-8a3a-b4b4b4b4b4b0',
+            'e1e1e1e1-f2f2-4a3a-8b4b-c5c5c5c5c5c1',
+        ];
+
+        foreach ($uuids as $i => $uuid) {
+            $day = $i + 1;
+            $entity = $table->newEntity([
+                'user_id' => $this->userId,
+                'device_uuid' => $this->deviceUuid,
+                'name' => "Discipline {$i}",
+                'weapon_type_id' => 1,
+                'scoring_type_id' => 1,
+                'use_fm' => false,
+                'active' => true,
+                'show_previous_series_on_scoring' => false,
+                'always_editable_series' => false,
+                'modified_at' => "2026-04-0{$day} 10:00:00",
+            ], ['accessibleFields' => ['id' => true]]);
+            $entity->id = $uuid;
+            $table->saveOrFail($entity);
+        }
+
+        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00', 2);
+
+        $this->assertTrue($result['has_more']);
+        $this->assertArrayHasKey('disciplines', $result['records']);
+        $this->assertCount(2, $result['records']['disciplines']);
+    }
+
+    public function testPullExcludesOtherUserRecords(): void
+    {
+        $user1Id = $this->userId;
+        $user2Id = 'f2f2f2f2-a3a3-4b4b-8c5c-d6d6d6d6d6d2';
+
+        $table = TableRegistry::getTableLocator()->get('SyncDisciplines');
+
+        $uuid1 = 'a3a3a3a3-b4b4-4c5c-8d6d-e7e7e7e7e7e3';
+        $entity1 = $table->newEntity([
+            'user_id' => $user1Id,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'User1 Discipline',
+            'weapon_type_id' => 1,
+            'scoring_type_id' => 1,
+            'use_fm' => false,
+            'active' => true,
+            'show_previous_series_on_scoring' => false,
+            'always_editable_series' => false,
+            'modified_at' => '2026-04-01 10:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity1->id = $uuid1;
+        $table->saveOrFail($entity1);
+
+        $uuid2 = 'b4b4b4b4-c5c5-4d6d-8e7e-f8f8f8f8f8f4';
+        $entity2 = $table->newEntity([
+            'user_id' => $user2Id,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'User2 Discipline',
+            'weapon_type_id' => 1,
+            'scoring_type_id' => 1,
+            'use_fm' => false,
+            'active' => true,
+            'show_previous_series_on_scoring' => false,
+            'always_editable_series' => false,
+            'modified_at' => '2026-04-01 10:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity2->id = $uuid2;
+        $table->saveOrFail($entity2);
+
+        $result = $this->service->processPull($user1Id, '2026-03-01T00:00:00+00:00');
+
+        $this->assertArrayHasKey('disciplines', $result['records']);
+        $disciplineUuids = array_column($result['records']['disciplines'], 'uuid');
+        $this->assertContains($uuid1, $disciplineUuids);
+        $this->assertNotContains($uuid2, $disciplineUuids);
+    }
 }
