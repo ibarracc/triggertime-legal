@@ -303,7 +303,7 @@ import AppModal from '@/components/ui/AppModal.vue'
 
 const route = useRoute()
 const router = useRouter()
-const configId = route.params.id
+let configId = route.params.id
 
 const loading = ref(true)
 const saving = ref(false)
@@ -694,6 +694,11 @@ const diffRows = computed(() => {
             rowClass
         }
     })
+})
+
+watch(() => route.params.id, (newId) => {
+    configId = newId
+    loadConfig()
 })
 
 onMounted(() => {

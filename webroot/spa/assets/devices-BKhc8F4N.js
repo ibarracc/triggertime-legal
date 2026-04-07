@@ -1,1 +1,0 @@
-import{B as i}from"./index-DlFAw9rB.js";const c={getDevices(){return i.get("/web/devices")},linkDevice(e){return i.post("/web/devices/link",{link_code:e})},unlinkDevice(e){return i.post(`/web/devices/${e}/unlink`)},updateDevice(e,t){return i.put(`/web/devices/${e}`,t)}};export{c as d};
