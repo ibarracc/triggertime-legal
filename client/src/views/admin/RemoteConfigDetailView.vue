@@ -1,23 +1,23 @@
 <template>
   <div class="admin-config-detail">
-    <div class="flex items-center justify-between mb-8">
-      <div class="flex items-center gap-4">
-        <router-link to="/admin/remote-configs" class="text-secondary hover:text-primary transition-colors">
+    <div class="config-detail-header">
+      <div class="flex items-center gap-3 min-w-0">
+        <router-link to="/admin/remote-configs" class="text-secondary hover:text-primary transition-colors flex-shrink-0">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
           </svg>
         </router-link>
-        <h1 class="text-2xl font-bold font-heading">Remote Config Detail</h1>
+        <h1 class="text-xl md:text-2xl font-bold font-heading truncate">Remote Config</h1>
       </div>
-      
-      <div class="flex gap-2">
+
+      <div class="flex gap-2 flex-shrink-0">
         <AppButton v-if="!isComparing" variant="secondary" size="sm" @click="downloadJson">
-           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-           Download JSON
+           <svg class="w-4 h-4 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+           <span class="hidden md:inline">Download JSON</span>
         </AppButton>
         <AppButton v-if="!isComparing" variant="secondary" size="sm" @click="openDuplicateModal">
-           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-           Duplicate
+           <svg class="w-4 h-4 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+           <span class="hidden md:inline">Duplicate</span>
         </AppButton>
       </div>
     </div>
@@ -30,10 +30,10 @@
       {{ error }}
     </div>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-5">
-      
+    <div v-else class="config-layout">
+
       <!-- Metadata Sidebar -->
-      <div class="lg:col-span-1 space-y-6">
+      <div class="config-sidebar space-y-6">
         <div class="glass-card">
           <h2 class="text-lg font-semibold mb-4 text-primary">Metadata</h2>
           
@@ -79,7 +79,7 @@
       </div>
 
       <!-- Main Config View -->
-      <div class="lg:col-span-3 min-w-0 overflow-hidden">
+      <div class="config-main min-w-0 overflow-hidden">
         
         <!-- View Mode -->
         <div v-if="!isComparing" class="glass-card overflow-hidden h-full">
@@ -87,7 +87,8 @@
                 <h2 class="text-lg font-semibold text-primary">Key/Value Configuration</h2>
             </div>
             
-            <table class="config-table">
+            <!-- Desktop: Table layout -->
+            <table class="config-table hidden md:table">
                 <colgroup>
                     <col class="key-col" />
                     <col class="value-col" />
@@ -160,6 +161,62 @@
                 </tbody>
             </table>
 
+            <!-- Mobile: Card layout -->
+            <div class="md:hidden config-cards">
+                <div v-for="(value, key) in currentConfigData" :key="key" class="config-card">
+                    <div class="config-card-header">
+                        <span class="config-card-key">{{ key }}</span>
+                        <div v-if="editingKey === key" class="config-card-actions">
+                            <button class="action-btn-mobile action-btn-save" @click="saveEdit" :disabled="savingKey === key" title="Save">
+                                <svg v-if="savingKey === key" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                            <button class="action-btn-mobile" @click="cancelEdit" title="Cancel">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <div v-else-if="deletingKey === key" class="config-card-actions">
+                            <span class="delete-confirm-label">Delete?</span>
+                            <button class="delete-confirm-btn-mobile delete-confirm-yes" @click="executeDelete" :disabled="savingKey === key">Yes</button>
+                            <button class="delete-confirm-btn-mobile delete-confirm-no" @click="cancelDelete">No</button>
+                        </div>
+                        <div v-else class="config-card-actions">
+                            <button class="action-btn-mobile" @click="startEdit(key)" title="Edit">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <button class="action-btn-mobile action-btn-danger" @click="confirmDelete(key)" title="Delete">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Edit mode -->
+                    <div v-if="editingKey === key" class="config-card-value">
+                        <label v-if="typeof currentConfigData[key] === 'boolean'" class="boolean-toggle-mobile">
+                            <input type="checkbox" v-model="editValue" @keydown.escape="cancelEdit" />
+                            <span class="toggle-label" :class="editValue ? 'text-green-400' : 'text-red-400'">{{ editValue }}</span>
+                        </label>
+                        <div v-else-if="detectValueType(currentConfigData[key]) === 'json'" class="json-edit-wrapper">
+                            <textarea v-model="editValue" class="edit-input-mobile" rows="6" spellcheck="false" @keydown.escape="cancelEdit"></textarea>
+                            <div v-if="editJsonError" class="edit-json-error">{{ editJsonError }}</div>
+                        </div>
+                        <input v-else type="text" v-model="editValue" class="edit-input-mobile"
+                            @keydown.enter="saveEdit" @keydown.escape="cancelEdit" />
+                    </div>
+
+                    <!-- View mode -->
+                    <div v-else class="config-card-value">
+                        <pre v-if="typeof value === 'object'" class="value-pre-mobile">{{ JSON.stringify(value, null, 2) }}</pre>
+                        <span v-else-if="typeof value === 'boolean'" class="config-card-bool" :class="value ? 'text-green-400' : 'text-red-400'">{{ value }}</span>
+                        <span v-else class="config-card-text">{{ value }}</span>
+                    </div>
+                </div>
+
+                <div v-if="Object.keys(currentConfigData).length === 0" class="config-card-empty">
+                    No keys defined.
+                </div>
+            </div>
+
             <!-- Add Key -->
             <div v-if="!addingKey" class="add-key-trigger">
                 <button class="add-key-btn" @click="startAdd">
@@ -171,12 +228,12 @@
                 <div class="add-key-fields">
                     <div class="add-key-field">
                         <label class="add-key-label">Key Name</label>
-                        <input v-model="newKeyName" type="text" class="edit-input" placeholder="key_name"
+                        <input v-model="newKeyName" type="text" class="edit-input edit-input-responsive" placeholder="key_name"
                             @keydown.escape="cancelAdd" />
                     </div>
                     <div class="add-key-field">
                         <label class="add-key-label">Type</label>
-                        <select v-model="newKeyType" class="edit-input">
+                        <select v-model="newKeyType" class="edit-input edit-input-responsive">
                             <option value="string">String</option>
                             <option value="number">Number</option>
                             <option value="boolean">Boolean</option>
@@ -189,8 +246,8 @@
                             <input type="checkbox" v-model="newKeyValue" />
                             <span class="toggle-label" :class="newKeyValue ? 'text-green-400' : 'text-red-400'">{{ newKeyValue }}</span>
                         </label>
-                        <textarea v-else-if="newKeyType === 'json'" v-model="newKeyValue" class="edit-textarea" rows="4" placeholder="{}" spellcheck="false"></textarea>
-                        <input v-else type="text" v-model="newKeyValue" class="edit-input" placeholder="value"
+                        <textarea v-else-if="newKeyType === 'json'" v-model="newKeyValue" class="edit-textarea edit-input-responsive" rows="4" placeholder="{}" spellcheck="false"></textarea>
+                        <input v-else type="text" v-model="newKeyValue" class="edit-input edit-input-responsive" placeholder="value"
                             @keydown.enter="saveAdd" @keydown.escape="cancelAdd" />
                     </div>
                 </div>
@@ -1106,5 +1163,275 @@ onMounted(() => {
   letter-spacing: 0.05em;
   color: var(--text-secondary);
   font-weight: 600;
+}
+
+/* ── Responsive Layout ── */
+.config-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+
+.config-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.config-sidebar {
+  order: 1;
+}
+
+.config-main {
+  order: 2;
+}
+
+@media (min-width: 1024px) {
+  .config-detail-header {
+    margin-bottom: 2rem;
+  }
+  .config-layout {
+    grid-template-columns: 1fr 3fr;
+    gap: 1.25rem;
+  }
+  .config-sidebar {
+    order: 0;
+  }
+  .config-main {
+    order: 0;
+  }
+}
+
+/* ── Mobile Card Layout ── */
+.config-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.config-card {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.config-card:last-child {
+  border-bottom: none;
+}
+
+.config-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.config-card-key {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  word-break: break-all;
+  min-width: 0;
+}
+
+.config-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.config-card-value {
+  width: 100%;
+  min-width: 0;
+}
+
+.config-card-text {
+  display: block;
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--text-secondary);
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.config-card-bool {
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.config-card-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* Mobile action buttons: 44x44 touch targets */
+.action-btn-mobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-btn-mobile:active {
+  background: rgba(255,255,255,0.1);
+}
+
+.action-btn-mobile.action-btn-save {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+
+.action-btn-mobile.action-btn-save:active {
+  background: rgba(74, 222, 128, 0.15);
+}
+
+.action-btn-mobile.action-btn-danger {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.action-btn-mobile.action-btn-danger:active {
+  background: rgba(248, 113, 113, 0.15);
+}
+
+/* Mobile delete confirmation */
+.delete-confirm-btn-mobile {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.delete-confirm-btn-mobile.delete-confirm-yes {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.delete-confirm-btn-mobile.delete-confirm-yes:active {
+  background: rgba(248, 113, 113, 0.15);
+}
+
+.delete-confirm-btn-mobile.delete-confirm-no {
+  color: var(--text-secondary);
+}
+
+.delete-confirm-btn-mobile.delete-confirm-no:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Mobile edit inputs: larger, readable */
+.edit-input-mobile {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 16px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s;
+  line-height: 1.5;
+  -webkit-appearance: none;
+}
+
+.edit-input-mobile:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 99,102,241), 0.15);
+}
+
+textarea.edit-input-mobile {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.value-pre-mobile {
+  background: rgba(0,0,0,0.2);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  max-width: 100%;
+}
+
+.boolean-toggle-mobile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 16px;
+  padding: 8px 0;
+  min-height: 44px;
+}
+
+.boolean-toggle-mobile input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* ── Mobile-responsive Add Key Form ── */
+@media (max-width: 767px) {
+  .add-key-fields {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .edit-input-responsive {
+    padding: 12px 14px;
+    font-size: 16px;
+    border-radius: 8px;
+    min-height: 44px;
+    -webkit-appearance: none;
+  }
+
+  .add-key-label {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .add-key-form {
+    padding: 16px;
+  }
+
+  .add-key-trigger {
+    padding: 16px;
+  }
+
+  .add-key-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 14px;
+    min-height: 44px;
+  }
 }
 </style>
