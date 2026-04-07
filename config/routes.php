@@ -63,6 +63,9 @@ return function (RouteBuilder $routes): void {
                 $mobile->post('/devices/link-code', ['controller' => 'UpgradeTokens', 'action' => 'generateLinkCode']);
                 $mobile->get('/devices/{device_uuid}/license-status', ['controller' => 'Devices', 'action' => 'licenseStatus'])->setPass(['device_uuid']);
                 $mobile->post('/devices/{device_uuid}/transfer-license', ['controller' => 'Devices', 'action' => 'transferLicense'])->setPass(['device_uuid']);
+                $mobile->post('/sync/push', ['controller' => 'Sync', 'action' => 'push']);
+                $mobile->get('/sync/pull', ['controller' => 'Sync', 'action' => 'pull']);
+                $mobile->get('/sync/status', ['controller' => 'Sync', 'action' => 'status']);
             });
 
             // ── B/C. Web Endpoints ──
