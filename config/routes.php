@@ -93,6 +93,10 @@ return function (RouteBuilder $routes): void {
                     $webAuth->post('/me/social-disconnect', ['controller' => 'Auth', 'action' => 'disconnectSocial']);
                     $webAuth->delete('/me', ['controller' => 'Auth', 'action' => 'deleteAccount']);
                     $webAuth->get('/devices', ['controller' => 'Devices', 'action' => 'index']);
+                    $webAuth->get('/sessions', ['controller' => 'Sessions', 'action' => 'index']);
+                    $webAuth->get('/sessions/{uuid}', ['controller' => 'Sessions', 'action' => 'view'])
+                        ->setPatterns(['uuid' => '[a-f0-9\-]+'])
+                        ->setPass(['uuid']);
                     $webAuth->post('/subscriptions/checkout', ['controller' => 'Subscriptions', 'action' => 'createCheckout']);
                     $webAuth->post('/subscriptions/portal', ['controller' => 'Subscriptions', 'action' => 'portal']);
                     $webAuth->post('/auth/resend-verification', ['controller' => 'Auth', 'action' => 'resendVerification']);
