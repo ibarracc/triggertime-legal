@@ -67,19 +67,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useLocale } from '@/composables/useLocale'
 import AppButton from '@/components/ui/AppButton.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 const { locale, currentLocale, availableLocales, setLocale } = useLocale()
 
 const isScrolled = ref(false)
 const showLangMenu = ref(false)
 const mobileMenuOpen = ref(false)
+
+watch(() => route.path, () => {
+  mobileMenuOpen.value = false
+  showLangMenu.value = false
+})
 
 const handleLogout = () => {
   auth.logout()
