@@ -77,6 +77,10 @@ class SubscriptionsController extends AppController
         }
 
         $upgradeTokenString = $this->request->getData('upgrade_token');
+        // Fallback to user's pending upgrade token from registration flow
+        if (!$upgradeTokenString) {
+            $upgradeTokenString = $user->pending_upgrade_token;
+        }
         $sessionMetadata = [];
 
         if ($upgradeTokenString) {
