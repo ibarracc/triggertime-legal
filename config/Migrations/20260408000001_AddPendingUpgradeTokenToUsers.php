@@ -15,12 +15,24 @@ class AddPendingUpgradeTokenToUsers extends BaseMigration
      */
     public function change(): void
     {
-        $table = $this->table('users');
-        $table->addColumn('pending_upgrade_token', 'string', [
-            'default' => null,
-            'limit' => 255,
-            'null' => true,
-        ]);
-        $table->update();
+        if ($this->getAdapter()->getAdapterType() === 'sqlite') {
+            $rows = $this->fetchAll(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='users'",
+            );
+
+            if (!empty($rows)) {
+                $this->execute(
+                    'ALTER TABLE "users" ADD COLUMN "pending_upgrade_token" VARCHAR(255) DEFAULT NULL',
+                );
+            }
+        } else {
+            $table = $this->table('users');
+            $table->addColumn('pending_upgrade_token', 'string', [
+                'default' => null,
+                'limit' => 255,
+                'null' => true,
+            ]);
+            $table->update();
+        }
     }
 }

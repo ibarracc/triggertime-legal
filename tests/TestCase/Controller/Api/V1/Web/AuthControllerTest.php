@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace App\Test\TestCase\Controller\Api\V1\Web;
 
 use App\Service\EmailVerificationService;
+use Cake\I18n\DateTime;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Security;
+use Cake\Utility\Text;
 
 class AuthControllerTest extends TestCase
 {
@@ -247,6 +249,40 @@ class AuthControllerTest extends TestCase
         $this->assertResponseOk();
         $resendBody = json_decode((string)$this->_response->getBody(), true);
         $this->assertTrue($resendBody['success']);
+    }
+
+    public function testRegisterWithUpgradeTokenSavesPendingToken(): void
+    {
+        // Create a valid upgrade token directly in DB
+        $tokensTable = $this->getTableLocator()->get('UpgradeTokens');
+        $token = $tokensTable->newEntity([
+            'id' => Text::uuid(),
+            'token_string' => 'valid-upgrade-token-123',
+            'device_uuid' => 'device-uuid-abc',
+            'type' => 'upgrade',
+            'is_used' => false,
+            'expires_at' => DateTime::now()->addDays(7),
+        ]);
+        $tokensTable->saveOrFail($token);
+
+        $this->configRequest([
+            'headers' => ['Content-Type' => 'application/json'],
+        ]);
+        $this->post('/api/v1/web/auth/register', json_encode([
+            'email' => 'upgrade-token-user@example.com',
+            'password' => 'securepassword123',
+            'first_name' => 'Upgrade',
+            'last_name' => 'User',
+            'upgrade_token' => 'valid-upgrade-token-123',
+        ]));
+        $this->assertResponseOk();
+        $body = json_decode((string)$this->_response->getBody(), true);
+        $this->assertTrue($body['success']);
+
+        // Verify the pending_upgrade_token was saved on the user
+        $usersTable = $this->getTableLocator()->get('Users');
+        $user = $usersTable->get($body['user']['id']);
+        $this->assertSame('valid-upgrade-token-123', $user->pending_upgrade_token);
     }
 
     public function testRegisterReturnsUnverifiedUser(): void
