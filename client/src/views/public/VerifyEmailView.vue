@@ -116,7 +116,8 @@ const startCooldown = () => {
 const handleSubscribe = async () => {
   try {
     const upgradeToken = route.query.upgrade_token
-    const response = await subscriptionsApi.createCheckout(upgradeToken || null)
+    const payload = upgradeToken ? { upgrade_token: upgradeToken } : {}
+    const response = await subscriptionsApi.createCheckout(payload)
     if (response.checkout_url) {
       window.location.href = response.checkout_url
     }
