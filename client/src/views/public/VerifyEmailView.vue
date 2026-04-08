@@ -140,7 +140,14 @@ onMounted(async () => {
       if (response.success) {
         trackEvent('email_verified')
         await authStore.fetchUser()
-        router.replace('/dashboard?verified=1')
+
+        // Resume checkout flow if user registered from device unlock
+        const pendingToken = authStore.user?.pending_upgrade_token
+        if (pendingToken) {
+          router.replace(`/checkout/${pendingToken}`)
+        } else {
+          router.replace('/dashboard?verified=1')
+        }
       }
     } catch (err) {
       errorMsg.value = err.response?.data?.message || 'Verification link is invalid or has expired.'
