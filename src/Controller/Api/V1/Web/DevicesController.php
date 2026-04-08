@@ -187,6 +187,12 @@ class DevicesController extends AppController
         $token->is_used = true;
         $this->UpgradeTokens->save($token);
 
+        // Clear user's pending upgrade token
+        $usersTable = $this->fetchTable('Users');
+        $userEntity = $usersTable->get($userId);
+        $userEntity->pending_upgrade_token = null;
+        $usersTable->save($userEntity);
+
         return $this->response->withType('application/json')
             ->withStringBody((string)json_encode(['success' => true, 'device' => $device]));
     }
