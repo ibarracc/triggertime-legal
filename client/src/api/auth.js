@@ -5,8 +5,12 @@ export const authApi = {
         return api.post('/web/auth/login', { email, password });
     },
 
-    register(email, password, firstName, lastName, language, marketingOptin = false) {
-        return api.post('/web/auth/register', { email, password, first_name: firstName, last_name: lastName, language, marketing_optin: marketingOptin });
+    register(email, password, firstName, lastName, language, marketingOptin = false, upgradeToken = null) {
+        const payload = { email, password, first_name: firstName, last_name: lastName, language, marketing_optin: marketingOptin }
+        if (upgradeToken) {
+            payload.upgrade_token = upgradeToken
+        }
+        return api.post('/web/auth/register', payload)
     },
 
     forgotPassword(email) {

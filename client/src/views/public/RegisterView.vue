@@ -182,13 +182,13 @@ const handleRegister = async () => {
   isLoading.value = true
   errorMsg.value = ''
   
-  const result = await authStore.register(email.value, password.value, firstName.value, lastName.value, language.value, marketingOptin.value)
-  
+  const upgradeToken = route.query.upgrade_token
+  const result = await authStore.register(email.value, password.value, firstName.value, lastName.value, language.value, marketingOptin.value, upgradeToken || null)
+
   if (result.success) {
     // Sync local locale
     await setLocale(language.value)
 
-    const upgradeToken = route.query.upgrade_token
     if (upgradeToken) {
         router.push({ name: 'VerifyEmail', query: { upgrade_token: upgradeToken, intent: 'subscribe' } })
     } else {
