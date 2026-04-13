@@ -4,16 +4,15 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1;
 
 use App\Controller\AppController;
-use App\Model\Table\DevicesTable;
-use App\Model\Table\SubscriptionsTable;
 use App\Service\SyncService;
 use Cake\Http\Response;
 
+/**
+ * @property \App\Model\Table\DevicesTable $Devices
+ * @property \App\Model\Table\SubscriptionsTable $Subscriptions
+ */
 class SyncController extends AppController
 {
-    private DevicesTable $Devices;
-    private SubscriptionsTable $Subscriptions;
-
     /**
      * @inheritDoc
      */

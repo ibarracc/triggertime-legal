@@ -166,12 +166,12 @@ parameters:
 			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
 
 		-
-			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:duplicate\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:delete\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
 
 		-
-			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:delete\\(\\) has no return type specified\\.$#"
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Admin\\\\RemoteConfigController\\:\\:duplicate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Admin/RemoteConfigController.php
 
@@ -361,6 +361,16 @@ parameters:
 			path: src/Controller/Api/V1/DevicesController.php
 
 		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\SyncController\\:\\:\\$Devices \\(App\\\\Model\\\\Table\\\\DevicesTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/SyncController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\SyncController\\:\\:\\$Subscriptions \\(App\\\\Model\\\\Table\\\\SubscriptionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/SyncController.php
+
+		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$device_uuid\\.$#"
 			count: 2
 			path: src/Controller/Api/V1/UpgradeTokensController.php
@@ -458,6 +468,11 @@ parameters:
 		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$password_hash\\.$#"
 			count: 3
+			path: src/Controller/Api/V1/Web/AuthController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$pending_upgrade_token\\.$#"
+			count: 1
 			path: src/Controller/Api/V1/Web/AuthController.php
 
 		-
@@ -596,6 +611,11 @@ parameters:
 			path: src/Controller/Api/V1/Web/DevicesController.php
 
 		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$pending_upgrade_token\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/DevicesController.php
+
+		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$user_id\\.$#"
 			count: 1
 			path: src/Controller/Api/V1/Web/DevicesController.php
@@ -646,8 +666,28 @@ parameters:
 			path: src/Controller/Api/V1/Web/DevicesController.php
 
 		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\SessionsController\\:\\:index\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/SessionsController.php
+
+		-
+			message: "#^Method App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\SessionsController\\:\\:view\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/SessionsController.php
+
+		-
+			message: "#^Property App\\\\Controller\\\\Api\\\\V1\\\\Web\\\\SessionsController\\:\\:\\$SyncSessions \\(App\\\\Model\\\\Table\\\\SyncSessionsTable\\) does not accept Cake\\\\ORM\\\\Table\\.$#"
+			count: 1
+			path: src/Controller/Api/V1/Web/SessionsController.php
+
+		-
 			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$email\\.$#"
 			count: 2
+			path: src/Controller/Api/V1/Web/SubscriptionsController.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$pending_upgrade_token\\.$#"
+			count: 1
 			path: src/Controller/Api/V1/Web/SubscriptionsController.php
 
 		-
@@ -717,7 +757,7 @@ parameters:
 
 		-
 			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:save\\(\\)$#"
-			count: 6
+			count: 7
 			path: src/Controller/Api/V1/WebhooksController.php
 
 		-
@@ -739,3 +779,33 @@ parameters:
 			message: "#^Type Cake\\\\ORM\\\\Table in generic type Cake\\\\ORM\\\\Query\\\\SelectQuery\\<Cake\\\\ORM\\\\Table\\> in PHPDoc tag @param for parameter \\$query is not subtype of template type TSubject of array\\|Cake\\\\Datasource\\\\EntityInterface of class Cake\\\\ORM\\\\Query\\\\SelectQuery\\.$#"
 			count: 1
 			path: src/Model/Behavior/SoftDeleteBehavior.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$deleted_at\\.$#"
+			count: 1
+			path: src/Service/SyncService.php
+
+		-
+			message: "#^Access to an undefined property Cake\\\\Datasource\\\\EntityInterface\\:\\:\\$id\\.$#"
+			count: 1
+			path: src/Service/SyncService.php
+
+		-
+			message: "#^Cannot call method toArray\\(\\) on array\\|Cake\\\\Datasource\\\\EntityInterface\\.$#"
+			count: 1
+			path: src/Service/SyncService.php
+
+		-
+			message: "#^Method App\\\\Service\\\\SyncService\\:\\:applyOwnershipFilter\\(\\) has parameter \\$query with generic class Cake\\\\ORM\\\\Query\\\\SelectQuery but does not specify its types\\: TSubject$#"
+			count: 1
+			path: src/Service/SyncService.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:patchEntity\\(\\)$#"
+			count: 1
+			path: src/Service/SyncService.php
+
+		-
+			message: "#^Unable to resolve the template type TEntity in call to method Cake\\\\ORM\\\\Table\\<array\\>\\:\\:saveOrFail\\(\\)$#"
+			count: 1
+			path: src/Service/SyncService.php
