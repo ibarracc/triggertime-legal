@@ -35,7 +35,8 @@
         "subscription": "Abonnement",
         "admin_panel": "Admin-Panel",
         "home": "Startseite",
-        "users": "Benutzer"
+        "users": "Benutzer",
+        "sessions": "Sitzungen"
     },
     "landing": {
         "hero_badge": "Sportschießen Analyse",
@@ -399,5 +400,30 @@
         "marketing_title": "Marketing",
         "marketing_desc": "Werden verwendet, um relevante Werbung anzuzeigen und die Wirksamkeit von Kampagnen zu messen.",
         "always_on": "Immer aktiv"
+    },
+    "sessions": {
+        "title": "Sitzungen",
+        "subtitle": "Sehen Sie Ihre synchronisierten Schießsitzungen ein.",
+        "empty": "Noch keine Sitzungen synchronisiert. Synchronisieren Sie von Ihrer TriggerTime-App, um Ihre Sitzungen hier zu sehen.",
+        "date": "Datum",
+        "discipline": "Disziplin",
+        "type": "Typ",
+        "location": "Ort",
+        "total_score": "Ergebnis",
+        "total_x_count": "X-Anzahl",
+        "notes": "Notizen",
+        "series": "Serien",
+        "shots": "Schüsse",
+        "strings": "Durchgänge",
+        "phase": "Phase",
+        "sighting": "Probeschüsse",
+        "detail_title": "Sitzungsdetail",
+        "back_to_list": "Zurück zu Sitzungen",
+        "auto_closed": "Automatisch geschlossen",
+        "filter_discipline": "Alle Disziplinen",
+        "filter_type": "Alle Typen",
+        "sort_newest": "Neueste zuerst",
+        "sort_oldest": "Älteste zuerst",
+        "showing_count": "{count} Sitzungen"
     }
 }

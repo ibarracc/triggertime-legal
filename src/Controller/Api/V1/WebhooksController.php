@@ -183,6 +183,10 @@ class WebhooksController extends AppController
                                     $token->is_used = true;
                                     $tokensTable->save($token);
                                 }
+
+                                // Clear user's pending upgrade token
+                                $user->pending_upgrade_token = null;
+                                $this->fetchTable('Users')->save($user);
                             }
                         } catch (Exception $e) {
                             Log::error(

@@ -116,7 +116,8 @@ const startCooldown = () => {
 const handleSubscribe = async () => {
   try {
     const upgradeToken = route.query.upgrade_token
-    const response = await subscriptionsApi.createCheckout(upgradeToken || null)
+    const payload = upgradeToken ? { upgrade_token: upgradeToken } : {}
+    const response = await subscriptionsApi.createCheckout(payload)
     if (response.checkout_url) {
       window.location.href = response.checkout_url
     }
@@ -140,7 +141,14 @@ onMounted(async () => {
       if (response.success) {
         trackEvent('email_verified')
         await authStore.fetchUser()
-        router.replace('/dashboard?verified=1')
+
+        // Resume checkout flow if user registered from device unlock
+        const pendingToken = authStore.user?.pending_upgrade_token
+        if (pendingToken) {
+          router.replace(`/checkout/${pendingToken}`)
+        } else {
+          router.replace('/dashboard?verified=1')
+        }
       }
     } catch (err) {
       errorMsg.value = err.response?.data?.message || 'Verification link is invalid or has expired.'

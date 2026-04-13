@@ -35,7 +35,8 @@
         "subscription": "Subscripció",
         "admin_panel": "Panell Admin",
         "home": "Inici",
-        "users": "Usuaris"
+        "users": "Usuaris",
+        "sessions": "Sessions"
     },
     "landing": {
         "hero_badge": "Anàlisi de Tir Esportiu",
@@ -404,5 +405,30 @@
         "marketing_title": "Màrqueting",
         "marketing_desc": "S'utilitzen per mostrar anuncis rellevants i mesurar l'efectivitat de les campanyes.",
         "always_on": "Sempre actives"
+    },
+    "sessions": {
+        "title": "Sessions",
+        "subtitle": "Consulta les teves sessions de tir sincronitzades.",
+        "empty": "Encara no hi ha sessions sincronitzades. Sincronitza des de la teva app TriggerTime per veure-les aquí.",
+        "date": "Data",
+        "discipline": "Disciplina",
+        "type": "Tipus",
+        "location": "Ubicació",
+        "total_score": "Puntuació",
+        "total_x_count": "Compte X",
+        "notes": "Notes",
+        "series": "Sèries",
+        "shots": "Trets",
+        "strings": "Passades",
+        "phase": "Fase",
+        "sighting": "Proves",
+        "detail_title": "Detall de la Sessió",
+        "back_to_list": "Tornar a Sessions",
+        "auto_closed": "Tancada automàticament",
+        "filter_discipline": "Totes les Disciplines",
+        "filter_type": "Tots els Tipus",
+        "sort_newest": "Més recents",
+        "sort_oldest": "Més antigues",
+        "showing_count": "{count} sessions"
     }
 }

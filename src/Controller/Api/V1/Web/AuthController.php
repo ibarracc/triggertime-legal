@@ -108,6 +108,21 @@ class AuthController extends AppController
         $user->marketing_optin = $marketingOptin;
         $user->email_verified_at = null;
 
+        $upgradeToken = $this->request->getData('upgrade_token');
+        if ($upgradeToken) {
+            $tokensTable = $this->fetchTable('UpgradeTokens');
+            $validToken = $tokensTable->find()
+                ->where([
+                    'token_string' => $upgradeToken,
+                    'type' => 'upgrade',
+                    'is_used' => false,
+                ])
+                ->first();
+            if ($validToken) {
+                $user->pending_upgrade_token = $upgradeToken;
+            }
+        }
+
         if (!$this->Authentication->save($user)) {
             throw new BadRequestException('Could not create user account');
         }

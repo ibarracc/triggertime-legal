@@ -19,6 +19,9 @@
       <router-link to="/dashboard/devices" class="nav-item" active-class="active">
         {{ $t('nav.devices') }}
       </router-link>
+      <router-link to="/dashboard/sessions" class="nav-item" active-class="active">
+        {{ $t('nav.sessions') }}
+      </router-link>
       <router-link to="/dashboard/profile" class="nav-item" active-class="active">
         {{ $t('nav.profile') }}
       </router-link>

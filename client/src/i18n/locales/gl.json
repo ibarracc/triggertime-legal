@@ -35,7 +35,8 @@
         "subscription": "Subscrición",
         "admin_panel": "Panel de Administración",
         "home": "Inicio",
-        "users": "Usuarios"
+        "users": "Usuarios",
+        "sessions": "Sesións"
     },
     "landing": {
         "hero_badge": "Análise de Tiro Deportivo",
@@ -404,5 +405,30 @@
         "marketing_title": "Márketing",
         "marketing_desc": "Utilízanse para mostrar anuncios relevantes e medir a efectividade das campañas.",
         "always_on": "Sempre activas"
+    },
+    "sessions": {
+        "title": "Sesións",
+        "subtitle": "Consulta as túas sesións de tiro sincronizadas.",
+        "empty": "Aínda non hai sesións sincronizadas. Sincroniza desde a túa app TriggerTime para velas aquí.",
+        "date": "Data",
+        "discipline": "Disciplina",
+        "type": "Tipo",
+        "location": "Ubicación",
+        "total_score": "Puntuación",
+        "total_x_count": "Conta X",
+        "notes": "Notas",
+        "series": "Series",
+        "shots": "Disparos",
+        "strings": "Quendas",
+        "phase": "Fase",
+        "sighting": "Probas",
+        "detail_title": "Detalle da Sesión",
+        "back_to_list": "Volver a Sesións",
+        "auto_closed": "Pechada automaticamente",
+        "filter_discipline": "Todas as Disciplinas",
+        "filter_type": "Todos os Tipos",
+        "sort_newest": "Máis recentes",
+        "sort_oldest": "Máis antigas",
+        "showing_count": "{count} sesións"
     }
 }

@@ -50,9 +50,9 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function register(email, password, firstName, lastName, language, marketingOptin = false) {
+    async function register(email, password, firstName, lastName, language, marketingOptin = false, upgradeToken = null) {
         try {
-            const response = await authApi.register(email, password, firstName, lastName, language, marketingOptin)
+            const response = await authApi.register(email, password, firstName, lastName, language, marketingOptin, upgradeToken)
             if (response.success) {
                 setAuthData(response.token, response.user, response.user.subscriptions?.[0])
                 trackEvent('sign_up', { method: 'email' })
