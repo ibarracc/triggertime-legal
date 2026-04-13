@@ -17,7 +17,7 @@
       "Bash(vendor/bin/phpstan analyse --no-progress)",
       "Bash(php -r \"echo ini_get\\(''memory_limit''\\);\")",
       "Bash(php -d memory_limit=512M vendor/bin/phpstan analyse --no-progress)",
-      "Bash(php -r:*')",
+      "Bash(php -r :*)",
       "Bash(composer show)",
       "Bash(sqlite3:*)",
       "Bash(composer search cakephp phpstan)",

@@ -18,10 +18,10 @@
       <div class="header-section mb-8">
         <div class="flex items-center gap-3 flex-wrap mb-2">
           <h1 class="m-0">{{ session.discipline_name || $t('sessions.detail_title') }}</h1>
-          <AppBadge v-if="session.session_type" variant="primary">{{ session.session_type }}</AppBadge>
+          <AppBadge v-if="session.type" variant="primary">{{ session.type }}</AppBadge>
           <AppBadge v-if="session.auto_closed" variant="warning">{{ $t('sessions.auto_closed') }}</AppBadge>
         </div>
-        <p class="text-secondary m-0">{{ formatDate(session.session_date) }}</p>
+        <p class="text-secondary m-0">{{ formatDate(session.date) }}</p>
       </div>
 
       <!-- Location & Notes -->
@@ -53,8 +53,8 @@
       <!-- Scorecard -->
       <AppCard>
         <SessionScorecard
-          :series="session.series || []"
-          :strings="session.strings || []"
+          :series="session.sync_series || []"
+          :strings="session.sync_strings || []"
         />
       </AppCard>
     </template>

@@ -11,14 +11,14 @@
         >
           <div class="series-header flex items-center gap-2 mb-2">
             <span class="series-label font-medium">
-              {{ s.is_sighting ? $t('sessions.sighting') : `${$t('sessions.series')} ${s.series_number || idx + 1}` }}
+              {{ s.is_sighting ? $t('sessions.sighting') : `${$t('sessions.series')} ${s.series_number_within_phase || idx + 1}` }}
             </span>
             <AppBadge v-if="s.is_sighting" variant="neutral">{{ $t('sessions.sighting') }}</AppBadge>
-            <span v-if="s.series_score != null" class="series-score ml-auto font-bold">{{ s.series_score }}</span>
+            <span v-if="s.total_score != null" class="series-score ml-auto font-bold">{{ s.total_score }}</span>
           </div>
-          <div v-if="s.shots && s.shots.length > 0" class="shots-row flex flex-wrap gap-2">
+          <div v-if="s.sync_shots && s.sync_shots.length > 0" class="shots-row flex flex-wrap gap-2">
             <div
-              v-for="(shot, sIdx) in s.shots"
+              v-for="(shot, sIdx) in s.sync_shots"
               :key="shot.id || sIdx"
               class="shot-circle"
               :class="{ 'shot-x': shot.is_x }"
@@ -41,9 +41,9 @@
           class="string-item flex items-center justify-between py-2 border-b"
         >
           <span class="text-sm">
-            {{ str.is_sighting ? $t('sessions.sighting') : `${$t('sessions.strings')} ${str.string_number || idx + 1}` }}
+            {{ str.is_sighting ? $t('sessions.sighting') : `${$t('sessions.strings')} ${str.string_number_within_phase || idx + 1}` }}
           </span>
-          <span class="font-bold">{{ str.string_score ?? '-' }}</span>
+          <span class="font-bold">{{ str.total_score ?? '-' }}</span>
         </div>
       </div>
     </div>
@@ -64,12 +64,12 @@ defineProps({
 
 const shotDisplay = (shot) => {
   if (shot.is_x) return 'X'
-  if (shot.score != null) return String(shot.score)
+  if (shot.value != null) return String(shot.value)
   return '-'
 }
 
 const shotLabel = (shot) => {
-  let label = `${shot.score ?? '-'}`
+  let label = `${shot.value ?? '-'}`
   if (shot.is_x) label += ' (X)'
   return label
 }

@@ -72,7 +72,7 @@ const disciplines = computed(() => {
 const types = computed(() => {
   const set = new Set()
   sessions.value.forEach(s => {
-    if (s.session_type) set.add(s.session_type)
+    if (s.type) set.add(s.type)
   })
   return Array.from(set).sort()
 })

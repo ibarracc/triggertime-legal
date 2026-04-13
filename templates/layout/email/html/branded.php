@@ -4,7 +4,7 @@
  *
  * @var \Cake\View\View $this
  */
-$logoUrl = 'https://triggertime.es/triggertime.png';
+$logoUrl = 'https://triggertime.es/spa/triggertime.png';
 ?>
 <!DOCTYPE html>
 <html lang="<?= $this->get('locale', 'en') ?>">

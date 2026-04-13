@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /spa/
+Disallow: /debug_kit/
+
+Sitemap: https://triggertime.es/sitemap.xml

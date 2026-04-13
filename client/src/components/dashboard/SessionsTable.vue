@@ -34,11 +34,11 @@
             v-for="session in sessions"
             :key="session.id"
             class="session-row"
-            @click="$emit('select', session.uuid)"
+            @click="$emit('select', session.id)"
           >
-            <td>{{ formatDate(session.session_date) }}</td>
+            <td>{{ formatDate(session.date) }}</td>
             <td>{{ session.discipline_name || '-' }}</td>
-            <td>{{ session.session_type || '-' }}</td>
+            <td>{{ session.type || '-' }}</td>
             <td>{{ session.location || '-' }}</td>
             <td class="text-right font-bold">{{ session.total_score ?? '-' }}</td>
             <td class="text-right">{{ session.total_x_count ?? '-' }}</td>

@@ -57,10 +57,10 @@ class SessionsController extends AppController
             $query->where(['SyncSessions.type' => $type]);
         }
 
-        if ($sort === 'date_asc') {
-            $query->orderBy(['SyncSessions.session_date' => 'ASC']);
+        if ($sort === 'date_asc' || $sort === 'oldest') {
+            $query->orderBy(['SyncSessions.date' => 'ASC']);
         } else {
-            $query->orderBy(['SyncSessions.session_date' => 'DESC']);
+            $query->orderBy(['SyncSessions.date' => 'DESC']);
         }
 
         $total = $query->count();
@@ -93,7 +93,7 @@ class SessionsController extends AppController
 
         $session = $this->SyncSessions->find()
             ->where([
-                'SyncSessions.uuid' => $uuid,
+                'SyncSessions.id' => $uuid,
                 'SyncSessions.user_id' => $userId,
                 'SyncSessions.deleted_at IS' => null,
             ])
