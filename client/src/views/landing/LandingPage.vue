@@ -19,7 +19,7 @@
         </div>
 
         <div class="download-badges flex flex-wrap justify-center gap-4 mt-8">
-            <a href="#" class="badge-link block">
+            <a :href="appStoreUrl" class="badge-link block">
               <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1314316800&h=7e5b682945a0de79a4da48608dced948"
                   :alt="$t('landing.download_now')" class="h-12">
             </a>
@@ -242,8 +242,18 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import AppBadge from '@/components/ui/AppBadge.vue'
 import AppCard from '@/components/ui/AppCard.vue'
+
+const { locale } = useI18n()
+
+// Apple auto-routes to the user's regional store when no country code is in the path.
+// The `l` param controls the preview page language only.
+const appStoreUrl = computed(
+  () => `https://apps.apple.com/app/triggertime-pro/id6758999145?l=${locale.value}`
+)
 </script>
 
 <style scoped>
