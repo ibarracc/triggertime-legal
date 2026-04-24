@@ -10,6 +10,7 @@
       <router-link v-if="auth.isAdmin" to="/admin/versions" class="admin-tab" active-class="active">{{ $t('admin.versions_title') }}</router-link>
       <router-link v-if="auth.isAdmin" to="/admin/subscriptions" class="admin-tab" active-class="active">{{ $t('admin.subscriptions_title') }}</router-link>
       <router-link v-if="auth.isAdmin" to="/admin/remote-configs" class="admin-tab" active-class="active" :class="{'active': $route.path.includes('/admin/remote-configs')}">{{ $t('admin.configs_title') }}</router-link>
+      <router-link v-if="auth.isAdmin" to="/admin/sync-data" class="admin-tab" active-class="active">{{ $t('admin.sync_data_title') }}</router-link>
     </div>
     
     <!-- Render Child Routes -->

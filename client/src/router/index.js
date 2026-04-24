@@ -198,7 +198,13 @@ const routes = [
                 name: 'AdminRemoteConfigDetail',
                 meta: { requiresSuperAdmin: true, title: 'Admin | Remote Config' },
                 component: () => import('../views/admin/RemoteConfigDetailView.vue')
-            }
+            },
+            {
+                path: 'sync-data',
+                name: 'AdminSyncData',
+                meta: { requiresSuperAdmin: true, title: 'Admin | Sync Data' },
+                component: () => import('../views/admin/SyncDataView.vue')
+            },
         ]
     },
     // Catch-all 404
