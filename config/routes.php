@@ -117,6 +117,9 @@ return function (RouteBuilder $routes): void {
                 $admin->resources('Instances');
                 $admin->resources('Subscriptions');
                 $admin->resources('Devices'); // Added missing Devices resource routing
+                $admin->get('/sync-data', ['controller' => 'SyncData', 'action' => 'index']);
+                $admin->put('/sync-data/{id}', ['controller' => 'SyncData', 'action' => 'edit'])->setPass(['id']);
+                $admin->delete('/sync-data/{id}', ['controller' => 'SyncData', 'action' => 'delete'])->setPass(['id']);
             });
         });
     });
