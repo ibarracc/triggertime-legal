@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1\Admin;
 
 use App\Controller\AppController;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\I18n\DateTime;
+use Cake\ORM\Table;
 
 class SyncDataController extends AppController
 {
@@ -35,6 +37,9 @@ class SyncDataController extends AppController
         'ammo_transactions' => ['parent_table' => 'SyncAmmo', 'fk' => 'ammo_uuid'],
     ];
 
+    /**
+     * Throw a ForbiddenException if the current user is not an admin.
+     */
     private function ensureAdmin(): void
     {
         $payload = $this->request->getAttribute('jwt_payload');
@@ -43,17 +48,29 @@ class SyncDataController extends AppController
         }
     }
 
-    private function resolveTable(string $type): \Cake\ORM\Table
+    /**
+     * Resolve the ORM table for the given sync type string.
+     *
+     * @param string $type The sync data type key.
+     * @return \Cake\ORM\Table
+     * @throws \Cake\Http\Exception\BadRequestException When type is invalid.
+     */
+    private function resolveTable(string $type): Table
     {
         if (!isset(self::TYPE_MAP[$type])) {
             throw new BadRequestException(
-                'Invalid type: ' . $type . '. Valid types: ' . implode(', ', array_keys(self::TYPE_MAP))
+                'Invalid type: ' . $type . '. Valid types: ' . implode(', ', array_keys(self::TYPE_MAP)),
             );
         }
 
         return $this->fetchTable(self::TYPE_MAP[$type]);
     }
 
+    /**
+     * List sync records for a given user and type.
+     *
+     * @return \Cake\Http\Response
+     */
     public function index(): Response
     {
         $this->ensureAdmin();
@@ -110,6 +127,12 @@ class SyncDataController extends AppController
         ]));
     }
 
+    /**
+     * Update allowed fields on a sync record.
+     *
+     * @param string $id The record UUID.
+     * @return \Cake\Http\Response
+     */
     public function edit(string $id): Response
     {
         $this->ensureAdmin();
@@ -126,7 +149,7 @@ class SyncDataController extends AppController
 
         try {
             $record = $table->get($id);
-        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+        } catch (RecordNotFoundException $e) {
             throw new NotFoundException('Record not found');
         }
 
@@ -137,7 +160,7 @@ class SyncDataController extends AppController
         $record = $table->patchEntity(
             $record,
             $patchData,
-            ['fields' => array_merge($allowedFields, ['modified_at'])]
+            ['fields' => array_merge($allowedFields, ['modified_at'])],
         );
 
         if ($table->save($record)) {
@@ -153,6 +176,12 @@ class SyncDataController extends AppController
         ]));
     }
 
+    /**
+     * Soft-delete a sync record by setting deleted_at.
+     *
+     * @param string $id The record UUID.
+     * @return \Cake\Http\Response
+     */
     public function delete(string $id): Response
     {
         $this->ensureAdmin();
@@ -168,7 +197,7 @@ class SyncDataController extends AppController
 
         try {
             $record = $table->get($id);
-        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+        } catch (RecordNotFoundException $e) {
             throw new NotFoundException('Record not found');
         }
 
