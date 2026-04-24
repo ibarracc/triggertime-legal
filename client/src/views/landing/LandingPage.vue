@@ -38,30 +38,62 @@
         
         <div class="features-grid">
           <AppCard hoverable>
-            <template #header><span class="text-2xl mr-2">🎯</span> {{ $t('landing.feat_tracking_title') }}</template>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              {{ $t('landing.feat_tracking_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.feat_tracking_desc') }}
             </p>
           </AppCard>
-          
+
           <AppCard hoverable>
-            <template #header><span class="text-2xl mr-2">🔒</span> {{ $t('landing.feat_private_title') }}</template>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+              {{ $t('landing.feat_private_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.feat_private_desc') }}
             </p>
           </AppCard>
-          
+
           <AppCard hoverable>
-            <template #header><span class="text-2xl mr-2">⏱️</span> {{ $t('landing.feat_stopwatch_title') }}</template>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+              {{ $t('landing.feat_stopwatch_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.feat_stopwatch_desc') }}
             </p>
           </AppCard>
 
           <AppCard hoverable>
-            <template #header><span class="text-2xl mr-2">🏆</span> {{ $t('landing.feat_issf_title') }}</template>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+              {{ $t('landing.feat_issf_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.feat_issf_desc') }}
+            </p>
+          </AppCard>
+
+          <AppCard hoverable>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+              {{ $t('landing.feat_inventory_title') }}
+            </template>
+            <p class="text-secondary text-left m-0">
+              {{ $t('landing.feat_inventory_desc') }}
+            </p>
+          </AppCard>
+
+          <AppCard hoverable>
+            <template #header>
+              <svg class="icon-feature" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 8 12 8s5-4 7.5-4a2.5 2.5 0 0 1 0 5H18"/><path d="M18 15H6"/><path d="M10 22h4"/><path d="M14 22a8 8 0 0 0 1.73-15"/><path d="M10 22a8 8 0 0 1-1.73-15"/></svg>
+              {{ $t('landing.feat_competitions_title') }}
+            </template>
+            <p class="text-secondary text-left m-0">
+              {{ $t('landing.feat_competitions_desc') }}
             </p>
           </AppCard>
         </div>
@@ -76,42 +108,70 @@
         
         <div class="features-grid">
           <AppCard hoverable class="border-warning-subtle">
-            <template #header><span class="text-2xl mr-2 text-warning">⚡</span> {{ $t('landing.prem_timer_title') }}</template>
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+              {{ $t('landing.prem_timer_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_timer_desc') }}
             </p>
           </AppCard>
-          
+
           <AppCard hoverable class="border-warning-subtle">
-            <template #header><span class="text-2xl mr-2 text-warning">📥</span> {{ $t('landing.prem_excel_title') }}</template>
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M14 13h2"/><path d="M8 17h2"/><path d="M14 17h2"/></svg>
+              {{ $t('landing.prem_excel_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_excel_desc') }}
             </p>
           </AppCard>
-          
+
           <AppCard hoverable class="border-warning-subtle">
-            <template #header><span class="text-2xl mr-2 text-warning">💎</span> {{ $t('landing.prem_unlimited_title') }}</template>
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-2-2.67-4-4-6.5-4a3.5 3.5 0 1 0 0 7h.5"/><path d="M12 12c2-2.67 4-4 6.5-4a3.5 3.5 0 1 1 0 7H18"/></svg>
+              {{ $t('landing.prem_unlimited_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_unlimited_desc') }}
             </p>
           </AppCard>
 
           <AppCard hoverable class="border-warning-subtle">
-            <template #header><span class="text-2xl mr-2 text-warning">🛠️</span> {{ $t('landing.prem_custom_title') }}</template>
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+              {{ $t('landing.prem_custom_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_custom_desc') }}
             </p>
           </AppCard>
 
-          <AppCard hoverable class="border-warning-subtle coming-soon-card">
-            <template #header><span class="text-2xl mr-2 text-warning">☁️</span> {{ $t('landing.prem_sync_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span></template>
+          <AppCard hoverable class="border-warning-subtle">
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              {{ $t('landing.prem_sync_title') }}
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_sync_desc') }}
             </p>
           </AppCard>
 
+          <AppCard hoverable class="border-warning-subtle">
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>
+              {{ $t('landing.prem_ammo_title') }}
+            </template>
+            <p class="text-secondary text-left m-0">
+              {{ $t('landing.prem_ammo_desc') }}
+            </p>
+          </AppCard>
+
           <AppCard hoverable class="border-warning-subtle coming-soon-card">
-            <template #header><span class="text-2xl mr-2 text-warning">📊</span> {{ $t('landing.prem_analytics_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span></template>
+            <template #header>
+              <svg class="icon-feature text-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16l4-8 4 5 4-3"/></svg>
+              {{ $t('landing.prem_analytics_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span>
+            </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_analytics_desc') }}
             </p>
@@ -305,6 +365,15 @@ const appStoreUrl = computed(
   border-radius: 9999px !important;
   padding-left: 32px !important;
   padding-right: 32px !important;
+}
+
+.icon-feature {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .coming-soon-card {
