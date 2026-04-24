@@ -87,7 +87,13 @@
         "whitelabel_feature_1": "Identité visuelle & logo personnalisés",
         "whitelabel_feature_2": "Disciplines de tir spécifiques",
         "whitelabel_feature_3": "Gestion des licences d'activation",
-        "whitelabel_feature_4": "Support B2B dédié"
+        "whitelabel_feature_4": "Support B2B dédié",
+        "feat_inventory_title": "Gestion d'Inventaire",
+        "feat_inventory_desc": "Gérez vos armes et munitions en un seul endroit.",
+        "feat_competitions_title": "Calendrier des Compétitions",
+        "feat_competitions_desc": "Planifiez et gérez votre calendrier de compétitions avec suivi de statut et comptes à rebours.",
+        "prem_ammo_title": "Suivi des Munitions",
+        "prem_ammo_desc": "Suivez les achats de munitions, l'utilisation par session et les niveaux de stock."
     },
     "auth": {
         "login_title": "Bon retour",
@@ -263,7 +269,20 @@
         "subscriptions_title": "Abonnements",
         "add_license": "Ajouter une Licence",
         "import_csv": "Importer CSV",
-        "download_csv": "Télécharger CSV"
+        "download_csv": "Télécharger CSV",
+        "sync_data_title": "Données Synchronisées",
+        "sync_data_subtitle": "Parcourir et modifier les données synchronisées des utilisateurs",
+        "select_user": "Sélectionner un Utilisateur",
+        "tab_weapons": "Armes",
+        "tab_ammo": "Munitions",
+        "tab_competitions": "Compétitions",
+        "tab_reminders": "Rappels",
+        "tab_transactions": "Transactions",
+        "edit_sync_record": "Modifier l'Enregistrement",
+        "delete_sync_record": "Supprimer l'Enregistrement",
+        "delete_sync_confirm": "Êtes-vous sûr de vouloir supprimer cet enregistrement ? Il sera supprimé de l'appareil de l'utilisateur lors de la prochaine synchronisation.",
+        "no_sync_data": "Aucune donnée synchronisée trouvée pour cet utilisateur.",
+        "sync_modified_at": "Dernière Modification"
     },
     "privacy": {
         "title": "Politique de Confidentialité de TriggerTime",

@@ -87,7 +87,13 @@
         "whitelabel_feature_1": "Marca i logotip personalitzats",
         "whitelabel_feature_2": "Disciplines de tir específiques",
         "whitelabel_feature_3": "Gestió de llicències d'activació",
-        "whitelabel_feature_4": "Suport B2B dedicat"
+        "whitelabel_feature_4": "Suport B2B dedicat",
+        "feat_inventory_title": "Gestió d'Inventari",
+        "feat_inventory_desc": "Gestiona les teves armes i munició en un sol lloc.",
+        "feat_competitions_title": "Calendari de Competicions",
+        "feat_competitions_desc": "Planifica i gestiona el teu calendari de competicions amb seguiment d'estat i comptes enrere.",
+        "prem_ammo_title": "Seguiment de Munició",
+        "prem_ammo_desc": "Registra compres de munició, ús per sessió i nivells d'estoc."
     },
     "auth": {
         "login_title": "Benvingut de nou",
@@ -263,7 +269,20 @@
         "subscriptions_title": "Subscripcions",
         "add_license": "Afegir Llicència",
         "import_csv": "Importar CSV",
-        "download_csv": "Descarregar CSV"
+        "download_csv": "Descarregar CSV",
+        "sync_data_title": "Dades Sincronitzades",
+        "sync_data_subtitle": "Explorar i editar dades sincronitzades d'usuaris",
+        "select_user": "Seleccionar Usuari",
+        "tab_weapons": "Armes",
+        "tab_ammo": "Munició",
+        "tab_competitions": "Competicions",
+        "tab_reminders": "Recordatoris",
+        "tab_transactions": "Transaccions",
+        "edit_sync_record": "Editar Registre",
+        "delete_sync_record": "Eliminar Registre",
+        "delete_sync_confirm": "Estàs segur que vols eliminar aquest registre? S'eliminarà del dispositiu de l'usuari a la propera sincronització.",
+        "no_sync_data": "No s'han trobat dades sincronitzades per a aquest usuari.",
+        "sync_modified_at": "Última Modificació"
     },
     "privacy": {
         "title": "Política de Privadesa de TriggerTime",

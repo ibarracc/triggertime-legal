@@ -87,7 +87,13 @@
         "whitelabel_feature_1": "Marka eta logotipo pertsonalizatua",
         "whitelabel_feature_2": "Tiro diziplina zehatzak",
         "whitelabel_feature_3": "Aktibazio lizentzien kudeaketa",
-        "whitelabel_feature_4": "B2B laguntza dedikatua"
+        "whitelabel_feature_4": "B2B laguntza dedikatua",
+        "feat_inventory_title": "Inbentario Kudeaketa",
+        "feat_inventory_desc": "Kudeatu zure armak eta munizioa leku bakar batean.",
+        "feat_competitions_title": "Lehiaketa Egutegia",
+        "feat_competitions_desc": "Planifikatu eta kudeatu zure lehiaketa egutegia egoera jarraipenarekin eta atzerako kontaketekin.",
+        "prem_ammo_title": "Munizio Jarraipena",
+        "prem_ammo_desc": "Erregistratu munizio erosketak, saio bakoitzeko erabilera eta stock mailak."
     },
     "auth": {
         "login_title": "Ongi etorri berriro",
@@ -263,7 +269,20 @@
         "subscriptions_title": "Harpidetzak",
         "add_license": "Gehitu Lizentzia",
         "import_csv": "Inportatu CSV",
-        "download_csv": "Deskargatu CSV"
+        "download_csv": "Deskargatu CSV",
+        "sync_data_title": "Sinkronizatutako Datuak",
+        "sync_data_subtitle": "Erabiltzaileen sinkronizatutako datuak arakatu eta editatu",
+        "select_user": "Erabiltzailea Hautatu",
+        "tab_weapons": "Armak",
+        "tab_ammo": "Munizioa",
+        "tab_competitions": "Lehiaketak",
+        "tab_reminders": "Oroigarriak",
+        "tab_transactions": "Transakzioak",
+        "edit_sync_record": "Erregistroa Editatu",
+        "delete_sync_record": "Erregistroa Ezabatu",
+        "delete_sync_confirm": "Ziur zaude erregistro hau ezabatu nahi duzula? Erabiltzailearen gailutik hurrengo sinkronizazioan ezabatuko da.",
+        "no_sync_data": "Ez dira sinkronizatutako daturik aurkitu erabiltzaile honentzat.",
+        "sync_modified_at": "Azken Aldaketa"
     },
     "privacy": {
         "title": "TriggerTime-ren Pribatutasun Politika",

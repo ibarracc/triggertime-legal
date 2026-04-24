@@ -87,7 +87,13 @@
         "whitelabel_feature_1": "Marca e logotipo personalizados",
         "whitelabel_feature_2": "Disciplinas de tiro específicas",
         "whitelabel_feature_3": "Xestión de licenzas de activación",
-        "whitelabel_feature_4": "Soporte B2B dedicado"
+        "whitelabel_feature_4": "Soporte B2B dedicado",
+        "feat_inventory_title": "Xestión de Inventario",
+        "feat_inventory_desc": "Xestiona as túas armas e munición nun só lugar.",
+        "feat_competitions_title": "Calendario de Competicións",
+        "feat_competitions_desc": "Planifica e xestiona o teu calendario de competicións con seguimento de estado e contas atrás.",
+        "prem_ammo_title": "Seguimento de Munición",
+        "prem_ammo_desc": "Rexistra compras de munición, uso por sesión e niveis de stock."
     },
     "auth": {
         "login_title": "Benvido de novo",
@@ -263,7 +269,20 @@
         "subscriptions_title": "Subscricións",
         "add_license": "Engadir Licenza",
         "import_csv": "Importar CSV",
-        "download_csv": "Descargar CSV"
+        "download_csv": "Descargar CSV",
+        "sync_data_title": "Datos Sincronizados",
+        "sync_data_subtitle": "Explorar e editar datos sincronizados de usuarios",
+        "select_user": "Seleccionar Usuario",
+        "tab_weapons": "Armas",
+        "tab_ammo": "Munición",
+        "tab_competitions": "Competicións",
+        "tab_reminders": "Recordatorios",
+        "tab_transactions": "Transaccións",
+        "edit_sync_record": "Editar Rexistro",
+        "delete_sync_record": "Eliminar Rexistro",
+        "delete_sync_confirm": "Estás seguro de que queres eliminar este rexistro? Eliminarase do dispositivo do usuario na próxima sincronización.",
+        "no_sync_data": "Non se atoparon datos sincronizados para este usuario.",
+        "sync_modified_at": "Última Modificación"
     },
     "privacy": {
         "title": "Política de Privacidade de TriggerTime",

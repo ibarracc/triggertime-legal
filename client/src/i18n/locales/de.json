@@ -87,7 +87,13 @@
         "whitelabel_feature_1": "Eigenes Branding & Logo",
         "whitelabel_feature_2": "Spezifische Schießdisziplinen",
         "whitelabel_feature_3": "Verwaltung von Aktivierungslizenzen",
-        "whitelabel_feature_4": "Dedizierter B2B-Support"
+        "whitelabel_feature_4": "Dedizierter B2B-Support",
+        "feat_inventory_title": "Inventarverwaltung",
+        "feat_inventory_desc": "Verwalten Sie Ihre Waffen und Munition an einem Ort.",
+        "feat_competitions_title": "Wettkampfkalender",
+        "feat_competitions_desc": "Planen und verwalten Sie Ihren Wettkampfkalender mit Statusverfolgung und Countdown-Timern.",
+        "prem_ammo_title": "Munitionsverfolgung",
+        "prem_ammo_desc": "Verfolgen Sie Munitionskäufe, Verbrauch pro Sitzung und Lagerbestände."
     },
     "auth": {
         "login_title": "Willkommen zurück",
@@ -263,7 +269,20 @@
         "subscriptions_title": "Abonnemente",
         "add_license": "Lizenz hinzufügen",
         "import_csv": "CSV importieren",
-        "download_csv": "CSV herunterladen"
+        "download_csv": "CSV herunterladen",
+        "sync_data_title": "Synchronisierte Daten",
+        "sync_data_subtitle": "Synchronisierte Benutzerdaten durchsuchen und bearbeiten",
+        "select_user": "Benutzer auswählen",
+        "tab_weapons": "Waffen",
+        "tab_ammo": "Munition",
+        "tab_competitions": "Wettkämpfe",
+        "tab_reminders": "Erinnerungen",
+        "tab_transactions": "Transaktionen",
+        "edit_sync_record": "Eintrag bearbeiten",
+        "delete_sync_record": "Eintrag löschen",
+        "delete_sync_confirm": "Möchten Sie diesen Eintrag wirklich löschen? Er wird beim nächsten Sync vom Gerät des Benutzers entfernt.",
+        "no_sync_data": "Keine synchronisierten Daten für diesen Benutzer gefunden.",
+        "sync_modified_at": "Zuletzt geändert"
     },
     "privacy": {
         "title": "Datenschutzrichtlinie für TriggerTime",
