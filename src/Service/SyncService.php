@@ -24,6 +24,26 @@ class SyncService
             'ownership' => 'via_discipline',
             'fkField' => 'discipline_uuid',
         ],
+        'weapons' => [
+            'table' => 'SyncWeapons',
+            'ownership' => 'direct',
+            'fkField' => 'user_id',
+        ],
+        'ammo' => [
+            'table' => 'SyncAmmo',
+            'ownership' => 'direct',
+            'fkField' => 'user_id',
+        ],
+        'competitions' => [
+            'table' => 'SyncCompetitions',
+            'ownership' => 'direct',
+            'fkField' => 'user_id',
+        ],
+        'competition_reminders' => [
+            'table' => 'SyncCompetitionReminders',
+            'ownership' => 'via_competition',
+            'fkField' => 'competition_uuid',
+        ],
         'sessions' => [
             'table' => 'SyncSessions',
             'ownership' => 'direct',
@@ -44,6 +64,11 @@ class SyncService
             'ownership' => 'via_session',
             'fkField' => 'session_uuid',
         ],
+        'ammo_transactions' => [
+            'table' => 'SyncAmmoTransactions',
+            'ownership' => 'via_ammo',
+            'fkField' => 'ammo_uuid',
+        ],
     ];
 
     /**
@@ -54,10 +79,15 @@ class SyncService
     private array $processingOrder = [
         'disciplines',
         'phases',
+        'weapons',
+        'ammo',
+        'competitions',
+        'competition_reminders',
         'sessions',
         'series',
         'shots',
         'strings',
+        'ammo_transactions',
     ];
 
     /**
@@ -227,29 +257,23 @@ class SyncService
     {
         $sinceDate = new DateTime($since);
 
-        // Check disciplines
-        $disciplinesTable = TableRegistry::getTableLocator()->get('SyncDisciplines');
-        $count = $disciplinesTable->find()
-            ->where([
-                'user_id' => $userId,
-                'modified_at >' => $sinceDate,
-            ])
-            ->count();
+        $directTables = ['SyncDisciplines', 'SyncSessions', 'SyncWeapons', 'SyncAmmo', 'SyncCompetitions'];
 
-        if ($count > 0) {
-            return true;
+        foreach ($directTables as $tableName) {
+            $table = TableRegistry::getTableLocator()->get($tableName);
+            $count = $table->find()
+                ->where([
+                    'user_id' => $userId,
+                    'modified_at >' => $sinceDate,
+                ])
+                ->count();
+
+            if ($count > 0) {
+                return true;
+            }
         }
 
-        // Check sessions
-        $sessionsTable = TableRegistry::getTableLocator()->get('SyncSessions');
-        $count = $sessionsTable->find()
-            ->where([
-                'user_id' => $userId,
-                'modified_at >' => $sinceDate,
-            ])
-            ->count();
-
-        return $count > 0;
+        return false;
     }
 
     /**
@@ -305,6 +329,18 @@ class SyncService
             case 'via_series':
                 $query->innerJoinWith('SyncSeries.SyncSessions', function ($q) use ($userId) {
                     return $q->where(['SyncSessions.user_id' => $userId]);
+                });
+                break;
+
+            case 'via_competition':
+                $query->innerJoinWith('SyncCompetitions', function ($q) use ($userId) {
+                    return $q->where(['SyncCompetitions.user_id' => $userId]);
+                });
+                break;
+
+            case 'via_ammo':
+                $query->innerJoinWith('SyncAmmo', function ($q) use ($userId) {
+                    return $q->where(['SyncAmmo.user_id' => $userId]);
                 });
                 break;
         }
