@@ -46,4 +46,9 @@ export const adminApi = {
     createVersion: (data) => api.post('/admin/versions', data),
     updateVersion: (id, data) => api.put(`/admin/versions/${id}`, data),
     deleteVersion: (id) => api.delete(`/admin/versions/${id}`),
+
+    // Sync Data
+    getSyncData: (userId, type) => api.get('/admin/sync-data', { params: { user_id: userId, type } }),
+    updateSyncData: (id, data) => api.put(`/admin/sync-data/${id}`, data),
+    deleteSyncData: (id, type) => api.delete(`/admin/sync-data/${id}`, { params: { type } }),
 }
