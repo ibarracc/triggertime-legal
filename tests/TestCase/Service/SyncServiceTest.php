@@ -19,6 +19,11 @@ class SyncServiceTest extends TestCase
         'app.SyncSeries',
         'app.SyncShots',
         'app.SyncStrings',
+        'app.SyncWeapons',
+        'app.SyncAmmo',
+        'app.SyncCompetitions',
+        'app.SyncCompetitionReminders',
+        'app.SyncAmmoTransactions',
     ];
 
     /**
@@ -410,5 +415,174 @@ class SyncServiceTest extends TestCase
         $disciplineUuids = array_column($result['records']['disciplines'], 'uuid');
         $this->assertContains($uuid1, $disciplineUuids);
         $this->assertNotContains($uuid2, $disciplineUuids);
+    }
+
+    public function testPushInsertsNewWeapon(): void
+    {
+        $uuid = 'w1w1w1w1-a2a2-4b3b-8c4c-d5d5d5d5d5d1';
+        $records = [
+            'weapons' => [
+                [
+                    'uuid' => $uuid,
+                    'name' => 'CZ Shadow 2',
+                    'caliber' => '9mm',
+                    'serial_number' => 'SN12345',
+                    'notes' => null,
+                    'is_favorite' => true,
+                    'is_archived' => false,
+                    'shot_count' => 1500,
+                    'modified_at' => '2026-04-01T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertContains($uuid, $result['accepted']);
+
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->get($uuid);
+        $this->assertSame('CZ Shadow 2', $entity->name);
+        $this->assertSame('9mm', $entity->caliber);
+        $this->assertSame($this->userId, $entity->user_id);
+        $this->assertSame(1500, $entity->shot_count);
+    }
+
+    public function testPullReturnsWeapons(): void
+    {
+        $uuid = 'w2w2w2w2-b3b3-4c4c-8d5d-e6e6e6e6e6e2';
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Glock 17',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-04-01 10:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00');
+
+        $this->assertArrayHasKey('weapons', $result['records']);
+        $weaponUuids = array_column($result['records']['weapons'], 'uuid');
+        $this->assertContains($uuid, $weaponUuids);
+    }
+
+    public function testPushInsertsCompetitionAndReminder(): void
+    {
+        $compUuid = 'cp1cp1cp-a2a2-4b3b-8c4c-d5d5d5d5d5c1';
+        $remUuid = 'cr1cr1cr-b3b3-4c4c-8d5d-e6e6e6e6e6r1';
+        $records = [
+            'competitions' => [
+                [
+                    'uuid' => $compUuid,
+                    'name' => 'IPSC Level 2',
+                    'date' => '2026-06-15',
+                    'end_date' => '2026-06-16',
+                    'location' => 'Madrid',
+                    'discipline_id' => null,
+                    'status' => 'registered',
+                    'notes' => null,
+                    'is_active' => true,
+                    'modified_at' => '2026-04-01T10:00:00+00:00',
+                ],
+            ],
+            'competition_reminders' => [
+                [
+                    'uuid' => $remUuid,
+                    'competition_uuid' => $compUuid,
+                    'reminder_offset' => 1440,
+                    'is_enabled' => true,
+                    'modified_at' => '2026-04-01T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertContains($compUuid, $result['accepted']);
+        $this->assertContains($remUuid, $result['accepted']);
+
+        $compTable = TableRegistry::getTableLocator()->get('SyncCompetitions');
+        $comp = $compTable->get($compUuid);
+        $this->assertSame('IPSC Level 2', $comp->name);
+        $this->assertSame($this->userId, $comp->user_id);
+
+        $remTable = TableRegistry::getTableLocator()->get('SyncCompetitionReminders');
+        $rem = $remTable->get($remUuid);
+        $this->assertSame($compUuid, $rem->competition_uuid);
+        $this->assertSame(1440, $rem->reminder_offset);
+    }
+
+    public function testPushInsertsAmmoAndTransaction(): void
+    {
+        $ammoUuid = 'am1am1am-a2a2-4b3b-8c4c-d5d5d5d5d5a1';
+        $txUuid = 'at1at1at-b3b3-4c4c-8d5d-e6e6e6e6e6t1';
+        $records = [
+            'ammo' => [
+                [
+                    'uuid' => $ammoUuid,
+                    'brand' => 'Sellier & Bellot',
+                    'name' => 'FMJ',
+                    'caliber' => '9mm',
+                    'grain_weight' => 124,
+                    'cost_per_round' => 0.22,
+                    'current_stock' => 500,
+                    'is_archived' => false,
+                    'modified_at' => '2026-04-01T10:00:00+00:00',
+                ],
+            ],
+            'ammo_transactions' => [
+                [
+                    'uuid' => $txUuid,
+                    'ammo_uuid' => $ammoUuid,
+                    'type' => 'purchase',
+                    'quantity' => 500,
+                    'session_uuid' => null,
+                    'weapon_uuid' => null,
+                    'notes' => null,
+                    'modified_at' => '2026-04-01T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertContains($ammoUuid, $result['accepted']);
+        $this->assertContains($txUuid, $result['accepted']);
+
+        $ammoTable = TableRegistry::getTableLocator()->get('SyncAmmo');
+        $ammo = $ammoTable->get($ammoUuid);
+        $this->assertSame('Sellier & Bellot', $ammo->brand);
+
+        $txTable = TableRegistry::getTableLocator()->get('SyncAmmoTransactions');
+        $tx = $txTable->get($txUuid);
+        $this->assertSame($ammoUuid, $tx->ammo_uuid);
+        $this->assertSame(500, $tx->quantity);
+    }
+
+    public function testHasChangesDetectsWeaponChanges(): void
+    {
+        $uuid = 'w4w4w4w4-d5d5-4e6e-8f7f-a8a8a8a8a8w4';
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Beretta 92',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-04-01 10:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $result = $this->service->hasChanges($this->userId, '2026-03-01T00:00:00+00:00');
+        $this->assertTrue($result);
     }
 }
