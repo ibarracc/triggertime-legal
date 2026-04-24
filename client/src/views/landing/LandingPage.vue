@@ -217,6 +217,8 @@
                 <li>✓ {{ $t('landing.prem_timer_title') }}</li>
                 <li>✓ {{ $t('landing.prem_excel_title') }}</li>
                 <li>✓ {{ $t('landing.prem_custom_title') }}</li>
+                <li>✓ {{ $t('landing.prem_sync_title') }}</li>
+                <li>✓ {{ $t('landing.prem_ammo_title') }}</li>
               </ul>
               
               <router-link to="/register" class="btn btn-primary w-full text-center mt-auto">{{ $t('subscription.upgrade_now') }}</router-link>
@@ -327,7 +329,6 @@ const appStoreUrl = computed(
   background-image: linear-gradient(to bottom, rgba(10, 10, 15, 0.75), rgba(10, 10, 15, 0.95)), url('https://images.unsplash.com/photo-1584984647365-18151480f745?q=80&w=2600&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
 }
 
 .hero-title {
