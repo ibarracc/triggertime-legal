@@ -275,6 +275,7 @@
         "select_user": "Sélectionner un Utilisateur",
         "tab_weapons": "Armes",
         "tab_ammo": "Munitions",
+        "tab_sessions": "Sessions",
         "tab_competitions": "Compétitions",
         "tab_reminders": "Rappels",
         "tab_transactions": "Transactions",
