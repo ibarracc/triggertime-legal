@@ -167,10 +167,10 @@
             </p>
           </AppCard>
 
-          <AppCard hoverable class="border-warning-subtle coming-soon-card">
+          <AppCard hoverable class="border-warning-subtle">
             <template #header>
               <svg class="icon-feature text-warning" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16l4-8 4 5 4-3"/></svg>
-              {{ $t('landing.prem_analytics_title') }} <span class="coming-soon-badge">{{ $t('subscription.coming_soon') }}</span>
+              {{ $t('landing.prem_analytics_title') }}
             </template>
             <p class="text-secondary text-left m-0">
               {{ $t('landing.prem_analytics_desc') }}
@@ -377,22 +377,6 @@ const appStoreUrl = computed(
   flex-shrink: 0;
 }
 
-.coming-soon-card {
-  opacity: 0.6;
-}
-
-.coming-soon-badge {
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--warning);
-  background: rgba(251, 191, 36, 0.15);
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
 
 .bg-surface { background-color: var(--bg-surface); }
 .bg-elevated { background-color: var(--bg-elevated); }
