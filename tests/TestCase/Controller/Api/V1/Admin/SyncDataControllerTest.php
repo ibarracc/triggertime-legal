@@ -91,7 +91,7 @@ class SyncDataControllerTest extends TestCase
     {
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $weapon = $table->newEntity([
-            'id' => 'aaaa1111-bbbb-cccc-dddd-eeeeeeee0001',
+            'id' => 'aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0001',
             'user_id' => $this->adminUserId,
             'device_uuid' => 'test-device',
             'name' => 'Test Pistol',
@@ -116,7 +116,7 @@ class SyncDataControllerTest extends TestCase
     {
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $weapon = $table->newEntity([
-            'id' => 'aaaa1111-bbbb-cccc-dddd-eeeeeeee0002',
+            'id' => 'aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0002',
             'user_id' => $this->adminUserId,
             'device_uuid' => 'test-device',
             'name' => 'Old Name',
@@ -129,7 +129,7 @@ class SyncDataControllerTest extends TestCase
         $table->saveOrFail($weapon);
 
         $this->configureAdminRequest();
-        $this->put('/api/v1/admin/sync-data/aaaa1111-bbbb-cccc-dddd-eeeeeeee0002', json_encode([
+        $this->put('/api/v1/admin/sync-data/aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0002', json_encode([
             'type' => 'weapons',
             'name' => 'Updated Name',
             'caliber' => '.45 ACP',
@@ -145,7 +145,7 @@ class SyncDataControllerTest extends TestCase
     {
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $weapon = $table->newEntity([
-            'id' => 'aaaa1111-bbbb-cccc-dddd-eeeeeeee0003',
+            'id' => 'aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0003',
             'user_id' => $this->adminUserId,
             'device_uuid' => 'test-device',
             'name' => 'Original',
@@ -158,13 +158,13 @@ class SyncDataControllerTest extends TestCase
         $table->saveOrFail($weapon);
 
         $this->configureAdminRequest();
-        $this->put('/api/v1/admin/sync-data/aaaa1111-bbbb-cccc-dddd-eeeeeeee0003', json_encode([
+        $this->put('/api/v1/admin/sync-data/aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0003', json_encode([
             'type' => 'weapons',
             'user_id' => $this->regularUserId,
         ]));
         $this->assertResponseOk();
 
-        $updated = $table->get('aaaa1111-bbbb-cccc-dddd-eeeeeeee0003');
+        $updated = $table->get('aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0003');
         $this->assertEquals($this->adminUserId, $updated->user_id);
     }
 
@@ -172,7 +172,7 @@ class SyncDataControllerTest extends TestCase
     {
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $weapon = $table->newEntity([
-            'id' => 'aaaa1111-bbbb-cccc-dddd-eeeeeeee0004',
+            'id' => 'aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0004',
             'user_id' => $this->adminUserId,
             'device_uuid' => 'test-device',
             'name' => 'To Delete',
@@ -185,10 +185,10 @@ class SyncDataControllerTest extends TestCase
         $table->saveOrFail($weapon);
 
         $this->configureAdminRequest();
-        $this->delete('/api/v1/admin/sync-data/aaaa1111-bbbb-cccc-dddd-eeeeeeee0004?type=weapons');
+        $this->delete('/api/v1/admin/sync-data/aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0004?type=weapons');
         $this->assertResponseOk();
 
-        $deleted = $table->get('aaaa1111-bbbb-cccc-dddd-eeeeeeee0004');
+        $deleted = $table->get('aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0004');
         $this->assertNotNull($deleted->deleted_at);
     }
 

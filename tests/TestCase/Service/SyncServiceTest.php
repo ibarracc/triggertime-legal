@@ -474,8 +474,8 @@ class SyncServiceTest extends TestCase
 
     public function testPushInsertsCompetitionAndReminder(): void
     {
-        $compUuid = 'cp1cp1cp-a2a2-4b3b-8c4c-d5d5d5d5d5c1';
-        $remUuid = 'cr1cr1cr-b3b3-4c4c-8d5d-e6e6e6e6e6r1';
+        $compUuid = 'c01c01c0-a2a2-4b3b-8c4c-d5d5d5d5d5c1';
+        $remUuid = 'c21c21c2-b3b3-4c4c-8d5d-e6e6e6e6e601';
         $records = [
             'competitions' => [
                 [
@@ -520,8 +520,8 @@ class SyncServiceTest extends TestCase
 
     public function testPushInsertsAmmoAndTransaction(): void
     {
-        $ammoUuid = 'am1am1am-a2a2-4b3b-8c4c-d5d5d5d5d5a1';
-        $txUuid = 'at1at1at-b3b3-4c4c-8d5d-e6e6e6e6e6t1';
+        $ammoUuid = 'a01a01a0-a2a2-4b3b-8c4c-d5d5d5d5d5a1';
+        $txUuid = 'a21a21a2-b3b3-4c4c-8d5d-e6e6e6e6e601';
         $records = [
             'ammo' => [
                 [
