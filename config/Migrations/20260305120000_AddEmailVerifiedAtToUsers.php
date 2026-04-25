@@ -20,7 +20,7 @@ class AddEmailVerifiedAtToUsers extends BaseMigration
                     'ALTER TABLE "users" ADD COLUMN "email_verified_at" TIMESTAMP DEFAULT NULL',
                 );
                 $this->execute(
-                    'UPDATE "users" SET "email_verified_at" = "created_at" WHERE "email_verified_at" IS NULL',
+                    'UPDATE "users" SET "email_verified_at" = "created" WHERE "email_verified_at" IS NULL',
                 );
             }
         } else {
@@ -33,7 +33,7 @@ class AddEmailVerifiedAtToUsers extends BaseMigration
             $table->update();
 
             // Backfill: treat all existing users as verified
-            $this->execute('UPDATE users SET email_verified_at = created_at WHERE email_verified_at IS NULL');
+            $this->execute('UPDATE users SET email_verified_at = created WHERE email_verified_at IS NULL');
         }
     }
 }

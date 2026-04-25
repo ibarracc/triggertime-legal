@@ -24,12 +24,12 @@ class InstancesTableTest extends TestCase
      * @var array<string>
      */
     protected array $fixtures = [
-        'app.Instances',
         'app.Users',
+        'app.Instances',
+        'app.Versions',
         'app.ActivationLicenses',
         'app.AppRemoteConfig',
         'app.Devices',
-        'app.Versions',
     ];
 
     /**

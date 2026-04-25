@@ -419,7 +419,7 @@ class SyncServiceTest extends TestCase
 
     public function testPushInsertsNewWeapon(): void
     {
-        $uuid = 'w1w1w1w1-a2a2-4b3b-8c4c-d5d5d5d5d5d1';
+        $uuid = '01010101-a2a2-4b3b-8c4c-d5d5d5d5d5d1';
         $records = [
             'weapons' => [
                 [
@@ -450,7 +450,7 @@ class SyncServiceTest extends TestCase
 
     public function testPullReturnsWeapons(): void
     {
-        $uuid = 'w2w2w2w2-b3b3-4c4c-8d5d-e6e6e6e6e6e2';
+        $uuid = '02020202-b3b3-4c4c-8d5d-e6e6e6e6e6e2';
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $entity = $table->newEntity([
             'user_id' => $this->userId,
@@ -567,7 +567,7 @@ class SyncServiceTest extends TestCase
 
     public function testHasChangesDetectsWeaponChanges(): void
     {
-        $uuid = 'w4w4w4w4-d5d5-4e6e-8f7f-a8a8a8a8a8w4';
+        $uuid = '04040404-d5d5-4e6e-8f7f-a8a8a8a8a804';
         $table = TableRegistry::getTableLocator()->get('SyncWeapons');
         $entity = $table->newEntity([
             'user_id' => $this->userId,

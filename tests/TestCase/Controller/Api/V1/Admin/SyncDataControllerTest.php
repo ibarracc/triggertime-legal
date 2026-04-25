@@ -195,7 +195,7 @@ class SyncDataControllerTest extends TestCase
     public function testDeleteNotFoundReturns404(): void
     {
         $this->configureAdminRequest();
-        $this->delete('/api/v1/admin/sync-data/nonexistent-uuid?type=weapons');
+        $this->delete('/api/v1/admin/sync-data/00000000-0000-4000-8000-000000000000?type=weapons');
         $this->assertResponseCode(404);
     }
 }

@@ -191,7 +191,6 @@ class RemoteConfigController extends AppController
             'instance_id' => $data['instance_id'],
             'version_id' => $versionId,
             'config_data' => $source->config_data,
-            'app_instance' => $instance->name,
         ]);
 
         if ($table->save($newConfig)) {

@@ -31,7 +31,6 @@ class CreateSyncWeapons extends BaseMigration
             ->addColumn('deleted_at', 'datetime', ['null' => true])
             ->addColumn('created', 'datetime', ['null' => false])
             ->addColumn('modified', 'datetime', ['null' => false])
-            ->addIndex(['id'], ['unique' => true])
             ->addIndex(['user_id'])
             ->addIndex(['user_id', 'modified_at'])
             ->addIndex(['user_id', 'deleted_at'])

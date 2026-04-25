@@ -23,8 +23,8 @@ class InstancesFixture extends TestFixture
                 'name' => 'Lorem ipsum dolor sit amet',
                 'club_admin_id' => 'c3792a3c-af61-479e-aaa3-16e763aacbf8',
                 'is_active' => 1,
-                'created' => 1771994278,
-                'modified' => 1771994278,
+                'created' => '2026-02-25 12:00:00',
+                'modified' => '2026-02-25 12:00:00',
             ],
         ];
         parent::init();
