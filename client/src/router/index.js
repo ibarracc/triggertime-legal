@@ -205,6 +205,18 @@ const routes = [
                 meta: { requiresSuperAdmin: true, title: 'Admin | Sync Data' },
                 component: () => import('../views/admin/SyncDataView.vue')
             },
+            {
+                path: 'calibers',
+                name: 'AdminCalibers',
+                meta: { requiresSuperAdmin: true, title: 'Admin | Calibers' },
+                component: () => import('../views/admin/CalibersView.vue')
+            },
+            {
+                path: 'brands',
+                name: 'AdminBrands',
+                meta: { requiresSuperAdmin: true, title: 'Admin | Brands' },
+                component: () => import('../views/admin/BrandsView.vue')
+            },
         ]
     },
     // Catch-all 404

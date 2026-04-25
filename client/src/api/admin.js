@@ -51,4 +51,16 @@ export const adminApi = {
     getSyncData: (userId, type) => api.get('/admin/sync-data', { params: { user_id: userId, type } }),
     updateSyncData: (id, data) => api.put(`/admin/sync-data/${id}`, data),
     deleteSyncData: (id, type) => api.delete(`/admin/sync-data/${id}`, { params: { type } }),
+
+    // Calibers
+    getCalibers: () => api.get('/admin/calibers'),
+    createCaliber: (data) => api.post('/admin/calibers', data),
+    updateCaliber: (id, data) => api.put(`/admin/calibers/${id}`, data),
+    deleteCaliber: (id) => api.delete(`/admin/calibers/${id}`),
+
+    // Brands
+    getBrands: () => api.get('/admin/brands'),
+    createBrand: (data) => api.post('/admin/brands', data),
+    updateBrand: (id, data) => api.put(`/admin/brands/${id}`, data),
+    deleteBrand: (id) => api.delete(`/admin/brands/${id}`),
 }
