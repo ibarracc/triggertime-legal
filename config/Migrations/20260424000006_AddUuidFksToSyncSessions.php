@@ -17,9 +17,9 @@ class AddUuidFksToSyncSessions extends BaseMigration
     public function change(): void
     {
         $table = $this->table('sync_sessions');
-        $table->addColumn('weapon_uuid', 'uuid', ['null' => true, 'after' => 'auto_closed'])
-            ->addColumn('ammo_uuid', 'uuid', ['null' => true, 'after' => 'weapon_uuid'])
-            ->addColumn('competition_uuid', 'uuid', ['null' => true, 'after' => 'ammo_uuid'])
+        $table->addColumn('weapon_uuid', 'uuid', ['null' => true])
+            ->addColumn('ammo_uuid', 'uuid', ['null' => true])
+            ->addColumn('competition_uuid', 'uuid', ['null' => true])
             ->update();
     }
 }
