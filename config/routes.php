@@ -52,6 +52,12 @@ return function (RouteBuilder $routes): void {
             // Stripe webhook (signature verification only, no JWT)
             $v1->post('/webhooks/stripe', ['controller' => 'Webhooks', 'action' => 'stripe']);
 
+            // ── Public Reference Data (no auth) ──
+            $v1->scope('/reference', function (RouteBuilder $ref): void {
+                $ref->get('/calibers', ['controller' => 'ReferenceData', 'action' => 'calibers']);
+                $ref->get('/brands', ['controller' => 'ReferenceData', 'action' => 'brands']);
+            });
+
             // ── A. Mobile App Endpoints (API Key auth) ──
             $v1->scope('/', function (RouteBuilder $mobile): void {
                 $mobile->applyMiddleware('apiKey');
@@ -117,6 +123,8 @@ return function (RouteBuilder $routes): void {
                 $admin->resources('Instances');
                 $admin->resources('Subscriptions');
                 $admin->resources('Devices'); // Added missing Devices resource routing
+                $admin->resources('Calibers');
+                $admin->resources('Brands');
                 $admin->get('/sync-data', ['controller' => 'SyncData', 'action' => 'index']);
                 $admin->put('/sync-data/{id}', ['controller' => 'SyncData', 'action' => 'edit'])->setPass(['id']);
                 $admin->delete('/sync-data/{id}', ['controller' => 'SyncData', 'action' => 'delete'])->setPass(['id']);
