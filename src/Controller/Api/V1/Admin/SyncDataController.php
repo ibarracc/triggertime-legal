@@ -17,6 +17,7 @@ class SyncDataController extends AppController
     private const TYPE_MAP = [
         'weapons' => 'SyncWeapons',
         'ammo' => 'SyncAmmo',
+        'sessions' => 'SyncSessions',
         'competitions' => 'SyncCompetitions',
         'competition_reminders' => 'SyncCompetitionReminders',
         'ammo_transactions' => 'SyncAmmoTransactions',
@@ -24,13 +25,14 @@ class SyncDataController extends AppController
 
     private const EDITABLE_FIELDS = [
         'weapons' => ['name', 'caliber', 'notes', 'is_favorite', 'is_archived'],
-        'ammo' => ['brand', 'name', 'caliber', 'grain_weight', 'current_stock', 'notes', 'is_archived'],
+        'ammo' => ['brand', 'name', 'caliber', 'grain_weight', 'cost_per_round', 'current_stock', 'notes', 'is_archived'],
+        'sessions' => ['date', 'end_date', 'discipline_name', 'type', 'location', 'notes', 'total_score', 'total_x_count', 'weapon_uuid', 'ammo_uuid'],
         'competitions' => ['name', 'date', 'end_date', 'location', 'discipline_id', 'status', 'notes'],
         'competition_reminders' => ['reminder_date', 'type'],
         'ammo_transactions' => ['type', 'quantity', 'notes'],
     ];
 
-    private const DIRECT_OWNERSHIP = ['weapons', 'ammo', 'competitions'];
+    private const DIRECT_OWNERSHIP = ['weapons', 'ammo', 'sessions', 'competitions'];
 
     private const VIA_PARENT = [
         'competition_reminders' => ['parent_table' => 'SyncCompetitions', 'fk' => 'competition_uuid'],
