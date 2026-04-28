@@ -24,6 +24,8 @@ class SyncDiscipline extends Entity
         'deleted_at' => true,
         'created' => true,
         'modified' => true,
+        'seq' => true,
+        'version' => true,
         'sync_phases' => true,
     ];
 }

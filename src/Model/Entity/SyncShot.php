@@ -15,6 +15,8 @@ class SyncShot extends Entity
         'modified_at' => true,
         'deleted_at' => true,
         'created' => true,
+        'seq' => true,
+        'version' => true,
         'modified' => true,
     ];
 }

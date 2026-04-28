@@ -31,6 +31,8 @@ class SyncSession extends Entity
         'deleted_at' => true,
         'created' => true,
         'modified' => true,
+        'seq' => true,
+        'version' => true,
         'sync_series' => true,
         'sync_strings' => true,
     ];
