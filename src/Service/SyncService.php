@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Cake\Datasource\ConnectionManager;
 use Cake\I18n\DateTime;
 use Cake\ORM\TableRegistry;
 
@@ -100,17 +101,120 @@ class SyncService
         'deleted',
         'created',
         'modified',
+        'version',
     ];
 
     /**
-     * Process incoming push records using last-modified-wins strategy.
+     * Process incoming push records using version-based optimistic concurrency.
+     *
+     * @param string $userId The user ID.
+     * @param string $deviceUuid The device UUID.
+     * @param array<string, array<array<string, mixed>>> $records Records keyed by type.
+     * @return array{accepted: array<array{uuid: string, version: int, seq: int}>, rejected: array<array<string, mixed>>, current_seq: int}
+     */
+    public function processPush(string $userId, string $deviceUuid, array $records): array
+    {
+        $connection = ConnectionManager::get('default');
+
+        return $connection->transactional(function () use ($userId, $deviceUuid, $records) {
+            $accepted = [];
+            $rejected = [];
+
+            foreach ($this->processingOrder as $type) {
+                if (empty($records[$type])) {
+                    continue;
+                }
+
+                $config = $this->typeConfig[$type];
+                $table = TableRegistry::getTableLocator()->get($config['table']);
+
+                foreach ($records[$type] as $record) {
+                    $uuid = $record['uuid'] ?? null;
+                    if (empty($uuid)) {
+                        $rejected[] = [
+                            'uuid' => $uuid ?? 'unknown',
+                            'reason' => 'missing_uuid',
+                        ];
+                        continue;
+                    }
+
+                    $clientVersion = (int)($record['version'] ?? 0);
+                    $existing = $table->find()->where(['id' => $uuid])->first();
+
+                    if ($existing !== null) {
+                        $serverVersion = (int)$existing->version;
+
+                        if ($clientVersion !== $serverVersion) {
+                            $rejected[] = [
+                                'uuid' => $uuid,
+                                'reason' => 'version_conflict',
+                                'server_version' => $serverVersion,
+                                'server_data' => $this->entityToSyncData($existing),
+                            ];
+                            continue;
+                        }
+
+                        $newSeq = $this->bumpSeq($userId);
+
+                        if (!empty($record['deleted'])) {
+                            $existing->deleted_at = new DateTime($record['modified_at']);
+                            $existing->modified_at = new DateTime($record['modified_at']);
+                            $existing->version = $serverVersion + 1;
+                            $existing->seq = $newSeq;
+                            $table->saveOrFail($existing);
+                            $accepted[] = ['uuid' => $uuid, 'version' => $serverVersion + 1, 'seq' => $newSeq];
+                            continue;
+                        }
+
+                        $data = $this->prepareRecordData($record);
+                        $data['version'] = $serverVersion + 1;
+                        $data['seq'] = $newSeq;
+                        $existing = $table->patchEntity($existing, $data);
+                        $table->saveOrFail($existing);
+                        $accepted[] = ['uuid' => $uuid, 'version' => $serverVersion + 1, 'seq' => $newSeq];
+                    } else {
+                        $newSeq = $this->bumpSeq($userId);
+                        $data = $this->prepareRecordData($record);
+                        $data['version'] = 1;
+                        $data['seq'] = $newSeq;
+
+                        if ($config['ownership'] === 'direct') {
+                            $data['user_id'] = $userId;
+                            $data['device_uuid'] = $deviceUuid;
+                        }
+
+                        $entity = $table->newEntity($data, [
+                            'accessibleFields' => ['id' => true],
+                        ]);
+                        $entity->id = $uuid;
+
+                        if (!empty($record['deleted'])) {
+                            $entity->deleted_at = new DateTime($record['modified_at']);
+                        }
+
+                        $table->saveOrFail($entity);
+                        $accepted[] = ['uuid' => $uuid, 'version' => 1, 'seq' => $newSeq];
+                    }
+                }
+            }
+
+            return [
+                'accepted' => $accepted,
+                'rejected' => $rejected,
+                'current_seq' => $this->getCurrentSeq($userId),
+            ];
+        });
+    }
+
+    /**
+     * Process incoming push records using last-modified-wins strategy (legacy).
      *
      * @param string $userId The user ID.
      * @param string $deviceUuid The device UUID.
      * @param array<string, array<array<string, mixed>>> $records Records keyed by type.
      * @return array{accepted: array<string>, rejected: array<array{uuid: string, reason: string, server_modified_at: string}>, last_sync_at: string}
      */
-    public function processPush(string $userId, string $deviceUuid, array $records): array
+    public function processPushLegacy(string $userId, string $deviceUuid, array $records): array
     {
         $accepted = [];
         $rejected = [];
@@ -124,7 +228,15 @@ class SyncService
             $table = TableRegistry::getTableLocator()->get($config['table']);
 
             foreach ($records[$type] as $record) {
-                $uuid = $record['uuid'];
+                $uuid = $record['uuid'] ?? null;
+                if (empty($uuid)) {
+                    $rejected[] = [
+                        'uuid' => $uuid ?? 'unknown',
+                        'reason' => 'missing_uuid',
+                        'server_modified_at' => (new DateTime())->format('Y-m-d\TH:i:sP'),
+                    ];
+                    continue;
+                }
                 $incomingModifiedAt = new DateTime($record['modified_at']);
 
                 // Look up existing record by UUID
@@ -274,6 +386,78 @@ class SyncService
         }
 
         return false;
+    }
+
+    /**
+     * Bump the user's sync sequence counter and return the new value.
+     *
+     * @param string $userId The user ID.
+     * @return int The new sequence number.
+     */
+    private function bumpSeq(string $userId): int
+    {
+        $connection = ConnectionManager::get('default');
+
+        $stmt = $connection->execute(
+            'UPDATE user_sync_sequences SET current_seq = current_seq + 1 WHERE user_id = :user_id',
+            ['user_id' => $userId],
+        );
+
+        if ($stmt->rowCount() === 0) {
+            $connection->execute(
+                'INSERT INTO user_sync_sequences (user_id, current_seq) VALUES (:user_id, 1)',
+                ['user_id' => $userId],
+            );
+
+            return 1;
+        }
+
+        $row = $connection->execute(
+            'SELECT current_seq FROM user_sync_sequences WHERE user_id = :user_id',
+            ['user_id' => $userId],
+        )->fetch('assoc');
+
+        return (int)$row['current_seq'];
+    }
+
+    /**
+     * Get the current sync sequence number for a user.
+     *
+     * @param string $userId The user ID.
+     * @return int The current sequence number.
+     */
+    private function getCurrentSeq(string $userId): int
+    {
+        $connection = ConnectionManager::get('default');
+        $row = $connection->execute(
+            'SELECT current_seq FROM user_sync_sequences WHERE user_id = :user_id',
+            ['user_id' => $userId],
+        )->fetch('assoc');
+
+        return $row ? (int)$row['current_seq'] : 0;
+    }
+
+    /**
+     * Convert an entity to sync data format for conflict responses.
+     *
+     * @param object $entity The entity to convert.
+     * @return array<string, mixed>
+     */
+    private function entityToSyncData(object $entity): array
+    {
+        $data = $entity->toArray();
+        $data['uuid'] = $data['id'];
+        $data['deleted'] = $data['deleted_at'] !== null;
+        unset(
+            $data['id'],
+            $data['user_id'],
+            $data['device_uuid'],
+            $data['created'],
+            $data['modified'],
+            $data['deleted_at'],
+        );
+
+        return $data;
     }
 
     /**

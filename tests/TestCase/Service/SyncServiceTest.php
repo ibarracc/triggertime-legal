@@ -24,6 +24,7 @@ class SyncServiceTest extends TestCase
         'app.SyncCompetitions',
         'app.SyncCompetitionReminders',
         'app.SyncAmmoTransactions',
+        'app.UserSyncSequences',
     ];
 
     /**
@@ -60,7 +61,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($uuid, $result['accepted']);
         $this->assertEmpty($result['rejected']);
@@ -111,7 +112,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($uuid, $result['accepted']);
 
@@ -158,7 +159,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertNotContains($uuid, $result['accepted']);
         $this->assertCount(1, $result['rejected']);
@@ -209,7 +210,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($uuid, $result['accepted']);
 
@@ -436,7 +437,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($uuid, $result['accepted']);
 
@@ -502,7 +503,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($compUuid, $result['accepted']);
         $this->assertContains($remUuid, $result['accepted']);
@@ -550,7 +551,7 @@ class SyncServiceTest extends TestCase
             ],
         ];
 
-        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+        $result = $this->service->processPushLegacy($this->userId, $this->deviceUuid, $records);
 
         $this->assertContains($ammoUuid, $result['accepted']);
         $this->assertContains($txUuid, $result['accepted']);
@@ -584,5 +585,186 @@ class SyncServiceTest extends TestCase
 
         $result = $this->service->hasChanges($this->userId, '2026-03-01T00:00:00+00:00');
         $this->assertTrue($result);
+    }
+
+    public function testPushNewRecordAccepted(): void
+    {
+        $uuid = '11111111-aaaa-4bbb-8ccc-dddddddddd01';
+        $records = [
+            'weapons' => [
+                [
+                    'uuid' => $uuid,
+                    'version' => 0,
+                    'name' => 'New Weapon',
+                    'caliber' => '9mm',
+                    'is_favorite' => false,
+                    'is_archived' => false,
+                    'shot_count' => 0,
+                    'modified_at' => '2026-04-10T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertCount(1, $result['accepted']);
+        $this->assertSame($uuid, $result['accepted'][0]['uuid']);
+        $this->assertSame(1, $result['accepted'][0]['version']);
+        $this->assertArrayHasKey('seq', $result['accepted'][0]);
+        $this->assertEmpty($result['rejected']);
+        $this->assertArrayHasKey('current_seq', $result);
+
+        // Verify in DB
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->get($uuid);
+        $this->assertSame('New Weapon', $entity->name);
+        $this->assertSame(1, $entity->version);
+        $this->assertSame($this->userId, $entity->user_id);
+    }
+
+    public function testPushVersionMatchAccepted(): void
+    {
+        $uuid = '22222222-aaaa-4bbb-8ccc-dddddddddd02';
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Existing Weapon',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 100,
+            'modified_at' => '2026-03-01 10:00:00',
+            'version' => 3,
+            'seq' => 10,
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $records = [
+            'weapons' => [
+                [
+                    'uuid' => $uuid,
+                    'version' => 3,
+                    'name' => 'Updated Weapon',
+                    'caliber' => '.45 ACP',
+                    'is_favorite' => true,
+                    'is_archived' => false,
+                    'shot_count' => 200,
+                    'modified_at' => '2026-04-10T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertCount(1, $result['accepted']);
+        $this->assertSame($uuid, $result['accepted'][0]['uuid']);
+        $this->assertSame(4, $result['accepted'][0]['version']);
+        $this->assertEmpty($result['rejected']);
+
+        // Verify updated in DB
+        $updated = $table->get($uuid);
+        $this->assertSame('Updated Weapon', $updated->name);
+        $this->assertSame('.45 ACP', $updated->caliber);
+        $this->assertSame(4, $updated->version);
+    }
+
+    public function testPushVersionMismatchRejected(): void
+    {
+        $uuid = '33333333-aaaa-4bbb-8ccc-dddddddddd03';
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Server Weapon',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 500,
+            'modified_at' => '2026-03-01 10:00:00',
+            'version' => 5,
+            'seq' => 20,
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $records = [
+            'weapons' => [
+                [
+                    'uuid' => $uuid,
+                    'version' => 3,
+                    'name' => 'Stale Update',
+                    'caliber' => '.22 LR',
+                    'is_favorite' => true,
+                    'is_archived' => false,
+                    'shot_count' => 999,
+                    'modified_at' => '2026-04-10T10:00:00+00:00',
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertEmpty($result['accepted']);
+        $this->assertCount(1, $result['rejected']);
+        $this->assertSame($uuid, $result['rejected'][0]['uuid']);
+        $this->assertSame('version_conflict', $result['rejected'][0]['reason']);
+        $this->assertSame(5, $result['rejected'][0]['server_version']);
+        $this->assertArrayHasKey('server_data', $result['rejected'][0]);
+        $this->assertSame($uuid, $result['rejected'][0]['server_data']['uuid']);
+
+        // Verify NOT updated in DB
+        $existing = $table->get($uuid);
+        $this->assertSame('Server Weapon', $existing->name);
+        $this->assertSame(5, $existing->version);
+    }
+
+    public function testPushSoftDeleteWithVersionCheck(): void
+    {
+        $uuid = '44444444-aaaa-4bbb-8ccc-dddddddddd04';
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $entity = $table->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'To Be Deleted',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-03-01 10:00:00',
+            'version' => 2,
+            'seq' => 5,
+        ], ['accessibleFields' => ['id' => true]]);
+        $entity->id = $uuid;
+        $table->saveOrFail($entity);
+
+        $records = [
+            'weapons' => [
+                [
+                    'uuid' => $uuid,
+                    'version' => 2,
+                    'name' => 'To Be Deleted',
+                    'caliber' => '9mm',
+                    'is_favorite' => false,
+                    'is_archived' => false,
+                    'shot_count' => 0,
+                    'modified_at' => '2026-04-10T10:00:00+00:00',
+                    'deleted' => true,
+                ],
+            ],
+        ];
+
+        $result = $this->service->processPush($this->userId, $this->deviceUuid, $records);
+
+        $this->assertCount(1, $result['accepted']);
+        $this->assertSame($uuid, $result['accepted'][0]['uuid']);
+        $this->assertSame(3, $result['accepted'][0]['version']);
+        $this->assertEmpty($result['rejected']);
+
+        // Verify soft-deleted in DB
+        $deleted = $table->get($uuid);
+        $this->assertNotNull($deleted->deleted_at);
+        $this->assertSame(3, $deleted->version);
     }
 }
