@@ -41,7 +41,13 @@ class SyncController extends AppController
         }
 
         $syncService = new SyncService();
-        $result = $syncService->processPush($userId, (string)$deviceUuid, $records);
+
+        $isNewProtocol = $this->detectNewProtocol($records);
+        if ($isNewProtocol) {
+            $result = $syncService->processPush($userId, (string)$deviceUuid, $records);
+        } else {
+            $result = $syncService->processPushLegacy($userId, (string)$deviceUuid, $records);
+        }
 
         return $this->response->withType('application/json')
             ->withStringBody((string)json_encode($result));
@@ -57,7 +63,8 @@ class SyncController extends AppController
         $this->request->allowMethod(['get']);
 
         $deviceUuid = $this->request->getQuery('device_uuid');
-        $since = $this->request->getQuery('since', '');
+        $lastSeq = $this->request->getQuery('last_seq');
+        $since = $this->request->getQuery('since');
 
         $userId = $this->authorizeSync((string)$deviceUuid);
         if ($userId instanceof Response) {
@@ -65,7 +72,12 @@ class SyncController extends AppController
         }
 
         $syncService = new SyncService();
-        $result = $syncService->processPull($userId, (string)$since);
+
+        if ($lastSeq !== null) {
+            $result = $syncService->processPull($userId, (int)$lastSeq);
+        } else {
+            $result = $syncService->processPullLegacy($userId, (string)$since);
+        }
 
         return $this->response->withType('application/json')
             ->withStringBody((string)json_encode($result));
@@ -81,6 +93,7 @@ class SyncController extends AppController
         $this->request->allowMethod(['get']);
 
         $deviceUuid = $this->request->getQuery('device_uuid');
+        $lastSeq = $this->request->getQuery('last_seq');
         $since = $this->request->getQuery('since', '1970-01-01T00:00:00+00:00');
 
         $userId = $this->authorizeSync((string)$deviceUuid);
@@ -89,10 +102,36 @@ class SyncController extends AppController
         }
 
         $syncService = new SyncService();
-        $hasChanges = $syncService->hasChanges($userId, (string)$since);
+
+        if ($lastSeq !== null) {
+            $hasChanges = $syncService->hasChangesSinceSeq($userId, (int)$lastSeq);
+        } else {
+            $hasChanges = $syncService->hasChanges($userId, (string)$since);
+        }
 
         return $this->response->withType('application/json')
             ->withStringBody((string)json_encode(['has_changes' => $hasChanges]));
+    }
+
+    /**
+     * Detect if the push request uses the new protocol.
+     *
+     * The new protocol includes a 'version' field in each record.
+     *
+     * @param array $records The records from the push request.
+     * @return bool True if the new protocol is detected, false otherwise.
+     */
+    private function detectNewProtocol(array $records): bool
+    {
+        foreach ($records as $typeRecords) {
+            foreach ($typeRecords as $record) {
+                if (array_key_exists('version', $record)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
