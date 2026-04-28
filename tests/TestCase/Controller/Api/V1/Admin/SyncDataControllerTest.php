@@ -19,6 +19,7 @@ class SyncDataControllerTest extends TestCase
         'app.SyncCompetitions',
         'app.SyncCompetitionReminders',
         'app.SyncAmmoTransactions',
+        'app.UserSyncSequences',
     ];
 
     private string $adminUserId = 'c3792a3c-af61-479e-aaa3-16e763aacbf8';
@@ -197,5 +198,35 @@ class SyncDataControllerTest extends TestCase
         $this->configureAdminRequest();
         $this->delete('/api/v1/admin/sync-data/00000000-0000-4000-8000-000000000000?type=weapons');
         $this->assertResponseCode(404);
+    }
+
+    public function testEditBumpsVersionAndSeq(): void
+    {
+        $table = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $weapon = $table->newEntity([
+            'id' => 'aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0005',
+            'user_id' => $this->adminUserId,
+            'device_uuid' => 'test-device',
+            'name' => 'Bump Test',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'version' => 1,
+            'seq' => 0,
+            'modified_at' => '2026-04-24 12:00:00',
+        ], ['accessibleFields' => ['id' => true]]);
+        $table->saveOrFail($weapon);
+
+        $this->configureAdminRequest();
+        $this->put('/api/v1/admin/sync-data/aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0005', json_encode([
+            'type' => 'weapons',
+            'name' => 'Bumped Name',
+        ]));
+        $this->assertResponseOk();
+
+        $updated = $table->get('aaaa1111-bbbb-4ccc-8ddd-eeeeeeee0005');
+        $this->assertEquals(2, $updated->version);
+        $this->assertGreaterThan(0, $updated->seq);
     }
 }
