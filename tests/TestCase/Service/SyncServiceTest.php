@@ -239,7 +239,7 @@ class SyncServiceTest extends TestCase
         $entity->id = $uuid;
         $table->saveOrFail($entity);
 
-        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00');
+        $result = $this->service->processPullLegacy($this->userId, '2026-03-01T00:00:00+00:00');
 
         $this->assertArrayHasKey('records', $result);
         $this->assertArrayHasKey('disciplines', $result['records']);
@@ -270,7 +270,7 @@ class SyncServiceTest extends TestCase
         $table->saveOrFail($entity);
 
         // Pull with since AFTER the record's modified_at
-        $result = $this->service->processPull($this->userId, '2026-06-01T00:00:00+00:00');
+        $result = $this->service->processPullLegacy($this->userId, '2026-06-01T00:00:00+00:00');
 
         $disciplineUuids = array_column($result['records']['disciplines'] ?? [], 'uuid');
         $this->assertNotContains($uuid, $disciplineUuids);
@@ -326,7 +326,7 @@ class SyncServiceTest extends TestCase
         $entity->id = $uuid;
         $table->saveOrFail($entity);
 
-        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00');
+        $result = $this->service->processPullLegacy($this->userId, '2026-03-01T00:00:00+00:00');
 
         $this->assertArrayHasKey('disciplines', $result['records']);
         $disciplines = $result['records']['disciplines'];
@@ -364,7 +364,7 @@ class SyncServiceTest extends TestCase
             $table->saveOrFail($entity);
         }
 
-        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00', 2);
+        $result = $this->service->processPullLegacy($this->userId, '2026-03-01T00:00:00+00:00', 2);
 
         $this->assertTrue($result['has_more']);
         $this->assertArrayHasKey('disciplines', $result['records']);
@@ -410,7 +410,7 @@ class SyncServiceTest extends TestCase
         $entity2->id = $uuid2;
         $table->saveOrFail($entity2);
 
-        $result = $this->service->processPull($user1Id, '2026-03-01T00:00:00+00:00');
+        $result = $this->service->processPullLegacy($user1Id, '2026-03-01T00:00:00+00:00');
 
         $this->assertArrayHasKey('disciplines', $result['records']);
         $disciplineUuids = array_column($result['records']['disciplines'], 'uuid');
@@ -466,7 +466,7 @@ class SyncServiceTest extends TestCase
         $entity->id = $uuid;
         $table->saveOrFail($entity);
 
-        $result = $this->service->processPull($this->userId, '2026-03-01T00:00:00+00:00');
+        $result = $this->service->processPullLegacy($this->userId, '2026-03-01T00:00:00+00:00');
 
         $this->assertArrayHasKey('weapons', $result['records']);
         $weaponUuids = array_column($result['records']['weapons'], 'uuid');
@@ -766,5 +766,131 @@ class SyncServiceTest extends TestCase
         $deleted = $table->get($uuid);
         $this->assertNotNull($deleted->deleted_at);
         $this->assertSame(3, $deleted->version);
+    }
+
+    public function testPullReturnsRecordsAfterSeq(): void
+    {
+        $weaponsTable = TableRegistry::getTableLocator()->get('SyncWeapons');
+
+        $uuid1 = 'a0a0a0a0-1111-4aaa-8bbb-cccccccccc01';
+        $weapon1 = $weaponsTable->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Weapon A',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-04-28 09:00:00',
+            'version' => 1,
+            'seq' => 5,
+        ], ['accessibleFields' => ['id' => true]]);
+        $weapon1->id = $uuid1;
+        $weaponsTable->saveOrFail($weapon1);
+
+        $uuid2 = 'a0a0a0a0-2222-4aaa-8bbb-cccccccccc02';
+        $weapon2 = $weaponsTable->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Weapon B',
+            'caliber' => '.45',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-04-28 10:00:00',
+            'version' => 1,
+            'seq' => 10,
+        ], ['accessibleFields' => ['id' => true]]);
+        $weapon2->id = $uuid2;
+        $weaponsTable->saveOrFail($weapon2);
+
+        $result = $this->service->processPull($this->userId, 5);
+
+        $this->assertArrayHasKey('weapons', $result['records']);
+        $this->assertCount(1, $result['records']['weapons']);
+        $this->assertEquals($uuid2, $result['records']['weapons'][0]['uuid']);
+        $this->assertFalse($result['has_more']);
+        $this->assertArrayHasKey('current_seq', $result);
+    }
+
+    public function testPullWithSeqZeroReturnsAll(): void
+    {
+        $weaponsTable = TableRegistry::getTableLocator()->get('SyncWeapons');
+
+        $uuids = [
+            'b0b0b0b0-1111-4aaa-8bbb-cccccccccc01',
+            'b0b0b0b0-2222-4aaa-8bbb-cccccccccc02',
+            'b0b0b0b0-3333-4aaa-8bbb-cccccccccc03',
+        ];
+
+        for ($i = 1; $i <= 3; $i++) {
+            $weapon = $weaponsTable->newEntity([
+                'user_id' => $this->userId,
+                'device_uuid' => $this->deviceUuid,
+                'name' => "Weapon $i",
+                'caliber' => '9mm',
+                'is_favorite' => false,
+                'is_archived' => false,
+                'shot_count' => 0,
+                'modified_at' => "2026-04-28 0{$i}:00:00",
+                'version' => 1,
+                'seq' => $i,
+            ], ['accessibleFields' => ['id' => true]]);
+            $weapon->id = $uuids[$i - 1];
+            $weaponsTable->saveOrFail($weapon);
+        }
+
+        $result = $this->service->processPull($this->userId, 0);
+
+        $this->assertArrayHasKey('weapons', $result['records']);
+        $this->assertCount(3, $result['records']['weapons']);
+    }
+
+    public function testPullGlobalOrderingAcrossTypes(): void
+    {
+        $weaponsTable = TableRegistry::getTableLocator()->get('SyncWeapons');
+        $ammoTable = TableRegistry::getTableLocator()->get('SyncAmmo');
+
+        $weaponUuid = 'c0c0c0c0-1111-4aaa-8bbb-cccccccccc01';
+        $weapon = $weaponsTable->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'name' => 'Weapon',
+            'caliber' => '9mm',
+            'is_favorite' => false,
+            'is_archived' => false,
+            'shot_count' => 0,
+            'modified_at' => '2026-04-28 10:00:00',
+            'version' => 1,
+            'seq' => 2,
+        ], ['accessibleFields' => ['id' => true]]);
+        $weapon->id = $weaponUuid;
+        $weaponsTable->saveOrFail($weapon);
+
+        $ammoUuid = 'c0c0c0c0-2222-4aaa-8bbb-cccccccccc02';
+        $ammo = $ammoTable->newEntity([
+            'user_id' => $this->userId,
+            'device_uuid' => $this->deviceUuid,
+            'brand' => 'Federal',
+            'name' => '9mm Luger',
+            'caliber' => '9mm',
+            'current_stock' => 100,
+            'modified_at' => '2026-04-28 09:00:00',
+            'version' => 1,
+            'seq' => 1,
+        ], ['accessibleFields' => ['id' => true]]);
+        $ammo->id = $ammoUuid;
+        $ammoTable->saveOrFail($ammo);
+
+        // With limit=1, should get only the ammo (seq=1) since it's globally first
+        $result = $this->service->processPull($this->userId, 0, 1);
+
+        $totalRecords = 0;
+        foreach ($result['records'] as $records) {
+            $totalRecords += count($records);
+        }
+        $this->assertEquals(1, $totalRecords);
+        $this->assertTrue($result['has_more']);
+        $this->assertArrayHasKey('ammo', $result['records']);
     }
 }

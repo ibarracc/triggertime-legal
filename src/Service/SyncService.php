@@ -307,14 +307,70 @@ class SyncService
     }
 
     /**
-     * Pull records modified since the given timestamp.
+     * Pull records with seq greater than lastSeq, globally ordered across all types.
+     *
+     * @param string $userId The user ID.
+     * @param int $lastSeq The last sequence number the client has seen.
+     * @param int $limit Maximum total records to return.
+     * @return array{records: array<string, array<array<string, mixed>>>, has_more: bool, current_seq: int}
+     */
+    public function processPull(string $userId, int $lastSeq, int $limit = 500): array
+    {
+        $allResults = [];
+
+        foreach ($this->processingOrder as $type) {
+            $config = $this->typeConfig[$type];
+            $table = TableRegistry::getTableLocator()->get($config['table']);
+
+            $query = $table->find()
+                ->where(["{$config['table']}.seq >" => $lastSeq])
+                ->orderBy(["{$config['table']}.seq" => 'ASC']);
+
+            $this->applyOwnershipFilter($query, $config, $userId);
+
+            $results = $query->all()->toArray();
+
+            foreach ($results as $entity) {
+                $allResults[] = [
+                    'type' => $type,
+                    'entity' => $entity,
+                    'seq' => (int)$entity->seq,
+                ];
+            }
+        }
+
+        usort($allResults, fn($a, $b) => $a['seq'] <=> $b['seq']);
+
+        $hasMore = count($allResults) > $limit;
+        if ($hasMore) {
+            $allResults = array_slice($allResults, 0, $limit);
+        }
+
+        $grouped = [];
+        foreach ($allResults as $item) {
+            $data = $item['entity']->toArray();
+            $data['uuid'] = $data['id'];
+            $data['deleted'] = $data['deleted_at'] !== null;
+            unset($data['id']);
+            $grouped[$item['type']][] = $data;
+        }
+
+        return [
+            'records' => $grouped,
+            'has_more' => $hasMore,
+            'current_seq' => $this->getCurrentSeq($userId),
+        ];
+    }
+
+    /**
+     * Pull records modified since the given timestamp (legacy).
      *
      * @param string $userId The user ID.
      * @param string $since ISO 8601 timestamp.
      * @param int $limit Maximum records per table type.
      * @return array{records: array<string, array<array<string, mixed>>>, has_more: bool, sync_timestamp: string}
      */
-    public function processPull(string $userId, string $since, int $limit = 500): array
+    public function processPullLegacy(string $userId, string $since, int $limit = 500): array
     {
         $sinceDate = new DateTime($since);
         $allRecords = [];
@@ -377,6 +433,34 @@ class SyncService
                 ->where([
                     'user_id' => $userId,
                     'modified_at >' => $sinceDate,
+                ])
+                ->count();
+
+            if ($count > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if there are any changes for the given user since the given sequence number.
+     *
+     * @param string $userId The user ID.
+     * @param int $lastSeq The last sequence number the client has seen.
+     * @return bool
+     */
+    public function hasChangesSinceSeq(string $userId, int $lastSeq): bool
+    {
+        $directTables = ['SyncDisciplines', 'SyncSessions', 'SyncWeapons', 'SyncAmmo', 'SyncCompetitions'];
+
+        foreach ($directTables as $tableName) {
+            $table = TableRegistry::getTableLocator()->get($tableName);
+            $count = $table->find()
+                ->where([
+                    'user_id' => $userId,
+                    'seq >' => $lastSeq,
                 ])
                 ->count();
 
