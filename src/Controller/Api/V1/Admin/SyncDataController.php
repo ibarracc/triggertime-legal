@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\Api\V1\Admin;
 
 use App\Controller\AppController;
+use App\Service\SyncService;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\ForbiddenException;
@@ -157,25 +158,47 @@ class SyncDataController extends AppController
 
         $allowedFields = self::EDITABLE_FIELDS[$type];
         $patchData = array_intersect_key($data, array_flip($allowedFields));
-        $patchData['modified_at'] = DateTime::now();
 
         $record = $table->patchEntity(
             $record,
             $patchData,
-            ['fields' => array_merge($allowedFields, ['modified_at'])],
+            ['fields' => $allowedFields],
         );
 
-        if ($table->save($record)) {
-            return $this->response->withType('application/json')->withStringBody((string)json_encode([
-                'success' => true,
-                'record' => $record,
-            ]));
-        }
+        $syncService = new SyncService();
+        $recordUserId = $this->resolveRecordUserId($record, $type);
+        $syncService->bumpSeqAndVersion($recordUserId, $record, $table);
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
-            'success' => false,
-            'errors' => $record->getErrors(),
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
+            'success' => true,
+            'record' => $record,
         ]));
+    }
+
+    /**
+     * Resolve the user_id for a record, following parent relationships for child types.
+     *
+     * @param object $record The record entity.
+     * @param string $type The sync data type key.
+     * @return string The user ID.
+     * @throws \RuntimeException When user_id cannot be determined.
+     */
+    private function resolveRecordUserId(object $record, string $type): string
+    {
+        if (property_exists($record, 'user_id') && $record->user_id) {
+            return (string)$record->user_id;
+        }
+        $parentMap = [
+            'competition_reminders' => ['SyncCompetitions', 'competition_uuid'],
+            'ammo_transactions' => ['SyncAmmo', 'ammo_uuid'],
+        ];
+        if (isset($parentMap[$type])) {
+            [$parentTable, $fk] = $parentMap[$type];
+            $parent = $this->fetchTable($parentTable)->get($record->get($fk));
+
+            return (string)$parent->user_id;
+        }
+        throw new \RuntimeException("Cannot determine user_id for type: $type");
     }
 
     /**
@@ -203,20 +226,15 @@ class SyncDataController extends AppController
             throw new NotFoundException('Record not found');
         }
 
-        $now = DateTime::now();
-        $record->set('deleted_at', $now);
-        $record->set('modified_at', $now);
+        $record->set('deleted_at', DateTime::now());
 
-        if ($table->save($record)) {
-            return $this->response->withType('application/json')->withStringBody((string)json_encode([
-                'success' => true,
-                'message' => 'Record soft-deleted',
-            ]));
-        }
+        $syncService = new SyncService();
+        $recordUserId = $this->resolveRecordUserId($record, $type);
+        $syncService->bumpSeqAndVersion($recordUserId, $record, $table);
 
-        return $this->response->withStatus(400)->withType('application/json')->withStringBody((string)json_encode([
-            'success' => false,
-            'message' => 'Failed to delete record',
+        return $this->response->withType('application/json')->withStringBody((string)json_encode([
+            'success' => true,
+            'message' => 'Record soft-deleted',
         ]));
     }
 }

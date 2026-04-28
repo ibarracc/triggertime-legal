@@ -473,6 +473,34 @@ class SyncService
     }
 
     /**
+     * Bump seq/version on an entity and save it.
+     *
+     * @param string $userId The user ID.
+     * @param object $entity The entity to update.
+     * @param \Cake\ORM\Table $table The ORM table to save through.
+     * @return void
+     */
+    public function bumpSeqAndVersion(string $userId, object $entity, object $table): void
+    {
+        $newSeq = $this->bumpSeq($userId);
+        $entity->version = (int)$entity->version + 1;
+        $entity->seq = $newSeq;
+        $entity->modified_at = new DateTime();
+        $table->saveOrFail($entity);
+    }
+
+    /**
+     * Public wrapper for bumpSeq.
+     *
+     * @param string $userId The user ID.
+     * @return int The new sequence number.
+     */
+    public function bumpSeqPublic(string $userId): int
+    {
+        return $this->bumpSeq($userId);
+    }
+
+    /**
      * Bump the user's sync sequence counter and return the new value.
      *
      * @param string $userId The user ID.

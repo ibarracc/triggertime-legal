@@ -103,6 +103,9 @@ return function (RouteBuilder $routes): void {
                     $webAuth->get('/sessions/{uuid}', ['controller' => 'Sessions', 'action' => 'view'])
                         ->setPatterns(['uuid' => '[a-f0-9\-]+'])
                         ->setPass(['uuid']);
+                    $webAuth->get('/sync-data', ['controller' => 'SyncData', 'action' => 'index']);
+                    $webAuth->put('/sync-data/{uuid}', ['controller' => 'SyncData', 'action' => 'edit'])->setPass(['uuid']);
+                    $webAuth->delete('/sync-data/{uuid}', ['controller' => 'SyncData', 'action' => 'delete'])->setPass(['uuid']);
                     $webAuth->post('/subscriptions/checkout', ['controller' => 'Subscriptions', 'action' => 'createCheckout']);
                     $webAuth->post('/subscriptions/portal', ['controller' => 'Subscriptions', 'action' => 'portal']);
                     $webAuth->post('/auth/resend-verification', ['controller' => 'Auth', 'action' => 'resendVerification']);
