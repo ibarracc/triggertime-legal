@@ -1,0 +1,16 @@
+---
+domain: staging.triggertime.es
+deploy_path: /var/www/triggertime-staging
+deploy_user: deploy
+deploy_rsync_delete: true
+db_name: triggertime_staging
+db_app_user: ttapp_staging
+db_backup_user: cakeapp_backup_staging
+db_migration_user: cakeapp_migrate_staging
+alert_email: support@triggertime.es
+nginx_rate_limit_api: "10r/s"
+nginx_rate_limit_api_burst: 20
+nginx_rate_limit_login: "3r/m"
+nginx_rate_limit_login_burst: 5
+certbot_email: support@triggertime.es
+certbot_include_www: false

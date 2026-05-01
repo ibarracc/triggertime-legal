@@ -1,0 +1,6 @@
+# TriggerTime application cron jobs — staging
+# Source: deploy/crons/staging
+# Deployed to /etc/cron.d/triggertime-app via ansible/roles/app-crons
+#
+# Cron jobs are disabled in staging to avoid side-effects
+# (subscription expiry, user purges) running against staging data.

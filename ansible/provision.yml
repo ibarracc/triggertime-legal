@@ -1,0 +1,24 @@
+---
+# Provisions environment-specific resources on an already-hardened server.
+# Use this when adding a new environment (e.g. staging) to an existing host:
+#
+#   ansible-playbook -i ansible/inventory/staging.yml ansible/provision.yml \
+#     --vault-password-file .vault_pass
+#
+# Intentionally excludes server-wide roles (ssh, firewall, unattended-upgrades,
+# cloudflare) that are already configured, and the backups role which writes a
+# single-entry /root/.pgpass that would overwrite other environments' credentials.
+- name: Provision environment-specific resources
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: Load vault secrets
+      ansible.builtin.include_vars:
+        file: "vault/{{ env_name }}.yml"
+  roles:
+    - role: postgres
+      tags: postgres
+    - role: certbot
+      tags: certbot
+    - role: nginx
+      tags: nginx

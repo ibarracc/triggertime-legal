@@ -318,7 +318,7 @@ return [
              * For MariaDB/MySQL use 'utf8mb4'; for PostgreSQL use 'utf8'.
              * Override via DB_ENCODING environment variable.
              */
-            'encoding' => env('DB_ENCODING', 'utf8mb4'),
+            'encoding' => env('DB_ENCODING', 'utf8'),
 
             /*
              * If your MySQL server is configured with `skip-character-set-client-handshake`
@@ -357,7 +357,7 @@ return [
             'driver' => Mysql::class,
             'persistent' => false,
             'timezone' => 'UTC',
-            'encoding' => 'utf8mb4',
+            'encoding' => env('DB_ENCODING', 'utf8'),
             'flags' => [],
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
