@@ -1,10 +1,7 @@
 <template>
   <div class="sessions-view">
     <div class="header-section mb-8 flex justify-between items-end">
-      <div>
-        <h1 class="mb-2">{{ $t('sessions.title') }}</h1>
-        <p class="text-secondary m-0">{{ $t('sessions.subtitle') }}</p>
-      </div>
+      <h1 class="m-0">{{ $t('sessions.title') }}</h1>
       <div v-if="!isLoading && sessions.length > 0" class="session-count text-right">
         <div class="text-2xl font-heading font-bold">{{ totalCount }}</div>
         <div class="text-xs text-secondary uppercase tracking-wide">{{ $t('nav.sessions') }}</div>
@@ -150,7 +147,7 @@ onMounted(fetchSessions)
 .spinner-lg {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
+  border: 4px solid oklch(0.93 0.005 145 / 0.1);
   border-radius: 50%;
   border-top-color: var(--primary);
   animation: spin 1s ease-in-out infinite;

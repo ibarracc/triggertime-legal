@@ -162,7 +162,7 @@ const handleSavePreferences = () => {
 .always-on-badge {
   font-size: 0.75rem;
   color: var(--primary);
-  background: rgba(193, 255, 114, 0.1);
+  background: var(--primary-a10);
   padding: 4px 10px;
   border-radius: 20px;
   white-space: nowrap;
@@ -215,7 +215,7 @@ const handleSavePreferences = () => {
 
 .toggle input:checked + .toggle-slider::before {
   transform: translateX(20px);
-  background: #0A0A0F;
+  background: var(--bg-base);
 }
 
 .cookie-actions {
@@ -238,7 +238,7 @@ const handleSavePreferences = () => {
 
 .cookie-btn-primary {
   background: var(--primary);
-  color: #0A0A0F;
+  color: var(--bg-base);
 }
 
 .cookie-btn-primary:hover {

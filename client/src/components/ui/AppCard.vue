@@ -27,23 +27,18 @@ defineProps({
 
 <style scoped>
 .glass-card {
-  background: rgba(30, 30, 35, 0.6);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transform: translateZ(0); /* Fixes WebKit disappearing element bug */
-  will-change: transform;
+  border-radius: 12px;
   box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
 }
 
 .card-hover:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-6px) translateZ(0);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-color: oklch(0.40 0.01 145 / 0.6);
+  box-shadow: var(--shadow-elevated);
 }
 
 .card-header {
@@ -66,8 +61,8 @@ defineProps({
 .card-footer {
   padding: 20px 32px;
   border-top: 1px solid var(--border-subtle);
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  background: oklch(0 0 0 / 0.2);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 </style>

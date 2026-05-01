@@ -1,10 +1,7 @@
 <template>
   <div class="devices-view">
     <div class="header-section devices-header mb-8 flex justify-between items-end">
-      <div>
-        <h1 class="mb-2">{{ $t('devices.title') }}</h1>
-        <p class="text-secondary m-0">{{ $t('devices.subtitle') }}</p>
-      </div>
+      <h1 class="m-0">{{ $t('devices.title') }}</h1>
       <div class="device-count text-right">
         <div class="text-2xl font-heading font-bold">{{ devices.length }}</div>
         <div class="text-xs text-secondary uppercase tracking-wide">{{ $t('nav.devices') }}</div>
@@ -25,11 +22,11 @@
                 </template>
                 <template v-else>
                   <h3 class="font-heading text-sm m-0 text-primary cursor-pointer hover:underline whitespace-nowrap truncate flex-1 min-w-0 block w-full" @click="openEditModal(device)">
-                    Add custom name
+                    {{ $t('devices.add_custom_name') }}
                   </h3>
                 </template>
               </div>
-              <div class="text-sm text-secondary truncate">{{ device.hardware_model || 'Unknown Model' }}</div>
+              <div class="text-sm text-secondary truncate">{{ device.hardware_model || $t('common.no_data') }}</div>
             </div>
           </div>
           <AppBadge variant="success" class="shrink-0">{{ $t('dashboard.active') }}</AppBadge>

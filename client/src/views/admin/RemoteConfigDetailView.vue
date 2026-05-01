@@ -260,7 +260,7 @@
         </div>
         
         <!-- Diff / Compare Mode -->
-        <div v-else class="glass-card h-full border-primary/50 shadow-glow overflow-hidden">
+        <div v-else class="glass-card h-full overflow-hidden">
             <div class="flex justify-between items-center mb-6 border-b border-[var(--border-subtle)] pb-4">
                 <div>
                     <h2 class="text-lg font-semibold text-primary">Review Changes</h2>

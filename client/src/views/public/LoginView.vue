@@ -197,7 +197,7 @@ const handleAppleLogin = async () => {
   font-size: 0.875rem;
   text-align: center;
   padding: 10px;
-  background: rgba(255, 77, 77, 0.1);
+  background: oklch(0.55 0.22 27 / 0.1);
   border-radius: 8px;
 }
 
@@ -276,7 +276,7 @@ const handleAppleLogin = async () => {
   font-size: 0.875rem;
   text-align: center;
   padding: 10px;
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--primary-a10);
   border-radius: 8px;
 }
 </style>

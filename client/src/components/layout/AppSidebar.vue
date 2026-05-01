@@ -3,9 +3,8 @@
     <div class="sidebar-backdrop" @click="$emit('close')"></div>
     <aside class="app-sidebar">
     <div class="sidebar-header">
-      <router-link to="/dashboard" class="logo flex items-center gap-2">
-        <img src="/triggertime.png" alt="TriggerTime Logo" class="logo-img">
-        <span class="logo-text">Trigger<span class="highlight">Time</span></span>
+      <router-link to="/dashboard" class="logo flex items-center">
+        <img src="/logo-dark.svg" alt="TriggerTime" class="logo-svg">
       </router-link>
     </div>
 
@@ -19,8 +18,8 @@
       <router-link to="/dashboard/devices" class="nav-item" active-class="active">
         {{ $t('nav.devices') }}
       </router-link>
-      <router-link to="/dashboard/sessions" class="nav-item" active-class="active">
-        {{ $t('nav.sessions') }}
+      <router-link to="/dashboard/my-data" class="nav-item" active-class="active">
+        {{ $t('nav.my_data') }}
       </router-link>
       <router-link to="/dashboard/profile" class="nav-item" active-class="active">
         {{ $t('nav.profile') }}
@@ -125,23 +124,9 @@ const handleLogout = () => {
   padding: 32px 24px;
 }
 
-.logo-text {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.logo-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.highlight {
-  color: var(--primary);
+.logo-svg {
+  height: 40px;
+  width: auto;
 }
 
 .sidebar-nav {
@@ -154,21 +139,21 @@ const handleLogout = () => {
 
 .nav-item {
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: 8px;
   color: var(--text-secondary);
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   display: flex;
   align-items: center;
 }
 
 .nav-item:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-elevated);
 }
 
 .nav-item.active {
-  background: rgba(193, 255, 114, 0.1);
+  background: var(--primary-a10);
   color: var(--primary);
   font-weight: 600;
 }
@@ -213,19 +198,19 @@ const handleLogout = () => {
 }
 
 .text-amber-500 {
-  color: #F59E0B;
+  color: var(--warning);
 }
 
 .end-impersonation-btn {
   font-size: 0.75rem;
   padding: 8px;
-  background: rgba(245, 158, 11, 0.1) !important;
-  border-color: rgba(245, 158, 11, 0.2) !important;
-  color: #F59E0B !important;
+  background: oklch(0.80 0.15 85 / 0.1);
+  border-color: oklch(0.80 0.15 85 / 0.2);
+  color: var(--warning);
 }
 
 .end-impersonation-btn:hover {
-  background: rgba(245, 158, 11, 0.2) !important;
+  background: oklch(0.80 0.15 85 / 0.2);
 }
 
 .sidebar-copyright {
@@ -251,7 +236,7 @@ const handleLogout = () => {
   .sidebar-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: oklch(0 0 0 / 0.5);
     opacity: 0;
     transition: opacity 0.3s ease;
   }

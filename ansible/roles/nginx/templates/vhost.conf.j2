@@ -1,15 +1,11 @@
 # Managed by Ansible — do not edit manually
 # Vhost for {{ domain }}
 
-upstream php-fpm {
-    server unix:/run/php/php{{ php_version }}-fpm.sock;
-}
-
 # HTTP → HTTPS redirect
 server {
     listen 80;
     listen [::]:80;
-    server_name {{ domain }} www.{{ domain }};
+    server_name {{ domain }}{% if certbot_include_www | default(true) %} www.{{ domain }}{% endif %};
     return 301 https://{{ domain }}$request_uri;
 }
 
@@ -17,7 +13,7 @@ server {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    server_name {{ domain }} www.{{ domain }};
+    server_name {{ domain }}{% if certbot_include_www | default(true) %} www.{{ domain }}{% endif %};
 
     root {{ deploy_path }}/webroot;
     index index.php;
@@ -37,7 +33,7 @@ server {
 
         try_files $uri $uri/ /index.php?$args;
         include fastcgi_params;
-        fastcgi_pass php-fpm;
+        fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $document_root/index.php;
     }
 
@@ -47,14 +43,14 @@ server {
 
         try_files $uri $uri/ /index.php?$args;
         include fastcgi_params;
-        fastcgi_pass php-fpm;
+        fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $document_root/index.php;
     }
 
     # PHP handler
     location ~ \.php$ {
         include fastcgi_params;
-        fastcgi_pass php-fpm;
+        fastcgi_pass unix:/run/php/php{{ php_version }}-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_intercept_errors on;
     }

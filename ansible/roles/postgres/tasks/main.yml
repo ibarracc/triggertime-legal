@@ -1,7 +1,9 @@
 ---
-- name: Install psycopg2 for Ansible PostgreSQL modules
+- name: Install psycopg2 and acl for Ansible PostgreSQL modules
   ansible.builtin.apt:
-    name: python3-psycopg2
+    name:
+      - python3-psycopg2
+      - acl
     state: present
 
 - name: Gather package facts for PostgreSQL version detection

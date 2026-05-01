@@ -9,7 +9,7 @@
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <span class="font-heading font-bold text-xl" style="color: var(--text-primary); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;">Trigger<span style="color: var(--primary);">Time</span></span>
+        <img src="/logo-dark.svg" alt="TriggerTime" style="height: 40px; width: auto;">
       </div>
     </div>
 

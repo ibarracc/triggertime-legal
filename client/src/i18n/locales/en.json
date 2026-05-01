@@ -5,6 +5,7 @@
         "logout": "Logout",
         "save": "Save Changes",
         "cancel": "Cancel",
+        "close": "Close",
         "delete": "Delete",
         "edit": "Edit",
         "loading": "Loading...",
@@ -21,7 +22,9 @@
         "confirm_delete": "Are you sure you want to delete this?",
         "no_data": "No data found.",
         "club_admin": "Shooting Club Admin",
-        "session": "Session"
+        "session": "Session",
+        "yes": "Yes",
+        "no": "No"
     },
     "nav": {
         "features": "Features",
@@ -36,7 +39,8 @@
         "admin_panel": "Admin Panel",
         "home": "Home",
         "users": "Users",
-        "sessions": "Sessions"
+        "sessions": "Sessions",
+        "my_data": "My Data"
     },
     "landing": {
         "hero_badge": "Sport Shooting Analytics",
@@ -158,7 +162,8 @@
         "no_devices": "No devices linked yet.",
         "manage_devices": "Manage Devices",
         "dashboard_subtitle": "Manage your account, devices and pro features.",
-        "shooter_fallback": "Shooter"
+        "shooter_fallback": "Shooter",
+        "sync_hint": "Sync from your TriggerTime app to see sessions here."
     },
     "profile": {
         "title": "Profile Settings",
@@ -206,7 +211,8 @@
         "unlink": "Unlink Device",
         "unlink_confirm": "Are you sure you want to unlink this device? You will lose access to Pro features on it.",
         "edit_device": "Edit Device",
-        "custom_name_label": "Custom Name"
+        "custom_name_label": "Custom Name",
+        "add_custom_name": "Add custom name"
     },
     "subscription": {
         "title": "Subscription Plans",
@@ -454,7 +460,7 @@
     "sessions": {
         "title": "Sessions",
         "subtitle": "View your synced shooting sessions.",
-        "empty": "No sessions synced yet. Sync from your TriggerTime app to see your sessions here.",
+        "empty": "No sessions synced yet. Sync from your <strong>TriggerTime</strong> app to see your sessions here.",
         "date": "Date",
         "discipline": "Discipline",
         "type": "Type",
@@ -470,10 +476,35 @@
         "detail_title": "Session Detail",
         "back_to_list": "Back to Sessions",
         "auto_closed": "Auto-closed",
+        "view_all": "View all",
         "filter_discipline": "All Disciplines",
         "filter_type": "All Types",
         "sort_newest": "Newest First",
         "sort_oldest": "Oldest First",
         "showing_count": "{count} sessions"
+    },
+    "my_data": {
+        "title": "My Data",
+        "subtitle": "Browse all your synced data from TriggerTime.",
+        "empty": "No synced data found. Sync from your TriggerTime app to see your data here.",
+        "tab_weapons": "Weapons",
+        "tab_ammo": "Ammo",
+        "tab_sessions": "Sessions",
+        "tab_competitions": "Competitions",
+        "tab_reminders": "Reminders",
+        "tab_transactions": "Transactions",
+        "col_name": "Name",
+        "col_caliber": "Caliber",
+        "col_favorite": "Favorite",
+        "col_archived": "Archived",
+        "col_modified": "Last Modified",
+        "col_brand": "Brand",
+        "col_grain": "Grain",
+        "col_cost_per_round": "Cost/Rnd",
+        "col_stock": "Stock",
+        "col_status": "Status",
+        "col_competition": "Competition",
+        "col_ammo": "Ammo",
+        "col_quantity": "Qty"
     }
 }

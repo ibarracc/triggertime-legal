@@ -152,7 +152,7 @@ onMounted(fetchSession)
 .spinner-lg {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
+  border: 4px solid oklch(0.93 0.005 145 / 0.1);
   border-radius: 50%;
   border-top-color: var(--primary);
   animation: spin 1s ease-in-out infinite;

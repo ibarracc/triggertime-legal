@@ -5,6 +5,7 @@
         "logout": "Saioa itxi",
         "save": "Gorde aldaketak",
         "cancel": "Utzi",
+        "close": "Itxi",
         "delete": "Ezabatu",
         "edit": "Editatu",
         "loading": "Kargatzen...",
@@ -21,7 +22,9 @@
         "confirm_delete": "Ziur hau ezabatu nahi duzula?",
         "no_data": "Ez da daturik aurkitu.",
         "club_admin": "Tiro Klubeko Administratzailea",
-        "session": "Saioa"
+        "session": "Saioa",
+        "yes": "Bai",
+        "no": "Ez"
     },
     "nav": {
         "features": "Ezaugarriak",
@@ -36,7 +39,8 @@
         "admin_panel": "Admin Panela",
         "home": "Hasiera",
         "users": "Erabiltzaileak",
-        "sessions": "Saioak"
+        "sessions": "Saioak",
+        "my_data": "Nire Datuak"
     },
     "landing": {
         "hero_badge": "Tiro Kirolaren Analisia",
@@ -158,7 +162,8 @@
         "no_devices": "Oraindik ez dago gailurik estekatuta.",
         "manage_devices": "Kudeatu Gailuak",
         "dashboard_subtitle": "Kudeatu zure kontua, gailuak eta pro funtzioak.",
-        "shooter_fallback": "Tiratzailea"
+        "shooter_fallback": "Tiratzailea",
+        "sync_hint": "Sinkronizatu zure TriggerTime aplikaziotik saioak hemen ikusteko."
     },
     "profile": {
         "title": "Profilaren Ezarpenak",
@@ -206,7 +211,8 @@
         "unlink": "Desestekatu Gailua",
         "unlink_confirm": "Ziur gailu hau desestekatu nahi duzula? Pro funtzioetarako sarbidea galduko duzu bertan.",
         "edit_device": "Gailua Editatu",
-        "custom_name_label": "Izen Pertsonalizatua"
+        "custom_name_label": "Izen Pertsonalizatua",
+        "add_custom_name": "Izen pertsonalizatua gehitu"
     },
     "subscription": {
         "title": "Harpidetza Planak",
@@ -451,7 +457,7 @@
     "sessions": {
         "title": "Saioak",
         "subtitle": "Ikusi zure sinkronizatutako tiro saioak.",
-        "empty": "Oraindik ez dago saiorik sinkronizatuta. Sinkronizatu zure TriggerTime aplikaziotik hemen ikusteko.",
+        "empty": "Oraindik ez dago saiorik sinkronizatuta. Sinkronizatu zure <strong>TriggerTime</strong> aplikaziotik hemen ikusteko.",
         "date": "Data",
         "discipline": "Diziplina",
         "type": "Mota",
@@ -467,10 +473,35 @@
         "detail_title": "Saioaren Xehetasuna",
         "back_to_list": "Saioetara Itzuli",
         "auto_closed": "Automatikoki itxita",
+        "view_all": "Guztiak ikusi",
         "filter_discipline": "Diziplina Guztiak",
         "filter_type": "Mota Guztiak",
         "sort_newest": "Berrienak lehenik",
         "sort_oldest": "Zaharrenak lehenik",
         "showing_count": "{count} saio"
+    },
+    "my_data": {
+        "title": "Nire Datuak",
+        "subtitle": "Zure TriggerTime-tik sinkronizatutako datu guztiak ikusi.",
+        "empty": "Ez da sinkronizatutako daturik aurkitu. Sinkronizatu zure TriggerTime aplikaziotik hemen ikusteko.",
+        "tab_weapons": "Armak",
+        "tab_ammo": "Munizioa",
+        "tab_sessions": "Saioak",
+        "tab_competitions": "Lehiaketak",
+        "tab_reminders": "Oroigarriak",
+        "tab_transactions": "Transakzioak",
+        "col_name": "Izena",
+        "col_caliber": "Kalibrea",
+        "col_favorite": "Gogokoa",
+        "col_archived": "Artxibatua",
+        "col_modified": "Azken Aldaketa",
+        "col_brand": "Marka",
+        "col_grain": "Grain",
+        "col_cost_per_round": "Kostua/Rnd",
+        "col_stock": "Stock",
+        "col_status": "Egoera",
+        "col_competition": "Lehiaketa",
+        "col_ammo": "Munizioa",
+        "col_quantity": "Kop."
     }
 }

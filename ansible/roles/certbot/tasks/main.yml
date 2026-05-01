@@ -6,6 +6,7 @@
       - python3-certbot-dns-cloudflare
     state: present
     update_cache: true
+    cache_valid_time: 3600
 
 - name: Create letsencrypt directory
   ansible.builtin.file:
@@ -32,7 +33,8 @@
   ansible.builtin.command: >
     certbot certonly --dns-cloudflare
     --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
-    -d {{ domain }} -d www.{{ domain }}
+    -d {{ domain }}
+    {% if certbot_include_www | default(true) %}-d www.{{ domain }}{% endif %}
     --email {{ certbot_email }}
     --agree-tos --non-interactive
   when: not cert_file.stat.exists

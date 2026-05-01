@@ -108,13 +108,13 @@ const shotLabel = (shot) => {
 }
 
 .shot-x {
-  background: rgba(193, 255, 114, 0.15);
-  border-color: rgba(193, 255, 114, 0.4);
+  background: var(--primary-a15);
+  border-color: var(--primary-a40);
   color: var(--primary);
 }
 
 .string-item {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .flex { display: flex; }

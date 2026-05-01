@@ -94,3 +94,29 @@ GitHub Actions (`.github/workflows/ci.yml`):
 - **Test matrix:** PHP 8.2 (lowest deps) + PHP 8.5 (highest deps) with SQLite
 - **Code quality:** PHPCS + PHPStan (level 8)
 - Runs on push to `5.x`/`5.next`/`6.x` and all pull requests
+
+## Design Context
+
+### Users
+Broad audience spanning competitive ISSF/national-level shooters, recreational range-goers, and club administrators managing teams and licenses. Users typically review their data after range sessions — often in the evening at home or between rounds at the range. The web dashboard is secondary to the mobile app; it's where users go for deeper analysis, data management, subscription handling, and admin tasks.
+
+### Brand Personality
+**Precise, focused, serious.** TriggerTime is an instrument, not a toy. Think of the confidence a shooter feels picking up a well-maintained firearm — reliable, purposeful, nothing wasted. The brand mark is a crosshair target in electric green on black, reinforcing the "locked on" feeling.
+
+### Emotional Goal
+**Excitement and progress.** When a shooter opens the dashboard, the feeling should be: "I can see how much I've improved." Data should feel motivating, not clinical. Celebrate milestones and trends without being noisy or gamified.
+
+### Aesthetic Direction
+- **Theme**: Dark. Shooters review data in low-light contexts (evenings, range rest areas). Dark feels native to the sport.
+- **Palette**: Olive green primary (#7CB342 brand green) on near-black surfaces tinted toward the brand hue. Warm accent (#C1693C) for secondary emphasis. The green should feel like a sight reticle — natural and precise, not neon.
+- **Typography**: Space Grotesk (headings, matching logo) + Figtree (body). No Inter, Outfit, or other AI-default fonts.
+- **Surfaces**: OKLCH-based neutrals with subtle green tint (hue 145). No glassmorphism, no glow shadows, no `backdrop-filter: blur`.
+- **Tone**: Technical confidence. Closer to a precision instrument's interface than a social fitness app. Dense where it matters (session data, scores), spacious where it guides (landing page, onboarding).
+- **Anti-references**: Avoid looking like a generic SaaS dashboard, a gaming UI, or a military/tactical cliche. No camo, no skulls, no aggressive red/black schemes.
+
+### Design Principles
+1. **Precision over decoration** — Every element should earn its place. If it doesn't help the shooter understand their data or take action, remove it.
+2. **Progress is the hero** — Design for the moment a shooter sees improvement. Charts, scores, and trends should be the most prominent elements, not chrome.
+3. **Instrument-grade clarity** — Labels, numbers, and states must be instantly readable. Ambiguity is failure in a precision sport.
+4. **Respect the breadth** — The interface serves first-time recreational shooters and seasoned ISSF competitors alike. Progressive disclosure: simple surface, depth on demand.
+5. **International by default** — 8 languages, metric and imperial, ISSF and local formats. Never assume a single locale.

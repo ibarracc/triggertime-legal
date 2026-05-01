@@ -20,7 +20,8 @@ export default defineConfig(({ command }) => ({
     port: 5173,
     strictPort: true,
     allowedHosts: [
-      'triggertime.ddev.site'
+      'triggertime.ddev.site',
+      'a76e-79-116-10-72.ngrok-free.app'
     ],
     hmr: {
       host: 'triggertime.ddev.site',

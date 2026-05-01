@@ -1,34 +1,36 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay">
-    <div class="modal-card" :class="maxWidthClass">
-      
-      <!-- Header -->
-      <div v-if="$slots.header || title" class="modal-header">
-        <h3 v-if="title" class="modal-title">{{ title }}</h3>
-        <slot name="header"></slot>
-        <button v-if="showClose" @click="close" class="modal-close">
-          <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
+  <Teleport to="body">
+    <div v-if="isOpen" class="modal-overlay" @click.self="close" @keydown.escape="close" role="dialog" aria-modal="true" :aria-labelledby="title ? modalTitleId : undefined">
+      <div class="modal-card" :class="maxWidthClass" ref="modalCard">
 
-      <!-- Body -->
-      <div class="modal-body">
-        <slot></slot>
-      </div>
+        <!-- Header -->
+        <div v-if="$slots.header || title" class="modal-header">
+          <h3 v-if="title" :id="modalTitleId" class="modal-title">{{ title }}</h3>
+          <slot name="header"></slot>
+          <button v-if="showClose" @click="close" class="modal-close" :aria-label="$t('common.close')">
+            <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
 
-      <!-- Footer -->
-      <div v-if="$slots.footer" class="modal-footer">
-        <slot name="footer"></slot>
+        <!-- Body -->
+        <div class="modal-body">
+          <slot></slot>
+        </div>
+
+        <!-- Footer -->
+        <div v-if="$slots.footer" class="modal-footer">
+          <slot name="footer"></slot>
+        </div>
+
       </div>
-      
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch, nextTick, ref, useId } from 'vue'
 
 const props = defineProps({
   isOpen: {
@@ -41,7 +43,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'md' // sm, md, lg, xl
+    default: 'md'
   },
   showClose: {
     type: Boolean,
@@ -50,10 +52,25 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+const modalCard = ref(null)
+const modalTitleId = `modal-title-${useId()}`
 
 const close = () => {
   emit('close')
 }
+
+let previouslyFocused = null
+
+watch(() => props.isOpen, async (open) => {
+  if (open) {
+    previouslyFocused = document.activeElement
+    await nextTick()
+    modalCard.value?.focus()
+  } else if (previouslyFocused) {
+    previouslyFocused.focus()
+    previouslyFocused = null
+  }
+})
 
 const maxWidthClass = computed(() => {
   switch (props.size) {
@@ -72,8 +89,7 @@ const maxWidthClass = computed(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background-color: oklch(0 0 0 / 0.6);
   z-index: 50;
   display: flex;
   align-items: center;
@@ -83,14 +99,15 @@ const maxWidthClass = computed(() => {
 
 .modal-card {
   background-color: var(--bg-card);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px oklch(0 0 0 / 0.5);
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 12px;
   padding: 1.5rem;
   width: 100%;
   border: 1px solid var(--border-subtle);
+  outline: none;
 }
 
 .max-w-sm { max-width: 24rem; }
@@ -121,11 +138,17 @@ const maxWidthClass = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s;
+  border-radius: 4px;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .modal-close:hover {
   color: var(--text-primary);
+}
+
+.modal-close:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .icon-sm {

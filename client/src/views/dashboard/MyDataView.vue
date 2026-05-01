@@ -1,10 +1,7 @@
 <template>
   <div class="my-data-view">
     <div class="flex justify-between items-center mb-6">
-      <div>
-        <h1 class="text-2xl font-bold font-heading">{{ $t('my_data.title') }}</h1>
-        <p class="text-secondary text-sm mt-1">{{ $t('my_data.subtitle') }}</p>
-      </div>
+      <h1 class="text-2xl font-bold font-heading m-0">{{ $t('my_data.title') }}</h1>
     </div>
 
     <!-- Error State -->

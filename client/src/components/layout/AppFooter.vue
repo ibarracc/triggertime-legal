@@ -7,8 +7,8 @@ const { openBanner } = useCookieConsent()
   <footer class="app-footer text-center">
     <div class="container">
       <div class="footer-content">
-        <div class="logo mb-4">
-          <span class="logo-text">Trigger<span class="highlight">Time</span></span>
+        <div class="logo-wrapper mb-4">
+          <img src="/logo-dark.svg" alt="TriggerTime" class="footer-logo">
         </div>
         <p class="text-secondary mb-8">{{ $t('footer.tagline') }}</p>
         
@@ -35,15 +35,14 @@ const { openBanner } = useCookieConsent()
   margin-top: auto;
 }
 
-.logo-text {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
-.highlight {
-  color: var(--primary);
+.footer-logo {
+  height: 50px;
+  width: auto;
 }
 
 .nav-link {

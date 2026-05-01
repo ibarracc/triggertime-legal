@@ -5,6 +5,7 @@
         "logout": "Tancar Sessió",
         "save": "Guardar Canvis",
         "cancel": "Cancel·lar",
+        "close": "Tancar",
         "delete": "Eliminar",
         "edit": "Editar",
         "loading": "Carregant...",
@@ -21,7 +22,9 @@
         "confirm_delete": "Estàs segur que vols eliminar-ho?",
         "no_data": "No s'han trobat dades.",
         "club_admin": "Admin del Club",
-        "session": "Sessió"
+        "session": "Sessió",
+        "yes": "Sí",
+        "no": "No"
     },
     "nav": {
         "features": "Característiques",
@@ -36,7 +39,8 @@
         "admin_panel": "Panell Admin",
         "home": "Inici",
         "users": "Usuaris",
-        "sessions": "Sessions"
+        "sessions": "Sessions",
+        "my_data": "Les Meves Dades"
     },
     "landing": {
         "hero_badge": "Anàlisi de Tir Esportiu",
@@ -158,7 +162,8 @@
         "no_devices": "Encara no hi ha dispositius vinculats.",
         "manage_devices": "Gestionar Dispositius",
         "dashboard_subtitle": "Gestiona el teu compte, dispositius i funcions pro.",
-        "shooter_fallback": "Tirador"
+        "shooter_fallback": "Tirador",
+        "sync_hint": "Sincronitza des de la teva app TriggerTime per veure les sessions aquí."
     },
     "profile": {
         "title": "Ajustaments de Perfil",
@@ -206,7 +211,8 @@
         "unlink": "Desvincular Dispositiu",
         "unlink_confirm": "Estàs segur que vols desvincular aquest dispositiu? Perdràs l'accés a les funcions Pro en ell.",
         "edit_device": "Editar Dispositiu",
-        "custom_name_label": "Nom Personalitzat"
+        "custom_name_label": "Nom Personalitzat",
+        "add_custom_name": "Afegir nom personalitzat"
     },
     "subscription": {
         "title": "Plans de Subscripció",
@@ -451,7 +457,7 @@
     "sessions": {
         "title": "Sessions",
         "subtitle": "Consulta les teves sessions de tir sincronitzades.",
-        "empty": "Encara no hi ha sessions sincronitzades. Sincronitza des de la teva app TriggerTime per veure-les aquí.",
+        "empty": "Encara no hi ha sessions sincronitzades. Sincronitza des de la teva app <strong>TriggerTime</strong> per veure-les aquí.",
         "date": "Data",
         "discipline": "Disciplina",
         "type": "Tipus",
@@ -467,10 +473,35 @@
         "detail_title": "Detall de la Sessió",
         "back_to_list": "Tornar a Sessions",
         "auto_closed": "Tancada automàticament",
+        "view_all": "Veure totes",
         "filter_discipline": "Totes les Disciplines",
         "filter_type": "Tots els Tipus",
         "sort_newest": "Més recents",
         "sort_oldest": "Més antigues",
         "showing_count": "{count} sessions"
+    },
+    "my_data": {
+        "title": "Les Meves Dades",
+        "subtitle": "Consulta totes les teves dades sincronitzades de TriggerTime.",
+        "empty": "No s'han trobat dades sincronitzades. Sincronitza des de la teva app TriggerTime per veure-les aquí.",
+        "tab_weapons": "Armes",
+        "tab_ammo": "Munició",
+        "tab_sessions": "Sessions",
+        "tab_competitions": "Competicions",
+        "tab_reminders": "Recordatoris",
+        "tab_transactions": "Transaccions",
+        "col_name": "Nom",
+        "col_caliber": "Calibre",
+        "col_favorite": "Favorit",
+        "col_archived": "Arxivat",
+        "col_modified": "Última Modificació",
+        "col_brand": "Marca",
+        "col_grain": "Gra",
+        "col_cost_per_round": "Cost/Rnd",
+        "col_stock": "Stock",
+        "col_status": "Estat",
+        "col_competition": "Competició",
+        "col_ammo": "Munició",
+        "col_quantity": "Qttat"
     }
 }

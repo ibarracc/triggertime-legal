@@ -5,6 +5,7 @@
         "logout": "Sair",
         "save": "Guardar Alterações",
         "cancel": "Cancelar",
+        "close": "Fechar",
         "delete": "Eliminar",
         "edit": "Editar",
         "loading": "A carregar...",
@@ -21,7 +22,9 @@
         "confirm_delete": "Tem a certeza que deseja eliminar isto?",
         "no_data": "Nenhum dado encontrado.",
         "club_admin": "Admin de Clube de Tiro",
-        "session": "Sessão"
+        "session": "Sessão",
+        "yes": "Sim",
+        "no": "Não"
     },
     "nav": {
         "features": "Funcionalidades",
@@ -36,7 +39,8 @@
         "admin_panel": "Painel Admin",
         "home": "Início",
         "users": "Utilizadores",
-        "sessions": "Sessões"
+        "sessions": "Sessões",
+        "my_data": "Meus Dados"
     },
     "landing": {
         "hero_badge": "Análise de Tiro Desportivo",
@@ -158,7 +162,8 @@
         "no_devices": "Nenhum dispositivo vinculado ainda.",
         "manage_devices": "Gerir Dispositivos",
         "dashboard_subtitle": "Gira a sua conta, dispositivos e funcionalidades pro.",
-        "shooter_fallback": "Atirador"
+        "shooter_fallback": "Atirador",
+        "sync_hint": "Sincronize a partir da sua app TriggerTime para ver as sessões aqui."
     },
     "profile": {
         "title": "Configurações de Perfil",
@@ -206,7 +211,8 @@
         "unlink": "Desvincular Dispositivo",
         "unlink_confirm": "Tem a certeza que deseja desvincular este dispositivo? Perderá o acesso às funcionalidades Pro no mesmo.",
         "edit_device": "Editar Dispositivo",
-        "custom_name_label": "Nome Personalizado"
+        "custom_name_label": "Nome Personalizado",
+        "add_custom_name": "Adicionar nome personalizado"
     },
     "subscription": {
         "title": "Planos de Subscrição",
@@ -451,7 +457,7 @@
     "sessions": {
         "title": "Sessões",
         "subtitle": "Consulte as suas sessões de tiro sincronizadas.",
-        "empty": "Ainda não há sessões sincronizadas. Sincronize a partir da sua app TriggerTime para as ver aqui.",
+        "empty": "Ainda não há sessões sincronizadas. Sincronize a partir da sua app <strong>TriggerTime</strong> para as ver aqui.",
         "date": "Data",
         "discipline": "Disciplina",
         "type": "Tipo",
@@ -467,10 +473,35 @@
         "detail_title": "Detalhe da Sessão",
         "back_to_list": "Voltar às Sessões",
         "auto_closed": "Fechada automaticamente",
+        "view_all": "Ver todas",
         "filter_discipline": "Todas as Disciplinas",
         "filter_type": "Todos os Tipos",
         "sort_newest": "Mais recentes",
         "sort_oldest": "Mais antigas",
         "showing_count": "{count} sessões"
+    },
+    "my_data": {
+        "title": "Meus Dados",
+        "subtitle": "Consulte todos os seus dados sincronizados do TriggerTime.",
+        "empty": "Nenhum dado sincronizado encontrado. Sincronize do seu app TriggerTime para ver seus dados aqui.",
+        "tab_weapons": "Armas",
+        "tab_ammo": "Munição",
+        "tab_sessions": "Sessões",
+        "tab_competitions": "Competições",
+        "tab_reminders": "Lembretes",
+        "tab_transactions": "Transações",
+        "col_name": "Nome",
+        "col_caliber": "Calibre",
+        "col_favorite": "Favorito",
+        "col_archived": "Arquivado",
+        "col_modified": "Última Modificação",
+        "col_brand": "Marca",
+        "col_grain": "Grão",
+        "col_cost_per_round": "Custo/Rnd",
+        "col_stock": "Estoque",
+        "col_status": "Estado",
+        "col_competition": "Competição",
+        "col_ammo": "Munição",
+        "col_quantity": "Qtd"
     }
 }

@@ -104,10 +104,10 @@ const routes = [
         meta: { requiresAuth: true, requiresVerified: true, title: 'Subscription' }
     },
     {
-        path: '/dashboard/sessions',
-        name: 'sessions',
-        component: () => import('../views/dashboard/SessionsView.vue'),
-        meta: { requiresAuth: true, requiresVerified: true, title: 'Sessions' }
+        path: '/dashboard/my-data',
+        name: 'my-data',
+        component: () => import('../views/dashboard/MyDataView.vue'),
+        meta: { requiresAuth: true, requiresVerified: true, title: 'My Data' }
     },
     {
         path: '/dashboard/sessions/:uuid',

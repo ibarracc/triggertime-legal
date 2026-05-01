@@ -1,9 +1,8 @@
 <template>
   <header class="app-header" :class="{ 'scrolled': isScrolled }">
     <div class="container flex justify-between items-center h-full relative">
-      <router-link to="/" class="logo flex items-center gap-2">
-        <img src="/triggertime.png" alt="TriggerTime Logo" class="logo-img">
-        <span class="logo-text">Trigger<span class="highlight">Time</span></span>
+      <router-link to="/" class="logo flex items-center">
+        <img src="/logo-dark.svg" alt="TriggerTime" class="logo-svg">
       </router-link>
       
       <!-- Mobile Menu Toggle -->
@@ -117,17 +116,16 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   right: 0;
-  height: 80px;
+  height: 64px;
   z-index: 100;
-  transition: all 0.3s ease;
+  transition: height 0.3s ease, background 0.3s ease;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .app-header.scrolled {
   background: var(--bg-surface);
-  backdrop-filter: blur(12px);
-  height: 70px;
+  height: 60px;
 }
 
 .h-full { height: 100%; }
@@ -138,22 +136,21 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   padding: 6px 12px;
-  border-radius: 9999px;
+  border-radius: 8px;
   color: var(--text-secondary);
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .lang-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
-  border-color: var(--primary);
+  border-color: oklch(0.40 0.01 145 / 0.6);
 }
 
 .lang-code {
@@ -180,7 +177,7 @@ onUnmounted(() => {
   border-radius: 12px;
   padding: 8px;
   width: 160px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px oklch(0 0 0 / 0.5);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -200,12 +197,12 @@ onUnmounted(() => {
 }
 
 .lang-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-elevated);
   color: var(--text-primary);
 }
 
 .lang-item.active {
-  background: rgba(193, 255, 114, 0.1);
+  background: var(--primary-a10);
   color: var(--primary);
 }
 
@@ -218,23 +215,9 @@ onUnmounted(() => {
   transform: translateY(-10px);
 }
 
-.logo-text {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.logo-img {
-  width: 50px;
+.logo-svg {
   height: 50px;
-  border-radius: 12px;
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.highlight {
-  color: var(--primary);
+  width: auto;
 }
 
 .desktop-nav {
@@ -260,12 +243,9 @@ onUnmounted(() => {
   align-items: center;
 }
 
-.rounded-btn {
-  border-radius: 20px !important;
-}
-
+.rounded-btn,
 .rounded-full {
-  border-radius: 9999px !important;
+  border-radius: 8px;
 }
 
 .mobile-menu-toggle {
@@ -284,8 +264,7 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .logo-img {
-    width: 40px;
+  .logo-svg {
     height: 40px;
   }
 
@@ -304,7 +283,7 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 24px;
     display: none;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px oklch(0 0 0 / 0.2);
   }
 
   .desktop-nav.is-open {

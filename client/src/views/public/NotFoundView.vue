@@ -57,8 +57,8 @@
   font-size: 8rem;
   font-weight: 900;
   line-height: 1;
-  color: var(--primary, #C1FF72);
-  text-shadow: 4px 4px 0px rgba(193, 255, 114, 0.15);
+  color: var(--primary);
+  text-shadow: 4px 4px 0px var(--primary-a15);
   margin-bottom: 1rem;
   animation: float 4s ease-in-out infinite;
 }
@@ -92,9 +92,9 @@
 }
 
 .bullet-hole {
-  fill: var(--primary, #C1FF72);
+  fill: var(--primary);
   transform-origin: center;
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+  animation: popIn 0.4s cubic-bezier(0.33, 1, 0.68, 1) backwards;
 }
 
 .bullet-hole:nth-child(4) { animation-delay: 0.5s; }
@@ -109,21 +109,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--primary, #C1FF72);
-  color: var(--bg-base, #0A0A0F);
+  background-color: var(--primary);
+  color: var(--bg-base);
   padding: 0.875rem 2rem;
-  border-radius: 9999px;
+  border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.125rem;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-glow, 0 0 20px rgba(193, 255, 114, 0.15));
+  transition: background-color 0.2s ease;
 }
 
 .home-btn:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: var(--shadow-glow-hover, 0 0 35px rgba(193, 255, 114, 0.3));
-  background-color: var(--primary-hover, #D4FF8A);
+  background-color: var(--primary-hover);
 }
 
 .home-btn:active {

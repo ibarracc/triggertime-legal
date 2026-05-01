@@ -36,11 +36,11 @@ const sizeClass = computed(() => `btn-${props.size}`)
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 8px;
   font-family: var(--font-body);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   border: 1px solid transparent;
 }
 
@@ -52,13 +52,10 @@ const sizeClass = computed(() => `btn-${props.size}`)
 /* Variants */
 .btn-primary {
   background: var(--primary);
-  color: #0A0A0F;
-  box-shadow: var(--shadow-glow);
+  color: oklch(0.14 0.01 145);
 }
 .btn-primary:hover:not(:disabled) {
   background: var(--primary-hover);
-  box-shadow: var(--shadow-glow-hover);
-  transform: translateY(-2px);
 }
 
 .btn-secondary {
@@ -67,18 +64,18 @@ const sizeClass = computed(() => `btn-${props.size}`)
   border-color: var(--border-subtle);
 }
 .btn-secondary:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: oklch(0.40 0.01 145 / 0.6);
+  background: var(--bg-elevated);
 }
 
 .btn-danger {
-  background: rgba(255, 77, 77, 0.1);
+  background: oklch(0.55 0.22 27 / 0.1);
   color: var(--danger);
-  border-color: rgba(255, 77, 77, 0.2);
+  border-color: oklch(0.55 0.22 27 / 0.2);
 }
 .btn-danger:hover:not(:disabled) {
   background: var(--danger);
-  color: #fff;
+  color: oklch(0.95 0.005 145);
 }
 
 .btn-ghost {
@@ -90,19 +87,23 @@ const sizeClass = computed(() => `btn-${props.size}`)
   background: var(--bg-elevated);
 }
 
+/* Focus */
+.btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* States */
 .disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 /* Loader */
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid oklch(0.93 0.005 145 / 0.3);
   border-radius: 50%;
   border-top-color: currentColor;
   animation: spin 1s ease-in-out infinite;
@@ -111,7 +112,7 @@ const sizeClass = computed(() => `btn-${props.size}`)
   to { transform: rotate(360deg); }
 }
 .btn-primary .spinner {
-  border-color: rgba(0,0,0,0.1);
-  border-top-color: #000;
+  border-color: oklch(0.14 0.01 145 / 0.2);
+  border-top-color: oklch(0.14 0.01 145);
 }
 </style>

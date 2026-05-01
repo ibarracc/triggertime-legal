@@ -10,6 +10,7 @@
         :required="required"
         :disabled="disabled"
         :name="name"
+        :aria-invalid="error ? 'true' : undefined"
         class="input select"
         :class="{ 'has-error': error }"
       >
@@ -31,6 +32,7 @@
         :disabled="disabled"
         :autocomplete="autocomplete"
         :name="name"
+        :aria-invalid="error ? 'true' : undefined"
         class="input"
         :class="{ 'has-error': error, 'has-icon': $slots.icon, 'has-trailing-icon': isPassword }"
       />
@@ -107,11 +109,11 @@ const togglePasswordVisibility = () => {
   padding: 14px 16px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 8px;
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
 
@@ -141,7 +143,7 @@ select.input option {
 
 .input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(193, 255, 114, 0.1);
+  box-shadow: 0 0 0 2px var(--primary-a10);
 }
 
 .input:disabled {

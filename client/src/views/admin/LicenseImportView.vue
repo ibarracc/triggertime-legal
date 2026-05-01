@@ -227,7 +227,7 @@ const submitImport = async () => {
 .import-select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px rgba(193, 255, 114, 0.3);
+  box-shadow: 0 0 0 1px var(--primary-a30);
 }
 
 .import-select option {
@@ -246,13 +246,13 @@ const submitImport = async () => {
 }
 
 .upload-zone:hover {
-  border-color: rgba(193, 255, 114, 0.3);
-  background: rgba(193, 255, 114, 0.03);
+  border-color: var(--primary-a30);
+  background: var(--primary-a10);
 }
 
 .upload-zone--has-file {
-  border-color: rgba(193, 255, 114, 0.4);
-  background: rgba(193, 255, 114, 0.04);
+  border-color: var(--primary-a40);
+  background: var(--primary-a10);
   border-style: solid;
 }
 

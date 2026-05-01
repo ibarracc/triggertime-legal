@@ -1,8 +1,7 @@
 <template>
   <div class="profile-view">
     <div class="header-section mb-8">
-      <h1 class="mb-2">{{ $t('profile.title') }}</h1>
-      <p class="text-secondary">{{ $t('profile.info_subtitle') }}</p>
+      <h1 class="m-0">{{ $t('profile.title') }}</h1>
     </div>
 
     <div class="flex flex-col gap-12">
@@ -53,9 +52,6 @@
       <!-- Connected Accounts -->
       <AppCard>
         <template #header>{{ $t('profile.connected_accounts') }}</template>
-        <p class="text-secondary mb-4 text-sm">
-          {{ $t('profile.connected_accounts_subtitle') }}
-        </p>
 
         <div class="flex flex-col gap-3">
           <!-- Google -->

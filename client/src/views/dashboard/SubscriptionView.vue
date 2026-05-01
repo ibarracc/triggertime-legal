@@ -1,8 +1,7 @@
 <template>
   <div class="subscription-view">
     <div class="header-section mb-8">
-      <h1 class="mb-2">{{ $t('nav.subscription') }}</h1>
-      <p class="text-secondary">{{ $t('subscription.subtitle') }}</p>
+      <h1 class="m-0">{{ $t('nav.subscription') }}</h1>
     </div>
 
     <AppCard class="mb-8">
@@ -21,12 +20,8 @@
               {{ auth.isProPlus ? $t('dashboard.active') : $t('subscription.current_plan') }}
             </AppBadge>
           </div>
-          <p class="text-secondary m-0">
-            {{ 
-              auth.isProPlus 
-                ? (auth.subscription?.current_period_end ? `${$t('subscription.next_billing')}: ${formatDate(auth.subscription.current_period_end)}.` : `${$t('dashboard.subscription_status')}: ${$t('dashboard.active')}`)
-                : $t('subscription.subtitle') 
-            }}
+          <p v-if="auth.isProPlus && auth.subscription?.current_period_end" class="text-secondary m-0">
+            {{ $t('subscription.next_billing') }}: {{ formatDate(auth.subscription.current_period_end) }}
           </p>
         </div>
         
@@ -182,8 +177,8 @@ const startCheckout = async () => {
   gap: 12px;
   padding: 14px 18px;
   border-radius: 10px;
-  background: rgba(251, 191, 36, 0.08);
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  background: oklch(0.80 0.15 85 / 0.08);
+  border: 1px solid oklch(0.80 0.15 85 / 0.25);
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--text-secondary);
